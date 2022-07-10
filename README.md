@@ -1,3 +1,3 @@
 # SIH-2022
 # Initial Flowchart
-<img src="https://media.discordapp.net/attachments/902114326905761793/987231972491407430/SIH_Project_Initial_Flow_Chart.png?width=1425&height=560" alt="Initial Flowchart"/>
+<img src="https://media.discordapp.net/attachments/709066676800323605/995595537623564308/SIH_Flowchart.png?width=1417&height=672" alt="Initial Flowchart"/>
