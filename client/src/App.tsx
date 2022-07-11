@@ -1,10 +1,18 @@
-import React from 'react';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
 
-function App() {
+// import Navbar from './components/Navbar';
+import Homepage from './components/Homepage';
+
+const App = () => {
+
   return (
-    <div className="App">
-      Welcome to Aztecs
+    <div className="font-nunito">
+      {/*<Navbar />*/}
+
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+
     </div>
   );
 }
