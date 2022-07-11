@@ -145,11 +145,11 @@ const Homepage: React.FC = () => {
         	</div>
 
         	<div className='bg-[#2d5063] min-h-screen mt-24'>
-        		<div className='lg:grid lg:grid-cols-5 ml-24 items-center'>
+        		<div className='lg:flex lg:flex-row ml-24 items-center'>
         			<h1 className='text-white text-6xl lg:text-7xl xl:text-8xl font-bold'>
         				One place for all your work.
         			</h1>
-        			<img src={MacbookPro} alt='macbook-pro' className='w-[2/3] col-span-4' />
+        			<img src={MacbookPro} alt='macbook-pro' className='w-full lg:w-2/3 float-right' />
         		</div>
         	</div>
 
