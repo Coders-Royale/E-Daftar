@@ -10,6 +10,12 @@ import DM3 from "../images/homepage_dm_3.png";
 import DM4 from "../images/homepage_dm_4.png";
 import MacbookPro from "../images/homepage_macbookpro.png";
 import Speed from "../images/homepage_speed.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+} from "@fortawesome/fontawesome-svg-core/import.macro";
 
 const Homepage: React.FC = () => {
   useEffect(() => {
