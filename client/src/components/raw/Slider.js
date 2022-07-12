@@ -5,7 +5,7 @@ const onMove = (event) => {
   if (!event.offsetX || event.offsetX < 10) {
     return;
   }
-  
+
   container.style.setProperty('--slide', `${event.offsetX}px`);
 }
 
