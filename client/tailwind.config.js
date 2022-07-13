@@ -32,6 +32,15 @@ module.exports = {
           550: "#DC143C",
         },
       },
+      fontFamily: {
+        'roboto': ['Roboto', 'sans-serif'],
+      },
+      padding: {
+        '120': '30rem',
+      },
+      borderRadius: {
+        '4xl': '32px',
+      },
     },
   },
   plugins: [],
