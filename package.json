@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "docs"
   ],
   "repository": "https://github.com/Coders-Royale/SIH-2022.git",
   "author": "RaghhavDTurki <raghhavdturki@gmail.com>",
