@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Homepage_1 from "../images/homepage_1.svg";
 import Homepage_2 from "../images/homepage_2.svg";
@@ -149,7 +149,7 @@ const Homepage: React.FC = () => {
           We help reduce time delay and scale up productivity in government
           offices.
         </p>
-        <ReactCompareImage leftImage={SliderLeft} rightImage={SliderRight} />;
+        <ReactCompareImage leftImage={SliderLeft} rightImage={SliderRight} />
       </div>
 
       <div className="px-32 -mt-24">
