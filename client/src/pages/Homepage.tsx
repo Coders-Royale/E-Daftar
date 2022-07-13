@@ -6,12 +6,6 @@ import SliderLeft from "../images/homepage_slider_left.svg";
 import SliderRight from "../images/homepage_slider_right.svg";
 import Preview from "../images/preview.svg";
 import Speed from "../images/speed.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  solid,
-  regular,
-  brands,
-} from "@fortawesome/fontawesome-svg-core/import.macro";
 import approveDark from "../images/icons/approve-dark.svg";
 import pendingDark from "../images/icons/pending-dark.svg";
 import primaryDark from "../images/icons/primary-dark.svg";

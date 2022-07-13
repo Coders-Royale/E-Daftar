@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div>
       <div
-        className="flex justify-between items-center py-16 px-32 mt-32 mx-32 rounded-4xl bg-cover bg-center bg-no-repeat shadow-2xl relative"
+        className="flex justify-between items-center py-16 px-32 mt-32 mx-32 rounded-4xl bg-cover bg-center bg-no-repeat shadow-2xl relative border-2 border-gray-350"
         style={{ backgroundImage: `url(${ChatWithUs})` }}
       >
         <h1 className="text-4xl text-gray-750 font-semibold">
