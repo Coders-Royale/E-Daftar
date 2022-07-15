@@ -21,6 +21,99 @@ export default function SignIn() {
   const [role, setRole] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  interface Error { 
+   type: string, 
+   message: string
+  }
+  const [errors, setErrors] = useState<Error[]>([]);
+
+  var errLength = 0;
+
+  const validate = () => {
+    errLength = 0;
+    setErrors([]);
+
+    if(empId === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "employeeId", message: "Employee ID is required" },
+      ]);
+      errLength++;
+    }
+
+    if(role === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "role", message: "Role is required" },
+      ]);
+      errLength++;
+    }
+
+    if (password === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "password", message: "Password is required" },
+      ]);
+      errLength++;
+    }
+    if (password.length > 0 && password.length < 8) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "password", message: "Password must be atleast 8 characters" },
+      ]);
+      errLength++;
+    }
+    if (password.length > 0 && password.match(/[a-z]/g) === null) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        {
+          type: "password",
+          message: "Password must contain atleast one lowercase letter",
+        },
+      ]);
+      errLength++;
+    }
+    if (password.length > 0 && password.match(/[A-Z]/g) === null) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        {
+          type: "password",
+          message: "Password must contain atleast one uppercase letter",
+        },
+      ]);
+      errLength++;
+    }
+    if (password.length > 0 && password.match(/[0-9]/g) === null) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        {
+          type: "password",
+          message: "Password must contain atleast one number",
+        },
+      ]);
+      errLength++;
+    }
+    if (
+      password.length > 0 &&
+      password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g) === null
+    ) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        {
+          type: "password",
+          message: "Password must contain atleast one special character",
+        },
+      ]);
+      errLength++;
+    }
+
+    if(errLength == 0)
+      return true;
+
+    return false;
+  }
+
   return (
     <div className="flex gap-32 items-center h-screen px-32 bg-gray-250">
       <div className="w-2/5">
@@ -39,7 +132,7 @@ export default function SignIn() {
           />
           <FormControl fullWidth>
             <InputLabel id="select-role-label" size="small">
-              Age
+              Role
             </InputLabel>
             <Select
               id="select-role"
@@ -52,6 +145,35 @@ export default function SignIn() {
               <MenuItem value={"Admin"}>Admin</MenuItem>
             </Select>
           </FormControl>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+        <div className="mt-1 mb-1 text-left">
+            {errors.length > 0
+              ? errors.map((item, index) => {
+                if (item.type === "employeeId") {
+                  return (
+                    <p className="text-red-500 text-xs" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+              : null}
+          </div>
+          <div className="mt-1 mb-1 text-left">
+            {errors.length > 0
+              ? errors.map((item, index) => {
+                if (item.type === "role") {
+                  return (
+                    <p className="text-red-500 text-xs" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+              : null}
+          </div>
         </div>
 
         <div className="pt-4">
@@ -79,6 +201,19 @@ export default function SignIn() {
               label="Password"
             />
           </FormControl>
+          <div className="mt-1 mb-1 text-left">
+            {errors.length > 0
+              ? errors.map((item, index) => {
+                if (item.type === "password") {
+                  return (
+                    <p className="text-red-500 text-xs" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+              : null}
+          </div>
         </div>
         <div className="flex justify-between items-center mt-6">
           <div className="flex flex-row items-center">
@@ -96,7 +231,7 @@ export default function SignIn() {
             Forgot Password?
           </Link>
         </div>
-        <DiveIn text={"Dive In !!!"} toUrl="/" />
+        <DiveIn text={"Dive In !!!"} toUrl="/" validate={validate} />
       </div>
     </div>
   );

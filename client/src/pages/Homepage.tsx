@@ -125,6 +125,7 @@ const Homepage: React.FC = () => {
         <div className="grid grid-cols-5 gap-12 text-center px-12 -mb-6">
           {title.map((item, index) => (
             <div
+              key={index}
               className={`col-span-1 p-3.5 content-center rounded-lg text-lg font-medium cursor-pointer border-2 border-gray-750 ${
                 index === selected
                   ? "bg-gray-750 text-gray-150"
@@ -164,7 +165,7 @@ const Homepage: React.FC = () => {
         </p>
         <div className="grid grid-cols-4 mt-16 divide-x-2 divide-gray-450 divide-dashed">
           {cards.map((item, index) => (
-            <div className="col-span-1 flex flex-col items-center px-6 text-lg">
+            <div className="col-span-1 flex flex-col items-center px-6 text-lg" key={index}>
               <div className="bg-gray-750 p-6 rounded-full">
                 <img
                   src={item.icon}
