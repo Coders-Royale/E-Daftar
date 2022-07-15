@@ -15,7 +15,10 @@ import stackWhite from "../images/icons/stack-white.svg";
 import storageWhite from "../images/icons/storage-white.svg";
 import approveWhite from "../images/icons/approve-white.svg";
 import hourglassWhite from "../images/icons/hourglass-white.svg";
-import ReactCompareImage from "react-compare-image";
+import {
+  ReactCompareSlider,
+  ReactCompareSliderImage,
+} from "react-compare-slider";
 import Footer from "../components/Footer";
 
 const Homepage: React.FC = () => {
@@ -149,7 +152,10 @@ const Homepage: React.FC = () => {
           We help reduce time delay and scale up productivity in government
           offices.
         </p>
-        <ReactCompareImage leftImage={SliderLeft} rightImage={SliderRight} />
+        <ReactCompareSlider
+          itemOne={<ReactCompareSliderImage src={SliderLeft} alt="Left" />}
+          itemTwo={<ReactCompareSliderImage src={SliderRight} alt="Right" />}
+        />
       </div>
 
       <div className="px-32 -mt-24">
