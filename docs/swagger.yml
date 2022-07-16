@@ -14,3 +14,244 @@ servers:
     url: http://localhost:7071/api/
   - description: Production Server
     url: https://sih-2022-server.azurewebsites.net/api/
+paths:
+  /createAdmin:
+    post: 
+      tags:
+        - admin
+      summary: Create Admin Account
+      operationId: createAdmin
+      requestBody:
+        $ref: '#/components/requestBodies/CreateAdminInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Admin Created Successfully
+  /createEmployee:
+    post: 
+      tags:
+        - admin
+      security: 
+        - bearerAuth: []
+      summary: Create Employee Account
+      operationId: createEmployee
+      requestBody:
+        $ref: '#/components/requestBodies/CreateEmployeeInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Employee Created Successfully
+  /createHOD:
+    post: 
+      tags:
+        - admin
+      security: 
+        - bearerAuth: []
+      summary: Create HOD Account
+      operationId: createHOD
+      requestBody:
+        $ref: '#/components/requestBodies/CreateEmployeeInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: HOD Created Successfully
+  /login:
+    post:
+      tags: 
+        - login
+      summary: Login
+      operationId: login
+      requestBody:
+        $ref: '#/components/requestBodies/LoginInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Logged In Successfully!
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/LoginResponse'
+          
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        name:
+          type: string
+        employeeID:
+          type: string
+        email:
+          type: string
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date-time
+        address:
+          type: string
+        password:
+          type: string
+        role: 
+          type: string
+        department:
+          type: string
+        profile:
+          type: object
+          properties:
+            name:
+              type: string
+            employeeID:
+              type: string
+            email:
+              type: string
+            gender:
+              type: string
+            dob:
+              type: string
+              format: date-time
+            address:
+              type: string
+            role: 
+              type: string
+            department:
+              type: string
+    Admin:
+      type: object
+      properties:
+        name:
+          type: string
+        employeeID:
+          type: string
+        email:
+          type: string
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date-time
+        address:
+          type: string
+        password:
+          type: string
+        role: 
+          type: string
+        department:
+          type: string
+        profile:
+          type: object
+          properties:
+            name:
+              type: string
+            employeeID:
+              type: string
+            email:
+              type: string
+            gender:
+              type: string
+            dob:
+              type: string
+              format: date-time
+            address:
+              type: string
+            role: 
+              type: string
+            department:
+              type: string
+    CreateAdminInput:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        address:
+          type: string
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date-time
+        department:
+          type: string
+    CreateEmployeeInput:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        address:
+          type: string
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date-time
+        department:
+          type: string
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        role: 
+          type: string
+          enum:
+            - admin
+            - employee
+            - hod
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        profile:
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Iron Sealed Token
+  requestBodies:
+    CreateAdminInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateAdminInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/CreateAdminInput'
+      required: true
+    CreateEmployeeInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateEmployeeInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/CreateEmployeeInput'
+      required: true
+    LoginInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/LoginInput'
+      required: true
