@@ -5,6 +5,7 @@
   "author": "Raghhav D Turki",
   "license": "MIT",
   "private": true,
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
     "postinstall": "tsc",
