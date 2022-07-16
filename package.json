@@ -1,11 +1,6 @@
 {
   "name": "sih-2022",
   "version": "1.0.0",
-  "workspaces": [
-    "client",
-    "server",
-    "docs"
-  ],
   "repository": "https://github.com/Coders-Royale/SIH-2022.git",
   "author": "RaghhavDTurki <raghhavdturki@gmail.com>",
   "license": "MIT",
