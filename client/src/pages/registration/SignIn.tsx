@@ -22,9 +22,9 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  interface Error { 
-   type: string, 
-   message: string
+  interface Error {
+    type: string;
+    message: string;
   }
   const [errors, setErrors] = useState<Error[]>([]);
 
@@ -34,7 +34,7 @@ export default function SignIn() {
     errLength = 0;
     setErrors([]);
 
-    if(empId === "") {
+    if (empId === "") {
       setErrors((errors: Error[]) => [
         ...errors,
         { type: "employeeId", message: "Employee ID is required" },
@@ -42,7 +42,7 @@ export default function SignIn() {
       errLength++;
     }
 
-    if(role === "") {
+    if (role === "") {
       setErrors((errors: Error[]) => [
         ...errors,
         { type: "role", message: "Role is required" },
@@ -108,11 +108,10 @@ export default function SignIn() {
       errLength++;
     }
 
-    if(errLength == 0)
-      return true;
+    if (errLength == 0) return true;
 
     return false;
-  }
+  };
 
   return (
     <div className="flex gap-32 items-center h-screen px-32 bg-gray-250">
@@ -148,30 +147,30 @@ export default function SignIn() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-        <div className="mt-1 mb-1 text-left">
+          <div className="mt-1 mb-1 text-left">
             {errors.length > 0
               ? errors.map((item, index) => {
-                if (item.type === "employeeId") {
-                  return (
-                    <p className="text-red-500 text-xs" key={index}>
-                      {item.message}
-                    </p>
-                  );
-                }
-              })
+                  if (item.type === "employeeId") {
+                    return (
+                      <p className="text-red-500 text-xs" key={index}>
+                        {item.message}
+                      </p>
+                    );
+                  }
+                })
               : null}
           </div>
           <div className="mt-1 mb-1 text-left">
             {errors.length > 0
               ? errors.map((item, index) => {
-                if (item.type === "role") {
-                  return (
-                    <p className="text-red-500 text-xs" key={index}>
-                      {item.message}
-                    </p>
-                  );
-                }
-              })
+                  if (item.type === "role") {
+                    return (
+                      <p className="text-red-500 text-xs" key={index}>
+                        {item.message}
+                      </p>
+                    );
+                  }
+                })
               : null}
           </div>
         </div>
@@ -204,14 +203,14 @@ export default function SignIn() {
           <div className="mt-1 mb-1 text-left">
             {errors.length > 0
               ? errors.map((item, index) => {
-                if (item.type === "password") {
-                  return (
-                    <p className="text-red-500 text-xs" key={index}>
-                      {item.message}
-                    </p>
-                  );
-                }
-              })
+                  if (item.type === "password") {
+                    return (
+                      <p className="text-red-500 text-xs" key={index}>
+                        {item.message}
+                      </p>
+                    );
+                  }
+                })
               : null}
           </div>
         </div>

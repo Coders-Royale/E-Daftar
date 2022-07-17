@@ -36,6 +36,7 @@ module.exports = {
         'roboto': ['Roboto', 'sans-serif'],
       },
       fontSize: {
+        'xxs': '10px',
         '4.5xl': '40px',
       },
       padding: {
