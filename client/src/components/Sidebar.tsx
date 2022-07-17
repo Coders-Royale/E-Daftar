@@ -82,7 +82,7 @@ export default function Sidebar() {
         </div>
         <div className="mt-6">
           {sidebarContent1.map((item, index) => (
-            <div>
+            <div key={index}>
               <div
                 className={`flex justify-between items-center py-3 px-5 rounded-lg cursor-pointer ${
                   selected === index ? "bg-blue-50" : "bg-white"
