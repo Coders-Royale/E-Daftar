@@ -5,6 +5,7 @@ import SignIn from "./pages/registration/SignIn";
 import ForgotPassword from "./pages/registration/ForgotPassword";
 import NewPassword from "./pages/registration/NewPassword";
 import CreateNewEmployee from "./pages/admin/CreateNewEmployee";
+import Dashboard from "./pages/admin/dashboard";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/new-password" element={<NewPassword />} />
           <Route path="/admin/new-employee" element={<CreateNewEmployee />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
         </Routes>
       </QueryClientProvider>
     </div>
