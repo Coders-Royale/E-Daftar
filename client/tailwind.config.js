@@ -24,11 +24,11 @@ module.exports = {
           850: "#202020",
         },
         green: {
-          150: "FFE4EA",
+          150: "#E9FFFD",
           550: "#039487",
         },
         red: {
-          150: "#E9FFFD",
+          150: "#FFE4EA",
           550: "#DC143C",
         },
       },
@@ -44,6 +44,10 @@ module.exports = {
       },
       borderRadius: {
         '4xl': '32px',
+      },
+      borderWidth: {
+        '1/2': '0.5px',
+        '1': '1px',
       },
     },
   },

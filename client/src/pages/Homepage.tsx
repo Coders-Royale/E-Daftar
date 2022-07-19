@@ -165,7 +165,10 @@ const Homepage: React.FC = () => {
         </p>
         <div className="grid grid-cols-4 mt-16 divide-x-2 divide-gray-450 divide-dashed">
           {cards.map((item, index) => (
-            <div className="col-span-1 flex flex-col items-center px-6 text-lg" key={index}>
+            <div
+              className="col-span-1 flex flex-col items-center px-6 text-lg"
+              key={index}
+            >
               <div className="bg-gray-750 p-6 rounded-full">
                 <img
                   src={item.icon}
@@ -188,12 +191,12 @@ const Homepage: React.FC = () => {
 
       <div className="bg-gray-750 pt-32 pb-28 mt-32">
         <div className="lg:flex lg:flex-row ml-32 items-center">
-          <h1 className="text-white text-6xl lg:text-7xl xl:text-8xl font-bold">
+          <p className="text-white text-6xl lg:text-7xl xl:text-8xl font-bold">
             One place for all your work.
-          </h1>
+          </p>
           <img
             src={Preview}
-            alt="macbook-pro"
+            alt="preview"
             className="w-full lg:w-4/5 float-right"
           />
         </div>
