@@ -389,7 +389,7 @@ export default function dashboard() {
                     {data.from}
                   </td>
                   <td className="pr-8 pl-4 py-4 text-sm text-gray-550">
-                    {data.to || "N/A"}
+                    {data.to || "~"}
                   </td>
                 </tr>
               ))}
