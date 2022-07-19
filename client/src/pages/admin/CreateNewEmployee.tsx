@@ -101,7 +101,7 @@ const CreateNewEmployee = () => {
       errLength++;
     }
 
-    if (errLength == 0) return true;
+    if (errLength === 0) return true;
 
     return false;
   };
