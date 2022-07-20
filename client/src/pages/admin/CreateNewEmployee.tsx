@@ -248,18 +248,18 @@ const CreateNewEmployee = () => {
             <h1 className='font-normal text-base text-gray-650 pt-4'>Gender</h1>
             <div className="bg-white shadow-md mt-1 rounded">
               <FormControl fullWidth>
-		        <Select
-		          labelId="label-gender"
-		          id="gender"
-		          value={gender}
-		          onChange={handleChange}
-		          size="small"
-		        >
-		          <MenuItem value="Male">Male</MenuItem>
-		          <MenuItem value="Female">Female</MenuItem>
-		          <MenuItem value="Transgender">Transgender</MenuItem>
-		        </Select>
-		      </FormControl>
+    		        <Select
+    		          labelId="label-gender"
+    		          id="gender"
+    		          value={gender}
+    		          onChange={handleChange}
+    		          size="small"
+    		        >
+    		          <MenuItem value="Male">Male</MenuItem>
+    		          <MenuItem value="Female">Female</MenuItem>
+    		          <MenuItem value="Transgender">Transgender</MenuItem>
+    		        </Select>
+    		      </FormControl>
             </div>
             <div className="mt-1 mb-1 text-left">
             	{errors.length > 0

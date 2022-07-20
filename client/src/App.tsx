@@ -7,6 +7,8 @@ import NewPassword from "./pages/registration/NewPassword";
 import CreateNewEmployee from "./pages/admin/CreateNewEmployee";
 import Dashboard from "./pages/admin/dashboard";
 import Tracking from './pages/admin/Tracking';
+import Notifications from './pages/admin/Notifications';
+import Profile from './pages/user/Profile';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +30,8 @@ const App: React.FC = () => {
           <Route path="/admin/new-employee" element={<CreateNewEmployee />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/tracking" element={<Tracking />} />
+          <Route path="/admin/notifications" element={<Notifications />} />
+          <Route path="/user/profile" element={<Profile />} />
         </Routes>
       </QueryClientProvider>
     </div>
