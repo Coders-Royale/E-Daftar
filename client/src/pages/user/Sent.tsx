@@ -7,6 +7,8 @@ import TimelineComponent from '../../components/TimelineComponent';
 
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SendIcon from '@mui/icons-material/Send';
 import Man from '../../images/man.svg';
 import GreenTick from '../../images/icons/tracking_page_green_tick.svg';
@@ -81,8 +83,20 @@ const Sent = () => {
 
         <div className='w-2/3 overflow-scroll px-10'>
 
+          {/*NAVIGATOR*/}
+          <div className='mt-16 flex flex-row justify-end'>
+            <div className="flex flex-row gap-4 items-center">
+              <h1 className='text-sm font-normal text-gray-750'>1 of 50</h1>
+              <div className='px-4 py-3 rounded-lg border border-gray-450 flex flex-row'>
+                <button className='pr-4'><ChevronLeftIcon /></button>
+                <button className='pl-4 border-l-1 border-gray-450'><ChevronRightIcon /></button>
+              </div>
+
+            </div>
+          </div>
+
           {/*HEADING*/}
-          <div className='mt-32 flex flex-row justify-between'>
+          <div className='mt-6 flex flex-row justify-between'>
             <div className="flex flex-row gap-4">
               <img src={Man} alt='man-photo' className='rounded-full w-[60px] h-[60px]' />
               <div className=''>
@@ -113,7 +127,8 @@ const Sent = () => {
             <h1 className='text-sm font-bold text-gray-750 tracking-widest'>TRACKING</h1>
             <div className='mt-4'>
               <TimelineComponent index={1} name="Mr. Parmish Verma" time="12:30 PM" date="11 July, 2022 (Monday)" status={Status.Forwarded} remarks="Bla Bla Bla" />
-              <TimelineComponent index={2} name="Mr. Raghuram Rajan" time="1:30 PM" date="11 July, 2022 (Monday)" status={Status.Forwarded} remarks="Bla Bla Bla" />
+              <TimelineComponent index={2} name="Mr. Raghuram Rajan" time="1:30 PM" date="11 July, 2022 (Monday)" status={Status.Rejected} remarks="Bla Bla Bla" />
+              <TimelineComponent index={2} name="Mr. Raghuram Rajan" time="1:30 PM" date="11 July, 2022 (Monday)" status={Status.Pending} remarks="Bla Bla Bla" />
               <TimelineComponent index={3} name="Mr. Venkatesh Iyer" time="2:30 PM" date="11 July, 2022 (Monday)" status={Status.Approved} />
             </div>
           </div>
