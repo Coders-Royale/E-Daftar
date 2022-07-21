@@ -8,7 +8,7 @@ export interface SignInButtonProps {
 }
 
 const dummy = () => {
-  console.log('dummy');
+  return true;
 }
 
 export default function RegistrationButton({
@@ -26,8 +26,7 @@ export default function RegistrationButton({
     <div>
         <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 w-full rounded-lg font-semibold"
         onClick={(e) => {
-            wrapValidate();
-            navigate(`${toUrl}`);
+            wrapValidate() && navigate(`${toUrl}`);
         }}>
           {text}
         </button>

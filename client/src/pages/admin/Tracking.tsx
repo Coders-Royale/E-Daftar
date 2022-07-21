@@ -32,7 +32,7 @@ Thank you.
 
 Yours Sincerely,
 John Doe
-`
+`;
 
 const Tracking = () => {
  
