@@ -113,7 +113,7 @@ export default function Sidebar() {
                   {item.number}
                 </p>
               </div>
-              {index == 4 || index > 7 ? (
+              {index === 4 || index > 7 ? (
                 <hr className="text-gray-450 my-5" />
               ) : null}
             </div>

@@ -9,6 +9,7 @@ import Dashboard from "./pages/admin/dashboard";
 import Tracking from './pages/admin/Tracking';
 import Notifications from './pages/admin/Notifications';
 import Profile from './pages/user/Profile';
+import Sent from './pages/user/Sent';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           <Route path="/admin/tracking" element={<Tracking />} />
           <Route path="/admin/notifications" element={<Notifications />} />
           <Route path="/user/profile" element={<Profile />} />
+          <Route path='/user/sent' element={<Sent />} />
         </Routes>
       </QueryClientProvider>
     </div>
