@@ -5,7 +5,6 @@ import Sidebar from "../../components/Sidebar";
 import Middlebar from '../../components/Middlebar';
 import TimelineComponent from '../../components/TimelineComponent';
 
-import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -98,7 +97,7 @@ const Sent = () => {
           {/*HEADING*/}
           <div className='mt-6 flex flex-row justify-between'>
             <div className="flex flex-row gap-4">
-              <img src={Man} alt='man-photo' className='rounded-full w-[60px] h-[60px]' />
+              <img src={Man} alt='man' className='rounded-full w-[60px] h-[60px]' />
               <div className=''>
                 <h1 className='text-sm font-semibold text-gray-750'>To: Himanshu Chittora <span><KeyboardArrowDownIcon fontSize="small"/></span></h1>
                 <h1 className='text-3xl font-normal text-gray-750'>Leave Application</h1>

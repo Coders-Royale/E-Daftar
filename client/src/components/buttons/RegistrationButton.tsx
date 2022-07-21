@@ -12,9 +12,9 @@ const dummy = () => {
 }
 
 export default function RegistrationButton({
-  toUrl: toUrl,
-  text: text,
-  validate: validate,
+  toUrl,
+  text,
+  validate,
 }: SignInButtonProps) {
   const navigate = useNavigate();
 

@@ -609,7 +609,7 @@ const Profile = () => {
 
         <div className="pt-16 flex flex-row gap-8 mx-auto w-80 pb-44">
           <div className="flex-auto">
-            <RegistrationButton text="Update" toUrl="/"/>
+            <RegistrationButton text="Update" toUrl="/" validate={validate} />
           </div>
           <div className="flex-auto">
             <button

@@ -28,10 +28,10 @@ export default function TimelineComponent({ index, name, time, date, status, rem
         <div className="w-5 h-5 rounded-full bg-blue-150"><h1 className='text-xs text-white text-center py-0.5'>{index}</h1></div>
         <h1 className='text-xs text-gray-650 font-medium'>{name}</h1>
       </div>
-      <div className={` ${status != Status.Approved && `border-l-1 border-gray-450` } h-16 ml-2`}>
+      <div className={` ${status !== Status.Approved && status !== Status.Rejected && `border-l-1 border-gray-450` } h-16 ml-2`}>
         <h1 className='text-xxs font-normal text-gray-550 pl-5'>{`${time}, ${date}`}</h1>
         
-        { status == Status.Approved &&
+        { status === Status.Approved &&
           <div className="flex flex-row gap-1 items-center pl-5">
             <h1 className='text-sm font-medium text-green-550'>{status}</h1>
             <img // change the icon according to status.
@@ -41,7 +41,7 @@ export default function TimelineComponent({ index, name, time, date, status, rem
             />
           </div>
         }
-        { status == Status.Forwarded &&
+        { status === Status.Forwarded &&
           <div className="flex flex-row gap-1 items-center pl-5">
             <h1 className='text-sm font-medium text-blue-350'>{status}</h1>
             <img // change the icon according to status.
@@ -52,7 +52,7 @@ export default function TimelineComponent({ index, name, time, date, status, rem
           </div>
         }
         {
-          status == Status.Pending &&
+          status === Status.Pending &&
           <div className="flex flex-row gap-1 items-center pl-5">
             <h1 className='text-sm font-medium text-gray-650'>{status}</h1>
             <img // change the icon according to status.
@@ -63,7 +63,7 @@ export default function TimelineComponent({ index, name, time, date, status, rem
           </div>
         }
         {
-          status == Status.Rejected &&
+          status === Status.Rejected &&
           <div className="flex flex-row gap-1 items-center pl-5">
             <h1 className='text-sm font-medium text-red-550'>{status}</h1>
             <img // change the icon according to status.
@@ -75,7 +75,7 @@ export default function TimelineComponent({ index, name, time, date, status, rem
         }
 
       {/*Remove remarks if status="Approved"*/}
-        { status != Status.Approved && status != Status.Pending &&
+        { status !== Status.Approved && status !== Status.Pending &&
           <h1 className='text-xxs font-medium text-gray-650 pl-5'>Remarks: <span className='font-normal test-gray-550'></span>{remarks}</h1>
         }
       </div>
