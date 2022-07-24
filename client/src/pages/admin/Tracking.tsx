@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -40,6 +40,10 @@ interface Props {
 }
 
 const Tracking = ({ selected, setSelected }: Props) => {
+  useEffect(() => {
+    setSelected(9);
+  }, [setSelected]);
+
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar";
@@ -47,6 +47,10 @@ interface Props {
 }
 
 const Sent = ({ selected, setSelected }: Props) => {
+  useEffect(() => {
+    setSelected(1);
+  }, [setSelected]);
+
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
 

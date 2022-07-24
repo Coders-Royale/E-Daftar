@@ -13,6 +13,10 @@ interface Props {
   setSelected: (selected: number) => void;
 }
 const Profile = ({ selected, setSelected }: Props) => {
+  useEffect(() => {
+    setSelected(7);
+  }, [setSelected]);
+
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [emailId, setEmailId] = useState<string>("");
@@ -245,13 +249,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   First Name
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter First Name"
-                  id="firstName"
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter First Name"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -270,13 +278,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Email ID
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter Email ID"
-                  id="emailid"
-                  onChange={(e) => setEmailId(e.target.value)}
-                />
+
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter Email ID"
+                    onChange={(e) => setEmailId(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -295,13 +307,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Employee Code
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter Employee Code"
-                  id="employeeCode"
-                  onChange={(e) => setEmployeeCode(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter Employee Code"
+                    onChange={(e) => setEmployeeCode(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -320,13 +336,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Department
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter department"
-                  id="department"
-                  onChange={(e) => setDepartment(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter department"
+                    onChange={(e) => setDepartment(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -345,13 +365,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Date of Birth
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="date"
-                  placeholder=""
-                  id="dob"
-                  onChange={(e) => setDob(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder=""
+                    onChange={(e) => setDob(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -373,13 +397,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Last Name
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter Last Name"
-                  id="lastName"
-                  onChange={(e) => setLastName(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter Last Name"
+                    onChange={(e) => setLastName(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -398,13 +426,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Mobile Number
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter Mobile Number"
-                  id="mobileno"
-                  onChange={(e) => setMobileNo(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter Mobile Number"
+                    onChange={(e) => setMobileNo(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -431,7 +463,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                       value={gender}
                       onChange={handleChange}
                       size="small"
-                      className="h-6"
+                      className=""
                     >
                       <MenuItem value="Male">Male</MenuItem>
                       <MenuItem value="Female">Female</MenuItem>
@@ -457,13 +489,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Office Branch
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter office branch"
-                  id="officeBranch"
-                  onChange={(e) => setOfficeBranch(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter office branch"
+                    onChange={(e) => setOfficeBranch(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -482,13 +518,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Address
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="text"
-                  placeholder="Enter your address"
-                  id="address"
-                  onChange={(e) => setAddress(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter your address"
+                    onChange={(e) => setAddress(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -518,13 +558,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Old Password
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="password"
-                  placeholder="Enter old password"
-                  id="oldPassword"
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter old password"
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -543,13 +587,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Confirm Password
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="password"
-                  placeholder="Confirm password"
-                  id="confirmPassword"
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Confirm password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {
@@ -571,13 +619,17 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   New Password
                 </h1>
-                <input
-                  className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
-                  type="password"
-                  placeholder="Enter new password"
-                  id="newPassword"
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
+
+                <div className="bg-white w-full  rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Enter new password"
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
                     ? errors.map((item, index) => {

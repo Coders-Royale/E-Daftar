@@ -136,7 +136,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
         </div>
         <div className="mt-6">
           {sidebarContent1
-            .slice(0, pathArray[1] === "admin" ? 11 : 8)
+            .slice(0, params.user?.toLocaleLowerCase() === "admin" ? 11 : 8)
             .map((item, index) => (
               <div key={index}>
                 <div

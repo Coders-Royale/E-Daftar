@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
 import TextField from "@mui/material/TextField";
@@ -14,6 +14,10 @@ interface Props {
 }
 
 const CreateNewEmployee = ({ selected, setSelected }: Props) => {
+  useEffect(() => {
+    setSelected(10);
+  }, [setSelected]);
+
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [gender, setGender] = useState<string>("");

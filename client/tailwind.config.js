@@ -49,6 +49,9 @@ module.exports = {
         '1/2': '0.5px',
         '1': '1px',
       },
+      dropShadow: {
+        'blue': ['0 20px 13px rgb(18 226 239 / 0.03)', '0 8px 5px rgb(18 226 239  / 0.08)'],
+      },
     },
   },
   plugins: [],

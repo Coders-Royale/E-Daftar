@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import {
   Chart as ChartJS,
@@ -237,7 +237,11 @@ interface Props {
   setSelected: (selected: number) => void;
 }
 
-export default function dashboard({ selected, setSelected }: Props) {
+export default function Dashboard({ selected, setSelected }: Props) {
+  useEffect(() => {
+    setSelected(8);
+  }, [setSelected]);
+
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
