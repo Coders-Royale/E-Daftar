@@ -4,11 +4,16 @@ import RegistrationButton from "../../components/buttons/RegistrationButton";
 import TextField from "@mui/material/TextField";
 import BottomPic from "../../images/new_employee.svg";
 
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const CreateNewEmployee = () => {
+interface Props {
+  selected: number;
+  setSelected: (selected: number) => void;
+}
+
+const CreateNewEmployee = ({ selected, setSelected }: Props) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [gender, setGender] = useState<string>("");
@@ -109,7 +114,7 @@ const CreateNewEmployee = () => {
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar />
+        <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       <div className="w-full px-10 overflow-scroll">
         <h1 className="mt-12 mx-10 text-lg font-medium tracking-widest">
@@ -118,8 +123,8 @@ const CreateNewEmployee = () => {
 
         <div className="pt-12 grid grid-cols-2 gap-20 mx-10">
           <div className="col-span-1">
-          	<h1 className='font-normal text-base text-gray-650'>First Name</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650">First Name</h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="John"
@@ -130,21 +135,23 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "firstName") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "firstName") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Employee Code</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">
+              Employee Code
+            </h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="XXX-XXX"
@@ -155,21 +162,23 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "employeeCode") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "employeeCode") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Date of Birth</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">
+              Date of Birth
+            </h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="date"
                 placeholder=""
@@ -180,21 +189,23 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "dob") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "dob") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Address Line 2</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">
+              Address Line 2
+            </h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="Street No. / Sector No."
@@ -205,23 +216,23 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "addressLine2") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "addressLine2") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
           </div>
 
           <div className="col-span-1">
-          	<h1 className='font-normal text-base text-gray-650'>Last Name</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650">Last Name</h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="Doe"
@@ -232,51 +243,53 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "lastName") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "lastName") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Gender</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">Gender</h1>
+            <div className="bg-white shadow mt-1 rounded">
               <FormControl fullWidth>
-    		        <Select
-    		          labelId="label-gender"
-    		          id="gender"
-    		          value={gender}
-    		          onChange={handleChange}
-    		          size="small"
-    		        >
-    		          <MenuItem value="Male">Male</MenuItem>
-    		          <MenuItem value="Female">Female</MenuItem>
-    		          <MenuItem value="Transgender">Transgender</MenuItem>
-    		        </Select>
-    		      </FormControl>
+                <Select
+                  labelId="label-gender"
+                  id="gender"
+                  value={gender}
+                  onChange={handleChange}
+                  size="small"
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Transgender">Transgender</MenuItem>
+                </Select>
+              </FormControl>
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "gender") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "gender") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Address Line 1</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">
+              Address Line 1
+            </h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="House No. / Flat No."
@@ -287,21 +300,23 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "addressLine1") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "addressLine1") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
 
-            <h1 className='font-normal text-base text-gray-650 pt-4'>Address Line 3</h1>
-            <div className="bg-white shadow-md mt-1 rounded">
+            <h1 className="font-normal text-base text-gray-650 pt-4">
+              Address Line 3
+            </h1>
+            <div className="bg-white shadow mt-1 rounded">
               <TextField
                 type="text"
                 placeholder="City / State"
@@ -312,24 +327,24 @@ const CreateNewEmployee = () => {
               />
             </div>
             <div className="mt-1 mb-1 text-left">
-            	{errors.length > 0
-	              ? errors.map((item, index) => {
-	                  if (item.type === "addressLine3") {
-	                    return (
-	                      <p className="text-red-500 text-xs" key={index}>
-	                        {item.message}
-	                      </p>
-	                    );
-	                  }
-	                })
-              	: null}
-          	</div>
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "addressLine3") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
           </div>
         </div>
 
         <div className="pt-12 flex flex-row gap-8 mx-auto w-80">
           <div className="flex-auto">
-            <RegistrationButton text="Create" toUrl="/" validate={validate}/>
+            <RegistrationButton text="Create" toUrl="/" validate={validate} />
           </div>
           <div className="flex-auto">
             <button

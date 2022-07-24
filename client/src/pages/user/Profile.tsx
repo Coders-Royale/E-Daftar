@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
-import TextField from "@mui/material/TextField"
+import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
-import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
-import Dp from '../../images/profile_page_dp.png';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
+import Dp from "../../images/profile_page_dp.png";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-const Profile = () => {
-
+interface Props {
+  selected: number;
+  setSelected: (selected: number) => void;
+}
+const Profile = ({ selected, setSelected }: Props) => {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [emailId, setEmailId] = useState<string>("");
@@ -50,7 +53,8 @@ const Profile = () => {
     (document.getElementById("officeBranch") as HTMLInputElement)!.value = "";
     (document.getElementById("oldPassword") as HTMLInputElement)!.value = "";
     (document.getElementById("newPassword") as HTMLInputElement)!.value = "";
-    (document.getElementById("confirmPassword") as HTMLInputElement)!.value = "";
+    (document.getElementById("confirmPassword") as HTMLInputElement)!.value =
+      "";
   };
 
   interface Error {
@@ -194,46 +198,53 @@ const Profile = () => {
     if (!newPassword.match(/[a-z]/)) {
       setLowercase(false);
     }
-  }
+  };
 
   useEffect(() => {
     validateNewPassword(newPassword);
   }, [newPassword]);
- 
+
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar />
+        <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       <div className="w-full px-10 overflow-scroll">
         <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black">
           PROFILE
         </h1>
 
-        <div className='flex flex-row gap-6'>
-          <img
-            src={Dp}
-            alt="profile_dp"
-            className="w-50 h-50"
-          />
-          <div className='flex flex-col justify-end'>
+        <div className="flex flex-row gap-6">
+          <img src={Dp} alt="profile_dp" className="w-50 h-50" />
+          <div className="flex flex-col justify-end">
             <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold">
-              <h1 className='font-medium text-sm text-gray-150'><span className='pr-2'><KeyboardTabIcon /></span>Choose an image</h1>
+              <h1 className="font-medium text-sm text-gray-150">
+                <span className="pr-2">
+                  <KeyboardTabIcon />
+                </span>
+                Choose an image
+              </h1>
             </button>
-            <h1 className='mb-1 text-xs font-medium text-gray-650 tracking-widest'>Acceptable format .jpg, .png only</h1>
-            <h1 className='text-xs font-medium text-gray-650 tracking-widest'>Max. file size is 500Kb and min. file size is 70Kb.</h1>
+            <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
+              Acceptable format .jpg, .png only
+            </h1>
+            <h1 className="text-xs font-medium text-gray-650 tracking-widest">
+              Max. file size is 500Kb and min. file size is 70Kb.
+            </h1>
           </div>
         </div>
 
-        <div className='mt-16'>
+        <div className="mt-16">
           <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
             ACCOUNT INFORMATION
           </h1>
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>First Name</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  First Name
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -255,8 +266,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Email ID</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Email ID
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -278,8 +291,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Employee Code</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Employee Code
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -301,8 +316,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Department</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Department
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -324,8 +341,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Date of Birth</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Date of Birth
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="date"
@@ -350,8 +369,10 @@ const Profile = () => {
             </div>
 
             <div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Last Name</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Last Name
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -373,8 +394,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Mobile Number</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Mobile Number
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -396,8 +419,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Gender</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Gender
+                </h1>
                 <div className="bg-white shadow-md rounded flex-auto">
                   <FormControl fullWidth>
                     <Select
@@ -406,7 +431,7 @@ const Profile = () => {
                       value={gender}
                       onChange={handleChange}
                       size="small"
-                      className='h-6'
+                      className="h-6"
                     >
                       <MenuItem value="Male">Male</MenuItem>
                       <MenuItem value="Female">Female</MenuItem>
@@ -428,8 +453,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Office Branch</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Office Branch
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -451,8 +478,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Address</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Address
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="text"
@@ -485,8 +514,10 @@ const Profile = () => {
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Old Password</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Old Password
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="password"
@@ -508,8 +539,10 @@ const Profile = () => {
                     : null}
                 </div>
               </div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>Confirm Password</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  Confirm Password
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="password"
@@ -534,8 +567,10 @@ const Profile = () => {
             </div>
 
             <div>
-              <div className='flex flex-row gap-7 items-center mb-4'>
-                <h1 className='font-normal text-base text-gray-650 w-36'>New Password</h1> 
+              <div className="flex flex-row gap-7 items-center mb-4">
+                <h1 className="font-normal text-base text-gray-650 w-36">
+                  New Password
+                </h1>
                 <input
                   className={`bg-white rounded drop-shadow pl-4 h-6 flex-auto `}
                   type="password"
@@ -560,7 +595,7 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className=''>
+          <div className="">
             <p
               className={`text-xs italic font-normal ${
                 uppercase ? "text-blue-150" : "text-gray-450"
@@ -575,7 +610,8 @@ const Profile = () => {
                 number ? "text-blue-150" : "text-gray-450"
               }`}
             >
-              <span className="text-sm">&#9679;</span> Contain at least one number
+              <span className="text-sm">&#9679;</span> Contain at least one
+              number
             </p>
 
             <p
@@ -583,8 +619,8 @@ const Profile = () => {
                 special ? "text-blue-150" : "text-gray-450"
               }`}
             >
-              <span className="text-sm">&#9679;</span> Contain at least one special
-              character
+              <span className="text-sm">&#9679;</span> Contain at least one
+              special character
             </p>
 
             <p
@@ -601,8 +637,8 @@ const Profile = () => {
                 match ? "text-blue-150" : "text-gray-450"
               }`}
             >
-              <span className="text-sm">&#9679;</span> Password should be greater
-              than 8 characters
+              <span className="text-sm">&#9679;</span> Password should be
+              greater than 8 characters
             </p>
           </div>
         </div>

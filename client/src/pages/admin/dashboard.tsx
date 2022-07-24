@@ -232,11 +232,16 @@ const TableData: TableInterface[] = [
   },
 ];
 
-export default function dashboard() {
+interface Props {
+  selected: number;
+  setSelected: (selected: number) => void;
+}
+
+export default function dashboard({ selected, setSelected }: Props) {
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar />
+        <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       <div className="w-full py-12 px-10 overflow-scroll">
         <div>
@@ -256,8 +261,11 @@ export default function dashboard() {
             <p className="uppercase tracking-widest font-medium text-lg text-gray-650 mb-6">
               Top Performers
             </p>
-            {People.map((person) => (
-              <div className="flex items-center justify-between mt-4 border border-gray-450 p-4 rounded-2xl">
+            {People.map((person, index) => (
+              <div
+                className="flex items-center justify-between mt-4 border border-gray-450 p-4 rounded-2xl"
+                key={index}
+              >
                 <div className="flex items-center">
                   <img
                     src={person.image}
@@ -285,8 +293,11 @@ export default function dashboard() {
           </div>
         </div>
         <div className="flex justify-between gap-5">
-          {DashboardContent.map((content) => (
-            <div className="bg-white p-4 rounded-2xl shadow-xl mt-8 w-full">
+          {DashboardContent.map((content, index) => (
+            <div
+              className="bg-white p-4 rounded-2xl shadow-xl mt-8 w-full"
+              key={index}
+            >
               <div className="flex items-start justify-between">
                 <div className="text-sm">
                   <p className="text-gray-750 font-medium text-sm">
@@ -356,6 +367,7 @@ export default function dashboard() {
                       className={`${
                         index === 0 ? "px-8" : "px-4"
                       } py-4 text-sm font-medium`}
+                      key={index}
                     >
                       {header}
                     </th>
@@ -364,8 +376,8 @@ export default function dashboard() {
               </tr>
             </thead>
             <tbody className="divide-y-1 divide-gray-450">
-              {TableData.map((data) => (
-                <tr>
+              {TableData.map((data, index) => (
+                <tr key={index}>
                   <td className="pl-8 pr-4 py-4 text-sm text-gray-750 font-medium">
                     {data.name}
                   </td>
