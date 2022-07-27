@@ -1,4 +1,4 @@
-import { IsDateString, IsString } from "class-validator";
+import { IsArray, IsDateString, IsString } from "class-validator";
 
 export class CreateIronToken {
     @IsString()
@@ -32,3 +32,26 @@ export class CreateAdminInput {
 }
 
 export class CreateEmployeeInput extends CreateAdminInput { };
+
+export class CreateDocumentInput {
+    @IsString()
+    employeeId: string
+    @IsString()
+    employee_name: string;
+    @IsString()
+    subject: string
+    @IsString()
+    description: string
+    @IsArray()
+    main_file: string[]
+    @IsArray()
+    reference_file: string[]
+    @IsString()
+    forwarding_dept: string
+    @IsString()
+    category: string
+}
+
+export class CreateRoomInput {
+
+}
