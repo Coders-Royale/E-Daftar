@@ -6,6 +6,19 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import Dp from "../../images/profile_page_dp.png";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import FilledInput from "@mui/material/FilledInput";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormHelperText from "@mui/material/FormHelperText";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface Props {
@@ -22,10 +35,12 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [emailId, setEmailId] = useState<string>("");
   const [employeeCode, setEmployeeCode] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
-  const [dob, setDob] = useState<string>("");
+  const [dob, setDob] = useState<Date | string | null>("");
   const [mobileNo, setMobileNo] = useState<string>("");
   const [officeBranch, setOfficeBranch] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+  const [addressLine1, setAddressLine1] = useState<string>("");
+  const [addressLine2, setAddressLine2] = useState<string>("");
+  const [addressLine3, setAddressLine3] = useState<string>("");
   const [gender, setGender] = useState<string>("");
 
   const [uppercase, setUppercase] = useState(false);
@@ -40,17 +55,13 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setGender(event.target.value as string);
-  };
-
   const clearInputs = () => {
     (document.getElementById("firstName") as HTMLInputElement)!.value = "";
     (document.getElementById("lastName") as HTMLInputElement)!.value = "";
     (document.getElementById("employeeCode") as HTMLInputElement)!.value = "";
     (document.getElementById("gender") as HTMLInputElement)!.value = "";
     (document.getElementById("dob") as HTMLInputElement)!.value = "";
-    (document.getElementById("address") as HTMLInputElement)!.value = "";
+    (document.getElementById("addressLine1") as HTMLInputElement)!.value = "";
     (document.getElementById("emailid") as HTMLInputElement)!.value = "";
     (document.getElementById("mobileno") as HTMLInputElement)!.value = "";
     (document.getElementById("department") as HTMLInputElement)!.value = "";
@@ -158,10 +169,10 @@ const Profile = ({ selected, setSelected }: Props) => {
       errLength++;
     }
 
-    if (address === "") {
+    if (addressLine1 === "") {
       setErrors((errors: Error[]) => [
         ...errors,
-        { type: "address", message: "Address is required" },
+        { type: "addressLine1", message: "AddressLine1 is required" },
       ]);
       errLength++;
     }
@@ -245,7 +256,7 @@ const Profile = ({ selected, setSelected }: Props) => {
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   First Name
                 </h1>
@@ -274,7 +285,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Email ID
                 </h1>
@@ -282,6 +293,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    disabled
                     className="w-full flex-auto"
                     placeholder="Enter Email ID"
                     onChange={(e) => setEmailId(e.target.value)}
@@ -303,7 +315,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Employee Code
                 </h1>
@@ -332,7 +344,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Department
                 </h1>
@@ -361,20 +373,26 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Date of Birth
                 </h1>
 
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder=""
-                    onChange={(e) => setDob(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DesktopDatePicker
+                      inputFormat="MM/dd/yyyy"
+                      value={dob}
+                      onChange={(date) => setDob(date)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          className="w-full"
+                          size="small"
+                        />
+                      )}
+                    />
+                  </LocalizationProvider>
                 </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
@@ -393,7 +411,7 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
 
             <div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Last Name
                 </h1>
@@ -422,7 +440,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Mobile Number
                 </h1>
@@ -451,23 +469,26 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Gender
                 </h1>
-                <div className="bg-white shadow-md rounded flex-auto">
+                <div className="bg-white w-full shadow-md rounded flex-auto">
                   <FormControl fullWidth>
                     <Select
-                      labelId="label-gender"
                       id="gender"
                       value={gender}
-                      onChange={handleChange}
+                      onChange={(e) => setGender(e.target.value)}
+                      displayEmpty
                       size="small"
-                      className=""
+                      className="w-full"
                     >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
                       <MenuItem value="Male">Male</MenuItem>
                       <MenuItem value="Female">Female</MenuItem>
-                      <MenuItem value="Transgender">Transgender</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -485,7 +506,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Office Branch
                 </h1>
@@ -514,34 +535,128 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
-                  Address
-                </h1>
+            </div>
+          </div>
+        </div>
 
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter your address"
-                    onChange={(e) => setAddress(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "address") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
+        <div className="mt-16">
+          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+            ADDRESS
+          </h1>
+          <div className="flex flex-row">
+            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
+              <h1 className="font-normal text-base text-gray-650 w-36">
+                Line 1
+              </h1>
+              <div className="bg-white w-full rounded drop-shadow">
+                <TextField
+                  id="filled-search"
+                  className="w-full flex-auto"
+                  placeholder="House/Flat No./Building Name"
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+              <div className="mt-1 mb-1 text-left">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "addressLine1") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+            </div>
+            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
+              <h1 className="font-normal text-base text-gray-650 w-36">
+                Line 2
+              </h1>
+
+              <div className="bg-white w-full rounded drop-shadow">
+                <TextField
+                  id="filled-search"
+                  className="w-full flex-auto"
+                  placeholder="Street/Area/Locality"
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+              <div className="mt-1 mb-1 text-left">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "addressLine1") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row">
+            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
+              <h1 className="font-normal text-base text-gray-650 w-36">City</h1>
+
+              <div className="bg-white w-full rounded drop-shadow">
+                <TextField
+                  id="filled-search"
+                  className="w-full flex-auto"
+                  placeholder="City"
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+              <div className="mt-1 mb-1 text-left">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "addressLine1") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+            </div>
+            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
+              <h1 className="font-normal text-base text-gray-650 w-36">
+                State
+              </h1>
+
+              <div className="bg-white w-full rounded drop-shadow">
+                <TextField
+                  id="filled-search"
+                  className="w-full flex-auto"
+                  placeholder="State"
+                  onChange={(e) => setAddressLine1(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+              <div className="mt-1 mb-1 text-left">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "addressLine1") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
               </div>
             </div>
           </div>
@@ -554,20 +669,38 @@ const Profile = ({ selected, setSelected }: Props) => {
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Old Password
                 </h1>
 
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter old password"
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <FormControl variant="outlined" className="w-full">
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showOldPassword ? "text" : "password"}
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      size="small"
+                      className="w-full"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowOldPassword(!showOldPassword)}
+                            onMouseDown={(e) => e.preventDefault()}
+                            edge="end"
+                          >
+                            {showOldPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
                 </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
@@ -583,20 +716,40 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Confirm Password
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Confirm password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
+                  <FormControl variant="outlined" className="w-full">
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      size="small"
+                      className="w-full"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                            onMouseDown={(e) => e.preventDefault()}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
                 </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
@@ -615,20 +768,38 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
 
             <div>
-              <div className="flex flex-row gap-7 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center mb-4">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   New Password
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter new password"
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
+                  <FormControl variant="outlined" className="w-full">
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      size="small"
+                      className="w-full"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            onMouseDown={(e) => e.preventDefault()}
+                            edge="end"
+                          >
+                            {showNewPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
                 </div>
                 <div className="mt-1 mb-1 text-left">
                   {errors.length > 0
@@ -644,54 +815,56 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
               </div>
+              <div className="flex">
+                <div className="w-1/2">
+                  <p
+                    className={`text-xs italic font-normal ${
+                      uppercase ? "text-blue-150" : "text-gray-450"
+                    }`}
+                  >
+                    <span className="text-sm">&#9679;</span> Contain at least
+                    one uppercase
+                  </p>
+
+                  <p
+                    className={`text-xs italic font-normal ${
+                      number ? "text-blue-150" : "text-gray-450"
+                    }`}
+                  >
+                    <span className="text-sm">&#9679;</span> Contain at least
+                    one number
+                  </p>
+
+                  <p
+                    className={`text-xs italic font-normal ${
+                      special ? "text-blue-150" : "text-gray-450"
+                    }`}
+                  >
+                    <span className="text-sm">&#9679;</span> Contain at least
+                    one special character
+                  </p>
+                </div>
+                <div className="w-1/2">
+                  <p
+                    className={`text-xs italic font-normal ${
+                      lowercase ? "text-blue-150" : "text-gray-450"
+                    }`}
+                  >
+                    <span className="text-sm">&#9679;</span> Contain at least
+                    one lowercase
+                  </p>
+
+                  <p
+                    className={`text-xs italic font-normal ${
+                      match ? "text-blue-150" : "text-gray-450"
+                    }`}
+                  >
+                    <span className="text-sm">&#9679;</span> Password should be
+                    greater than 8 characters
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className="">
-            <p
-              className={`text-xs italic font-normal ${
-                uppercase ? "text-blue-150" : "text-gray-450"
-              }`}
-            >
-              <span className="text-sm">&#9679;</span> Contain at least one
-              uppercase
-            </p>
-
-            <p
-              className={`text-xs italic font-normal ${
-                number ? "text-blue-150" : "text-gray-450"
-              }`}
-            >
-              <span className="text-sm">&#9679;</span> Contain at least one
-              number
-            </p>
-
-            <p
-              className={`text-xs italic font-normal ${
-                special ? "text-blue-150" : "text-gray-450"
-              }`}
-            >
-              <span className="text-sm">&#9679;</span> Contain at least one
-              special character
-            </p>
-
-            <p
-              className={`text-xs italic font-normal ${
-                lowercase ? "text-blue-150" : "text-gray-450"
-              }`}
-            >
-              <span className="text-sm">&#9679;</span> Contain at least one
-              lowercase
-            </p>
-
-            <p
-              className={`text-xs italic font-normal ${
-                match ? "text-blue-150" : "text-gray-450"
-              }`}
-            >
-              <span className="text-sm">&#9679;</span> Password should be
-              greater than 8 characters
-            </p>
           </div>
         </div>
 
