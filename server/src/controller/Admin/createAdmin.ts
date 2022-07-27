@@ -12,7 +12,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
         }
         const admin = new Admin();
         admin.name = body.name;
-        admin.employeeID = v4();
+        admin.employeeId = "A" + v4();
         admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.gender = body.gender;
         admin.dob = body.dob;
@@ -20,7 +20,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
         admin.department = body.department.toLowerCase();
         admin.password = body.password;
         admin.profile.name = body.name;
-        admin.profile.employeeID = admin.employeeID;
+        admin.profile.employeeId = admin.employeeId;
         admin.profile.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.profile.gender = body.gender;
         admin.profile.dob = body.dob;

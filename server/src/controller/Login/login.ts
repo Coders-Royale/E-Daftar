@@ -18,7 +18,7 @@ export const Login = async (body: LoginInput) => {
                 const isMatch = await admin.comparePassword(body.password);
                 if (isMatch) {
                     const token = await createToken({
-                        id: admin.employeeID,
+                        id: admin.employeeId,
                         role: "admin"
                     });
                     return {
@@ -49,7 +49,7 @@ export const Login = async (body: LoginInput) => {
 
                 if (isMatch) {
                     const token = await createToken({
-                        id: employee.employeeID,
+                        id: employee.employeeId,
                         role: "employee"
                     });
                     return {
@@ -80,7 +80,7 @@ export const Login = async (body: LoginInput) => {
 
                 if (isMatch) {
                     const token = await createToken({
-                        id: employee.employeeID,
+                        id: employee.employeeId,
                         role: "hod"
                     });
                     return {

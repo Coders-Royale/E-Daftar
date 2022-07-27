@@ -1,7 +1,6 @@
 import { Employee } from "../../models/employee.model";
 import * as Sentry from "@sentry/node";
 import { CreateEmployeeInput } from "../../types/types";
-import { v4 } from "uuid";
 
 export const createHOD = async (body: CreateEmployeeInput) => {
     try {
@@ -11,10 +10,21 @@ export const createHOD = async (body: CreateEmployeeInput) => {
                 message: "Body cannot be empty"
             };
         }
+        var employeeSNo;
+        // get last employee docuement from the database
+        const lastEmployee = await Employee.findOne({}).sort({ employeeSNo: -1 }).limit(1);
+        if (!lastEmployee) {
+            employeeSNo = 1;
+        }
+        else {
+            const lastEmployeeId = lastEmployee.employeeId;
+            const Sno = lastEmployeeId.split("E")[1];
+            employeeSNo = parseInt(Sno) + 1;
+        }
         const employee = new Employee();
         employee.name = body.name;
-        employee.employeeID = v4();
-        employee.email = employee.employeeID + "." + "HOD" + "." + body.department.toLowerCase() + "@gmail.com";
+        employee.employeeId = "E" + employeeSNo;
+        employee.email = employee.employeeId + "." + "HOD" + "." + body.department.toLowerCase() + "@gmail.com";
         employee.gender = body.gender;
         employee.dob = body.dob;
         employee.address = body.address;
@@ -22,7 +32,7 @@ export const createHOD = async (body: CreateEmployeeInput) => {
         employee.password = body.password;
         employee.role = "hod";
         employee.profile.name = body.name;
-        employee.profile.employeeID = employee.employeeID;
+        employee.profile.employeeId = employee.employeeId;
         employee.profile.email = employee.email;
         employee.profile.gender = body.gender;
         employee.profile.dob = body.dob;
