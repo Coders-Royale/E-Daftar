@@ -17,6 +17,10 @@ import Email2 from "../../images/tracking_page_email_2.png";
 import Email3 from "../../images/tracking_page_email_3.png";
 import Dp from "../../images/profile_page_dp.png";
 
+import getSocket from "../../helpers/socket";
+
+const socket = getSocket();
+
 enum Status {
   Pending = "Pending",
   Forwarded = "Forwarded",
