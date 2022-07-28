@@ -31,7 +31,10 @@ export class CreateAdminInput {
     password: string;
 }
 
-export class CreateEmployeeInput extends CreateAdminInput { };
+export class CreateEmployeeInput extends CreateAdminInput {
+    @IsString()
+    personalEmail: string
+};
 
 export class CreateDocumentInput {
     @IsString()
