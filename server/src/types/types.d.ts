@@ -9,7 +9,7 @@ export class CreateIronToken {
 
 export class LoginInput {
     @IsString()
-    email: string
+    employeeId: string
     @IsString()
     password: string
     @IsString()
