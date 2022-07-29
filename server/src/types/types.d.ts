@@ -55,6 +55,31 @@ export class CreateDocumentInput {
     category: string
 }
 
-export class CreateRoomInput {
+export class AssignDocumentInput {
+    @IsString()
+    adminId: string
+    @IsString()
+    department: string
+    @IsString()
+    documentId: string
+    @IsString()
+    employeeToAssign: string // employeeId of the employee to assign
+}
 
+export class ForwardToAdminInput {
+    @IsString()
+    employeeId: string
+    @IsString()
+    department: string
+    @IsString()
+    documentId: string
+}
+
+export class RejectDocumentInput {
+    @IsString()
+    employeeId: string
+    @IsString()
+    documentId: string
+    @IsString()
+    reason: string
 }
