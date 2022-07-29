@@ -8,14 +8,14 @@ export class CreateRoomInput {
     documentId: string;
 }
 
-// export class JoinRoomInput {
-//     @IsString()
-//     roomId: string;
-//     @IsString()
-//     employeeId: string;
-//     @IsString()
-//     name: string;
-// }
+export class JoinRoomInput {
+    @IsString()
+    roomId: string;
+    @IsString()
+    employeeId: string;
+    @IsString()
+    name: string;
+}
 
 // export class SocketJoinRoomInput {
 //     @IsString()
