@@ -49,7 +49,7 @@ export const Login = async (body: LoginInput) => {
 
                 if (isMatch) {
                     // Check if it is HOD 
-                    var token;
+                    let token;
                     if (employee.role == "hod") {
                         token = await createToken({
                             id: employee.employeeId,
