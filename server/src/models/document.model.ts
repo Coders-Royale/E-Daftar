@@ -1,23 +1,33 @@
 import mongoose from "mongoose";
 
 export type Document = mongoose.Document & {
-    documentID: string;
-    employeeID: string;
+    documentId: string;
+    subject: string;
+    description: string;
+    employeeId: string;
     main_file: string[];
     reference_files: string[];
     permissions: string[];
     status: string[];
+    time_recieved: Date[];
+    time_returned: Date[];
+    rejection_reason: string;
     category: string;
 }
 
 const DocumentSchema = new mongoose.Schema<Document>(
     {
-        documentID: { type: String, required: true },
-        employeeID: { type: String, required: true, $ref: "Employee" },
+        documentId: { type: String, required: true },
+        subject: { type: String, required: true },
+        description: String,
+        employeeId: { type: String, required: true },
         main_file: { type: [String], required: true },
         reference_files: [String],
         permissions: [String],
         status: [String],
+        time_recieved: [Date],
+        time_returned: [Date],
+        rejection_reason: String,
         category: { type: String, required: true }
     }
 );
