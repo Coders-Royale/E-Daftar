@@ -168,3 +168,38 @@ export const getMessages = async (req: Request, res: Response) => {
         });
     }
 };
+
+// Find the conversation with the documentId
+export const getConversation = async (req: Request, res: Response) => {
+    try {
+        if (!req.query["documentId"]) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "Invalid request to get conversation",
+            });
+        }
+        const documentId = req.query["documentId"];
+        const conversation = await Conversation.findOne({
+            documentId: documentId
+        });
+        if (!conversation) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "No conversation found",
+            });
+        }
+        return res.status(200).json({
+            error: false,
+            message: "Conversation fetched successfully",
+            data: conversation
+        });
+    }
+    catch (err) {
+        Sentry.captureException(err);
+        await Sentry.flush(2000);
+        res.status(500).json({
+            error: true,
+            message: err.message
+        });
+    }
+}
