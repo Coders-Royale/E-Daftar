@@ -8,7 +8,7 @@ import * as Tracing from "@sentry/tracing";
 import { SENTYRY_DSN } from "./utils/secrets";
 import { connect } from "./config/db";
 import { router } from "./routes/chat";
-import { connectRedis, redisClient } from "./config/cache";
+// import { connectRedis } from "./config/cache";
 const app = express();
 
 Sentry.init({
@@ -30,7 +30,7 @@ Sentry.init({
 connect();
 
 // Redis Config
-connectRedis();
+// connectRedis();
 
 // Express configuration
 app.set("port", process.env.PORT || 3000);
