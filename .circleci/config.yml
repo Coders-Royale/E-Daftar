@@ -10,7 +10,8 @@ jobs:
       - run:
           command: ls -la
           name: list files
-
+      - run:
+          command: cd server/ && pwd
       # - run: 
       #     command: npm ci
       # - run:
