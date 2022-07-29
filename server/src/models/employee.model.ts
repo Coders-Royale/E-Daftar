@@ -5,12 +5,15 @@ export type EmployeeDocument = mongoose.Document & {
     name: string;
     employeeId: string;
     email: string;
+    personal_email: string;
     gender: string;
     dob: Date;
     address: string;
     password: string;
     role: string;
     department: string;
+    resetPasswordToken: string | null,
+    resetPasswordExpires: Date | null,
     profile: {
         name: string;
         employeeId: string;
@@ -31,12 +34,15 @@ const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
         name: { type: String, required: true },
         employeeId: { type: String, required: true },
         email: { type: String, required: true },
+        personal_email: { type: String, required: true },
         gender: { type: String, required: true },
         dob: { type: Date, required: true },
         address: { type: String, required: true },
         department: { type: String, required: true },
         password: String,
         role: { type: String, default: "employee" },
+        resetPasswordToken: { type: String, default: null },
+        resetPasswordExpires: { type: Date, default: null },
         profile: {
             name: { type: String, required: true },
             employeeId: { type: String, required: true },
