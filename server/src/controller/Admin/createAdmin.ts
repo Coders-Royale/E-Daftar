@@ -1,7 +1,7 @@
 import { Admin } from "../../models/admin.model";
 import * as Sentry from "@sentry/node";
 import { CreateAdminInput } from "../../types/types";
-import { v4 } from "uuid";
+
 export const createAdmin = async (body: CreateAdminInput) => {
     try {
         if (!body) {
@@ -10,9 +10,26 @@ export const createAdmin = async (body: CreateAdminInput) => {
                 message: "Body cannot be empty"
             };
         }
+        var employeeSNo: number;
+        // get last employee docuement from the database
+        const noOfDocuments = await Admin.countDocuments();
+        if (noOfDocuments == 0) {
+            employeeSNo = 1;
+        }
+        else {
+            const lastEmployee = await Admin.findOne({}).sort({ "employeeId": -1 });
+            if (!lastEmployee) {
+                employeeSNo = 1;
+            }
+            else {
+                const lastEmployeeId = lastEmployee.employeeId;
+                const Sno = lastEmployeeId.split("A")[1];
+                employeeSNo = parseInt(Sno) + 1;
+            }
+        }
         const admin = new Admin();
         admin.name = body.name;
-        admin.employeeId = "A" + v4();
+        admin.employeeId = "A" + employeeSNo.toString();
         admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.gender = body.gender;
         admin.dob = body.dob;

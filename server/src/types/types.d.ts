@@ -9,7 +9,7 @@ export class CreateIronToken {
 
 export class LoginInput {
     @IsString()
-    email: string
+    employeeId: string
     @IsString()
     password: string
     @IsString()
@@ -31,7 +31,10 @@ export class CreateAdminInput {
     password: string;
 }
 
-export class CreateEmployeeInput extends CreateAdminInput { };
+export class CreateEmployeeInput extends CreateAdminInput {
+    @IsString()
+    personalEmail: string
+};
 
 export class CreateDocumentInput {
     @IsString()

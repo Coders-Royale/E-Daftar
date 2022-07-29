@@ -14,6 +14,8 @@ servers:
     url: http://localhost:7071/api/
   - description: Production Server
     url: https://sih-2022-server.azurewebsites.net/api/
+  - description: Chat Server
+    url: https://sih-email.herokuapp.com/api/chat
 paths:
   /createAdmin:
     post: 
@@ -83,7 +85,114 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/LoginResponse'
-          
+  /uploadFile:
+    post:
+      tags:
+        - employee
+      security: 
+        - bearerAuth: []
+      summary: Upload File
+      operationId: uploadFile
+      parameters: 
+        - in: query
+          name: filename
+          description: filename
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                    type: string
+                    format: binary
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: File Uploaded Successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+  /createDocument:
+    post:
+      tags:
+        - employee
+      security: 
+        - bearerAuth: []
+      summary: Create Document
+      operationId: createDocument
+      requestBody:
+        $ref: '#/components/requestBodies/CreateDocumentInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Document Created Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentResponse'
+  /rooms:
+    get:
+      tags:
+        - chat
+      security:
+       - bearerAuth: []
+      summary: Fetch all the rooms the employee is a part of
+      operationId: rooms
+      parameters: 
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Rooms fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRoomsResponse'
+  /messages:
+    get:
+      tags:
+        - chat
+      security:
+        - bearerAuth: []
+      summary: Fetch all the messages in a room
+      operationId: messages
+      parameters: 
+        - in: query
+          name: roomId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Messages fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMessagesResponse'
 components:
   schemas:
     Employee:
@@ -169,7 +278,41 @@ components:
             role: 
               type: string
             department:
-              type: string
+              type: string 
+    Conversation:
+      type: object
+      properties:
+        conversationName:
+          type: string
+        documentId:
+          type: string
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              info:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+    Message:
+      type: object
+      properties:
+        senderId:
+          type: string
+        subject:
+          type: string
+        content:
+          type: string
+        conversationId:
+          type: string
+        senderName: 
+          type: string
     CreateAdminInput:
       type: object
       properties:
@@ -191,8 +334,6 @@ components:
       properties:
         name:
           type: string
-        password:
-          type: string
         address:
           type: string
         gender:
@@ -202,10 +343,12 @@ components:
           format: date-time
         department:
           type: string
+        personalEmail: 
+          type: string
     LoginInput:
       type: object
       properties:
-        email:
+        employeeId:
           type: string
         password:
           type: string
@@ -215,6 +358,29 @@ components:
             - admin
             - employee
             - hod
+    CreateDocumentInput:
+      type: object
+      properties:
+        employeeId: 
+          type: string
+        employee_name: 
+          type: string
+        subject: 
+          type: string
+        description: 
+          type: string
+        main_file: 
+          type: array
+          items:
+            type: string
+        reference_file:
+          type: array
+          items:
+            type: string
+        forwarding_dept: 
+          type: string
+        category: 
+          type: string
     LoginResponse:
       type: object
       properties:
@@ -222,6 +388,23 @@ components:
           type: string
         profile:
           type: object
+    CreateDocumentResponse:
+      type: object
+      properties: 
+        documentId: 
+          type: string
+        employeeId: 
+          type: string
+        roomId: 
+          type: string
+    GetRoomsResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/Conversation"
+    GetMessagesResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/Message"
   securitySchemes:
     bearerAuth:
       type: http
@@ -254,4 +437,13 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/LoginInput'
+      required: true
+    CreateDocumentInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateDocumentInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/CreateDocumentInput'
       required: true

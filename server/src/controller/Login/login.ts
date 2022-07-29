@@ -13,7 +13,7 @@ export const Login = async (body: LoginInput) => {
             };
         }
         if (body.role.toLowerCase() == "admin") {
-            const admin = await Admin.findOne({ email: body.email });
+            const admin = await Admin.findOne({ employeeId: body.employeeId });
             if (admin) {
                 const isMatch = await admin.comparePassword(body.password);
                 if (isMatch) {
@@ -43,15 +43,25 @@ export const Login = async (body: LoginInput) => {
             }
         }
         else if (body.role.toLowerCase() == "employee") {
-            const employee = await Employee.findOne({ email: body.email });
+            const employee = await Employee.findOne({ employeeId: body.employeeId });
             if (employee) {
                 const isMatch = await employee.comparePassword(body.password);
 
                 if (isMatch) {
-                    const token = await createToken({
-                        id: employee.employeeId,
-                        role: "employee"
-                    });
+                    // Check if it is HOD 
+                    var token;
+                    if (employee.role == "hod") {
+                        token = await createToken({
+                            id: employee.employeeId,
+                            role: "hod"
+                        });
+                    }
+                    else {
+                        token = await createToken({
+                            id: employee.employeeId,
+                            role: "employee"
+                        });
+                    }
                     return {
                         error: false,
                         message: "Login successful",
@@ -73,37 +83,37 @@ export const Login = async (body: LoginInput) => {
                 };
             }
         }
-        else if (body.role.toLowerCase() == "hod") {
-            const employee = await Employee.findOne({ email: body.email, role: "hod" });
-            if (employee) {
-                const isMatch = await employee.comparePassword(body.password);
+        // else if (body.role.toLowerCase() == "hod") {
+        //     const employee = await Employee.findOne({ email: body.email, role: "hod" });
+        //     if (employee) {
+        //         const isMatch = await employee.comparePassword(body.password);
 
-                if (isMatch) {
-                    const token = await createToken({
-                        id: employee.employeeId,
-                        role: "hod"
-                    });
-                    return {
-                        error: false,
-                        message: "Login successful",
-                        data: employee.profile,
-                        token: token.message
-                    };
-                }
-                else {
-                    return {
-                        error: true,
-                        message: "Invalid password"
-                    };
-                }
-            }
-            else {
-                return {
-                    error: true,
-                    message: "Employee not found"
-                };
-            }
-        }
+        //         if (isMatch) {
+        //             const token = await createToken({
+        //                 id: employee.employeeId,
+        //                 role: "hod"
+        //             });
+        //             return {
+        //                 error: false,
+        //                 message: "Login successful",
+        //                 data: employee.profile,
+        //                 token: token.message
+        //             };
+        //         }
+        //         else {
+        //             return {
+        //                 error: true,
+        //                 message: "Invalid password"
+        //             };
+        //         }
+        //     }
+        //     else {
+        //         return {
+        //             error: true,
+        //             message: "Employee not found"
+        //         };
+        //     }
+        // }
         else {
             return {
                 error: true,
