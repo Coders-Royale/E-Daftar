@@ -1,3 +1,4 @@
+import { Conversation } from "../models/conversation.model";
 import { Message } from "../models/message.model";
 const users: any[] = [];
 
@@ -35,6 +36,14 @@ export function getRoomUsers(room: string) {
 
 
 export async function createNewMessageInDb(userId: string, message: string, roomId: string, senderName: string, subject: string) {
+    // check if room exists
+    const conversation = await Conversation.findOne({ _id: roomId });
+    if (!conversation) {
+        return {
+            error: true,
+            message: "Chat room does not exist"
+        }
+    }
     const newMessage = new Message({
         senderId: userId,
         content: message,
