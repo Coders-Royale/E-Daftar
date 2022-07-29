@@ -12,7 +12,7 @@ export const createHOD = async (body: CreateEmployeeInput) => {
                 message: "Body cannot be empty"
             };
         }
-        var employeeSNo;
+        let employeeSNo;
         const noOfDocuments = await Employee.countDocuments();
         if (noOfDocuments == 0) {
             employeeSNo = 1;

@@ -12,7 +12,7 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
                 message: "Body cannot be empty"
             };
         }
-        var employeeSNo;
+        let employeeSNo;
         const noOfDocuments = await Employee.countDocuments();
         if (noOfDocuments == 0) {
             employeeSNo = 1;
@@ -42,7 +42,7 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
         employee.dob = body.dob;
         employee.address = body.address;
         employee.department = body.department.toLowerCase();
-        employee.password = password
+        employee.password = password;
         employee.profile.name = body.name;
         employee.profile.employeeId = employee.employeeId;
         employee.profile.email = employee.email;

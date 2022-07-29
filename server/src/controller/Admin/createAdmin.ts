@@ -10,7 +10,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
                 message: "Body cannot be empty"
             };
         }
-        var employeeSNo: number;
+        let employeeSNo: number;
         // get last employee docuement from the database
         const noOfDocuments = await Admin.countDocuments();
         if (noOfDocuments == 0) {
