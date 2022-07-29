@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import { userJoin, createNewMessageInDb, getCurrentUser, userLeave } from "./utils/chat";
 import { SocketJoinRoomInput, SocketLeaveRoomInput, SocketMessageInput, SocketPrivateMessageInput, SocketRegisterInput } from "./types/types";
+import * as Sentry from "@sentry/node";
 
 const PORT = app.get("port");
 const httpServer = http.createServer(app);
@@ -15,78 +16,113 @@ const io = new Server(httpServer);
 io.on("connection", (socket) => {
     console.log("Socket.io connected");
 
-    socket.on("register", (data) => {
-        if (typeof data === "string") {
-            data = JSON.parse(data);
+    socket.on("register", async (data) => {
+        try {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            const _data = data as SocketRegisterInput;
+            socket.join(_data.userId);
+            console.log("User joined: " + _data.userId);
         }
-        const _data = data as SocketRegisterInput;
-        socket.join(_data.userId);
-        console.log("User joined: " + _data.userId);
-    });
-
-    socket.on("join-room", (data) => {
-        if (typeof data === "string") {
-            data = JSON.parse(data);
-        }
-        const _data = data as SocketJoinRoomInput;
-        if (!_data.userId || !_data.userName || !_data.roomId) {
-            return;
-        }
-        console.log(`User ${_data.userName} wants to join room ${_data.roomId}`);
-        if (_data.roomId) {
-            const user = userJoin(_data.userId, _data.userName, _data.roomId);
-            console.log(`${_data.userName} joined room ${_data.roomId}`);
-            socket.join(user.room);
-            // console.log(`User ${userName} joined room`);
-        }
-        else {
+        catch (err) {
+            Sentry.captureException(err);
+            await Sentry.flush(2200);
             return;
         }
     });
 
-    socket.on("leave-room", (data) => {
-        if (typeof data === "string") {
-            data = JSON.parse(data);
+    socket.on("join-room", async (data) => {
+        try {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            const _data = data as SocketJoinRoomInput;
+            if (!_data.userId || !_data.userName || !_data.roomId) {
+                return;
+            }
+            console.log(`User ${_data.userName} wants to join room ${_data.roomId}`);
+            if (_data.roomId) {
+                const user = userJoin(_data.userId, _data.userName, _data.roomId);
+                console.log(`${_data.userName} joined room ${_data.roomId}`);
+                socket.join(user.room);
+                // console.log(`User ${userName} joined room`);
+            }
+            else {
+                return;
+            }
         }
-        const _data = data as SocketLeaveRoomInput;
-        const user = userLeave(_data.userId);
-        if (user) {
-            socket.leave(user.room);
-            console.log(`${_data.userName} left room ${user.room}`);
+        catch (err) {
+            Sentry.captureException(err);
+            await Sentry.flush(2200);
+            return;
+        }
+    });
+
+    socket.on("leave-room", async (data) => {
+        try {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            const _data = data as SocketLeaveRoomInput;
+            const user = userLeave(_data.userId);
+            if (user) {
+                socket.leave(user.room);
+                console.log(`${_data.userName} left room ${user.room}`);
+            }
+        }
+        catch (err) {
+            Sentry.captureException(err);
+            await Sentry.flush(2200);
+            return;
         }
     });
 
     // when a new message is sent it is broadcasted to every user
     socket.on("message", async (data) => {
-        if (typeof data === "string") {
-            data = JSON.parse(data);
+        try {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            const _data = data as SocketMessageInput;
+            console.log(`${_data.senderId} sent message: ${_data.content}`);
+            const user = getCurrentUser(_data.senderId);
+            io.to(user.room).emit("message", {
+                senderId: _data.senderId,
+                content: _data.content,
+                createdAt: _data.createdAt,
+                senderuserName: _data.senderName,
+                subject: _data.subject
+            });
+            createNewMessageInDb(_data.senderId, _data.content, user.room, _data.senderName, _data.subject);
         }
-        const _data = data as SocketMessageInput;
-        console.log(`${_data.senderId} sent message: ${_data.content}`);
-        const user = getCurrentUser(_data.senderId);
-        io.to(user.room).emit("message", {
-            senderId: _data.senderId,
-            content: _data.content,
-            createdAt: _data.createdAt,
-            senderuserName: _data.senderName,
-            subject: _data.subject
-        });
-        createNewMessageInDb(_data.senderId, _data.content, user.room, _data.senderName, _data.subject);
+        catch (err) {
+            Sentry.captureException(err);
+            await Sentry.flush(2200);
+            return;
+        }
     });
 
-    socket.on("private-message", (data) => {
-        if (typeof data === "string") {
-            data = JSON.parse(data);
+    socket.on("private-message", async (data) => {
+        try {
+            if (typeof data === "string") {
+                data = JSON.parse(data);
+            }
+            const _data = data as SocketPrivateMessageInput;
+            console.log(`${_data.senderId} sent private message to ${_data.receiverId}: ${_data.content}`);
+            io.to(_data.receiverId).emit("private-message", {
+                senderId: _data.senderId,
+                content: _data.content,
+                createdAt: _data.createdAt,
+                senderuserName: _data.senderName,
+                subject: _data.subject
+            });
         }
-        const _data = data as SocketPrivateMessageInput;
-        console.log(`${_data.senderId} sent private message to ${_data.receiverId}: ${_data.content}`);
-        io.to(_data.receiverId).emit("private-message", {
-            senderId: _data.senderId,
-            content: _data.content,
-            createdAt: _data.createdAt,
-            senderuserName: _data.senderName,
-            subject: _data.subject
-        });
+        catch (err) {
+            Sentry.captureException(err);
+            await Sentry.flush(2200);
+            return;
+        }
     });
 
     socket.on("disconnect", () => {
