@@ -193,6 +193,90 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetMessagesResponse'
+  /assignDocument:
+    post:
+      tags:
+        - employee
+      security:
+        - bearerAuth: []
+      summary: Assign a document to an employee in your department
+      operationId: assignDocument
+      requestBody:
+        $ref: '#/components/requestBodies/AssignDocumentInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Document assigned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignDocumentResponse'
+  /forwardToAdmin:
+    post:
+      tags:
+        - employee
+      security:
+        - bearerAuth: []
+      summary: Forward a document to an admin
+      operationId: forwardToAdmin
+      requestBody:
+        $ref: '#/components/requestBodies/ForwardToAdminInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Document forwarded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignDocumentResponse'
+  /rejectDocument:
+    post:
+      tags:
+        - employee
+      security:
+        - bearerAuth: []
+      summary: Reject a document
+      operationId: rejectDocument
+      requestBody:
+        $ref: '#/components/requestBodies/RejectDocumentInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Document rejected successfully
+  /conversation:
+    get:
+      tags:
+        - chat
+      security:
+        - bearerAuth: []
+      summary: Fetch a conversation from a documentId
+      operationId: conversation
+      parameters: 
+        - in: query
+          name: documentId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Conversation fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
 components:
   schemas:
     Employee:
@@ -313,6 +397,48 @@ components:
           type: string
         senderName: 
           type: string
+    Document:
+      type: object
+      properties:
+        documentId: 
+          type: string
+        subject: 
+          type: string
+        description: 
+          type: string
+        employeeId: 
+          type: string
+        main_file: 
+          type: array
+          items:
+            type: string
+        reference_files: 
+          type: array
+          items:
+            type: string
+        permissions: 
+          type: array
+          items:
+            type: string  
+        status: 
+          type: array
+          items:
+            type: string
+        time_recieved: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        time_returned: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        rejection_reason: 
+          type: string
+        category: 
+          type: string
+
     CreateAdminInput:
       type: object
       properties:
@@ -381,6 +507,35 @@ components:
           type: string
         category: 
           type: string
+    AssignDocumentInput:
+      type: object
+      properties:
+        adminId: 
+          type: string
+        department: 
+          type: string
+        documentId: 
+          type: string
+        employeeToAssign: 
+          type: string
+    ForwardToAdminInput:
+      type: object
+      properties:
+        employeeId: 
+          type: string
+        department: 
+          type: string  
+        documentId: 
+          type: string
+    RejectDocumentInput:
+      type: object
+      properties:
+        employeeId: 
+          type: string
+        documentId: 
+          type: string
+        reason: 
+          type: string
     LoginResponse:
       type: object
       properties:
@@ -405,6 +560,13 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Message"
+    AssignDocumentResponse:
+      type: object
+      properties:
+        employeeAssignedId:
+          type: string
+        employeeAssignedName:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
@@ -446,4 +608,31 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/CreateDocumentInput'
+      required: true
+    AssignDocumentInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AssignDocumentInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/AssignDocumentInput'
+      required: true
+    ForwardToAdminInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForwardToAdminInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ForwardToAdminInput'
+      required: true
+    RejectDocumentInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RejectDocumentInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/RejectDocumentInput'
       required: true
