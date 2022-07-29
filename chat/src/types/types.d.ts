@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsArray, IsString } from "class-validator";
 import { participants } from "../models/conversation.model";
 
 export class CreateRoomInput {
@@ -29,6 +29,8 @@ export class SocketJoinRoomInput {
 export class SocketRegisterInput {
     @IsString()
     userId: string;
+    @IsString()
+    userName: string;
 }
 
 export class SocketMessageInput {
@@ -59,6 +61,12 @@ export class SocketPrivateMessageInput {
     receiverId: string;
     @IsString()
     receiverName: string;
+    @IsArray()
+    main_file: string[];
+    @IsArray()
+    reference_file?: string[];
+    @IsString()
+    documentId: string;
 }
 
 export class SocketLeaveRoomInput {

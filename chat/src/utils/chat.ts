@@ -1,5 +1,6 @@
 import { Conversation } from "../models/conversation.model";
 import { Message } from "../models/message.model";
+import * as Sentry from "@sentry/node";
 const users: any[] = [];
 
 // Join user to chat
@@ -52,6 +53,30 @@ export async function createNewMessageInDb(userId: string, message: string, room
         subject: subject
     });
     await newMessage.save();
+}
+
+export async function getRoomFromDocumentId(documentId: string) {
+    try {
+        const conversation = await Conversation.findOne({ documentId: documentId });
+        if (!conversation) {
+            return {
+                error: true,
+                message: "Chat room does not exist"
+            }
+        }
+        return {
+            error: false,
+            room: conversation
+        }
+    }
+    catch (err) {
+        Sentry.captureException(err);
+        await Sentry.flush(2200);
+        return {
+            error: true,
+            message: "Error getting room"
+        }
+    }
 }
 
 export async function checkIfRoomHasNoMessages(roomId: string) {
