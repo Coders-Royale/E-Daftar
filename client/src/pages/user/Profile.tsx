@@ -38,9 +38,10 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [dob, setDob] = useState<Date | string | null>("");
   const [mobileNo, setMobileNo] = useState<string>("");
   const [officeBranch, setOfficeBranch] = useState<string>("");
-  const [addressLine1, setAddressLine1] = useState<string>("");
-  const [addressLine2, setAddressLine2] = useState<string>("");
-  const [addressLine3, setAddressLine3] = useState<string>("");
+  const [line1, setLine1] = useState<string>("");
+  const [line2, setLine2] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
   const [gender, setGender] = useState<string>("");
 
   const [uppercase, setUppercase] = useState(false);
@@ -169,7 +170,7 @@ const Profile = ({ selected, setSelected }: Props) => {
       errLength++;
     }
 
-    if (addressLine1 === "") {
+    if (line1 === "") {
       setErrors((errors: Error[]) => [
         ...errors,
         { type: "addressLine1", message: "AddressLine1 is required" },
@@ -543,7 +544,7 @@ const Profile = ({ selected, setSelected }: Props) => {
           <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
             ADDRESS
           </h1>
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-20">
             <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
               <h1 className="font-normal text-base text-gray-650 w-36">
                 Line 1
@@ -553,7 +554,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="House/Flat No./Building Name"
-                  onChange={(e) => setAddressLine1(e.target.value)}
+                  onChange={(e) => setLine1(e.target.value)}
                   variant="outlined"
                   size="small"
                 />
@@ -582,7 +583,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="Street/Area/Locality"
-                  onChange={(e) => setAddressLine1(e.target.value)}
+                  onChange={(e) => setLine2(e.target.value)}
                   variant="outlined"
                   size="small"
                 />
@@ -602,7 +603,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-20">
             <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
               <h1 className="font-normal text-base text-gray-650 w-36">City</h1>
 
@@ -611,7 +612,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="City"
-                  onChange={(e) => setAddressLine1(e.target.value)}
+                  onChange={(e) => setCity(e.target.value)}
                   variant="outlined"
                   size="small"
                 />
@@ -640,7 +641,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="State"
-                  onChange={(e) => setAddressLine1(e.target.value)}
+                  onChange={(e) => setState(e.target.value)}
                   variant="outlined"
                   size="small"
                 />

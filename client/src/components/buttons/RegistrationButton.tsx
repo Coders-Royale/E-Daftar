@@ -5,16 +5,18 @@ export interface SignInButtonProps {
   text: string;
   toUrl: string;
   validate?: Function;
+  click?: Function;
 }
 
 const dummy = () => {
   return true;
-}
+};
 
 export default function RegistrationButton({
   toUrl,
   text,
   validate,
+  click,
 }: SignInButtonProps) {
   const navigate = useNavigate();
 
@@ -24,12 +26,12 @@ export default function RegistrationButton({
 
   return (
     <div>
-        <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 w-full rounded-lg font-semibold"
-        onClick={(e) => {
-            wrapValidate() && navigate(`${toUrl}`);
-        }}>
-          {text}
-        </button>
+      <button
+        className="bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 w-full rounded-lg font-semibold"
+        onClick={click}
+      >
+        {text}
+      </button>
     </div>
   );
 }
