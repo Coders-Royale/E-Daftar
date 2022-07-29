@@ -8,23 +8,23 @@ export class CreateRoomInput {
     documentId: string;
 }
 
-export class JoinRoomInput {
-    @IsString()
-    roomId: string;
-    @IsString()
-    employeeId: string;
-    @IsString()
-    name: string;
-}
+// export class JoinRoomInput {
+//     @IsString()
+//     roomId: string;
+//     @IsString()
+//     employeeId: string;
+//     @IsString()
+//     name: string;
+// }
 
-export class SocketJoinRoomInput {
-    @IsString()
-    userId: string;
-    @IsString()
-    userName: string;
-    @IsString()
-    roomId: string;
-}
+// export class SocketJoinRoomInput {
+//     @IsString()
+//     userId: string;
+//     @IsString()
+//     userName: string;
+//     @IsString()
+//     roomId: string;
+// }
 
 export class SocketRegisterInput {
     @IsString()
@@ -33,18 +33,18 @@ export class SocketRegisterInput {
     userName: string;
 }
 
-export class SocketMessageInput {
-    @IsString()
-    senderId: string;
-    @IsString()
-    content: string;
-    @IsString()
-    createdAt: string;
-    @IsString()
-    senderName: string;
-    @IsString()
-    subject: string;
-}
+// export class SocketMessageInput {
+//     @IsString()
+//     senderId: string;
+//     @IsString()
+//     content: string;
+//     @IsString()
+//     createdAt: string;
+//     @IsString()
+//     senderName: string;
+//     @IsString()
+//     subject: string;
+// }
 
 export class SocketPrivateMessageInput {
     @IsString()
