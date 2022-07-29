@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import SideBg from "../../components/SideBg";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
@@ -14,21 +12,38 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Checkbox from "@mui/material/Checkbox";
 import SignInButton from "../../components/buttons/SignInButton";
 import DiveIn from "../../components/buttons/RegistrationButton";
+import { useMutateLogin } from "../../queries/mutations";
 
 export default function SignIn() {
-  const [password, setPassword] = useState("");
-  const [empId, setEmpId] = useState("");
-  const [role, setRole] = useState("");
+  const [password, setPassword] = useState<string>("");
+  const [empId, setEmpId] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Error[]>([]);
+  var errLength = 0;
+
+  const { mutateAsync: loginData } = useMutateLogin({
+    onSuccess: () => {
+      console.log("login success");
+    },
+    onError: () => {
+      console.log("login error");
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  });
 
   interface Error {
     type: string;
     message: string;
   }
-  const [errors, setErrors] = useState<Error[]>([]);
 
-  var errLength = 0;
+  interface LoginData {
+    empId: string;
+    password: string;
+  }
 
   const validate = () => {
     errLength = 0;
@@ -38,14 +53,6 @@ export default function SignIn() {
       setErrors((errors: Error[]) => [
         ...errors,
         { type: "employeeId", message: "Employee ID is required" },
-      ]);
-      errLength++;
-    }
-
-    if (role === "") {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        { type: "role", message: "Role is required" },
       ]);
       errLength++;
     }
@@ -129,21 +136,6 @@ export default function SignIn() {
             value={empId}
             onChange={(e) => setEmpId(e.target.value)}
           />
-          <FormControl fullWidth>
-            <InputLabel id="select-role-label" size="small">
-              Role
-            </InputLabel>
-            <Select
-              id="select-role"
-              label="Role"
-              size="small"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <MenuItem value={"Employee"}>Employee</MenuItem>
-              <MenuItem value={"Admin"}>Admin</MenuItem>
-            </Select>
-          </FormControl>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -151,19 +143,6 @@ export default function SignIn() {
             {errors.length > 0
               ? errors.map((item, index) => {
                   if (item.type === "employeeId") {
-                    return (
-                      <p className="text-red-500 text-xs" key={index}>
-                        {item.message}
-                      </p>
-                    );
-                  }
-                })
-              : null}
-          </div>
-          <div className="mt-1 mb-1 text-left">
-            {errors.length > 0
-              ? errors.map((item, index) => {
-                  if (item.type === "role") {
                     return (
                       <p className="text-red-500 text-xs" key={index}>
                         {item.message}
@@ -230,7 +209,19 @@ export default function SignIn() {
             Forgot Password?
           </Link>
         </div>
-        <DiveIn text={"Dive In !!!"} toUrl="/" validate={validate} />
+        <DiveIn
+          text={"Dive In !!!"}
+          toUrl="/"
+          validate={validate}
+          click={(e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            validate() &&
+              loginData<LoginData>({
+                empId: empId,
+                password: password,
+              });
+          }}
+        />
       </div>
     </div>
   );

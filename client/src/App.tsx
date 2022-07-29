@@ -7,7 +7,7 @@ import SignIn from "./pages/registration/SignIn";
 import ForgotPassword from "./pages/registration/ForgotPassword";
 import NewPassword from "./pages/registration/NewPassword";
 import CreateNewEmployee from "./pages/admin/CreateNewEmployee";
-import Dashboard from "./pages/admin/dashboard";
+import Dashboard from "./pages/admin/Dashboard";
 import Tracking from "./pages/admin/Tracking";
 import Notifications from "./pages/admin/Notifications";
 import Profile from "./pages/user/Profile";
