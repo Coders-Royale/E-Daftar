@@ -126,8 +126,6 @@ io.on("connection", (socket) => {
                 createdAt: _data.createdAt,
                 senderuserName: _data.senderName,
                 subject: _data.subject,
-                main_file: _data.main_file,
-                reference_files: _data.reference_file ? _data.reference_file : []
             });
         }
         catch (err) {

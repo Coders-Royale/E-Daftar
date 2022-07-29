@@ -61,10 +61,6 @@ export class SocketPrivateMessageInput {
     receiverId: string;
     @IsString()
     receiverName: string;
-    @IsArray()
-    main_file: string[];
-    @IsArray()
-    reference_file?: string[];
     @IsString()
     documentId: string;
 }
