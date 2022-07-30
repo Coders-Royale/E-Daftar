@@ -5,13 +5,14 @@ orbs:
 jobs:
   build:
     executor: node/default
+    working_directory: ~/project/server
     steps:
       - checkout
       - run:
           command: ls -la
           name: list files
-      - run:
-          command: cd server/ && npm ci
+      # - run:
+      #     command: cd server/ && npm ci
       # - run: 
       #     command: npm ci
       # - run:
