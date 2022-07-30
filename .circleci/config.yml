@@ -11,7 +11,7 @@ jobs:
           command: ls -la
           name: list files
       - run:
-          command: cd server/ && npm i
+          command: cd server/ && npm ci
       # - run: 
       #     command: npm ci
       # - run:
