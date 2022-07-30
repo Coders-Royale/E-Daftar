@@ -6,11 +6,11 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "prestart": "yarn build",
+    "prestart": "npm run build",
+    "build:production": "npm run prestart && npm prune --production",
     "start": "func start",
-    "test": "jest --verbose",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-    "postinstall": "tsc"
+    "test": "echo \"No tests yet...\"",
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
   },
   "dependencies": {
     "@hapi/iron": "^7.0.0",
