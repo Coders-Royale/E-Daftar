@@ -11,17 +11,15 @@ jobs:
       - run:
           command: ls -la
           name: list files
-      # - run:
-      #     command: cd server/ && npm ci
-      # - run: 
-      #     command: npm ci
-      # - run:
-      #     command: npm run build:production
-      #     name: Build app
-      # - persist_to_workspace:
-      #     root: ~/project/server
-      #     paths: 
-      #       - .
+      - run:
+          command: cd server/ && npm ci
+      - run:
+          command: npm run build:production
+          name: Build app
+      - persist_to_workspace:
+          root: ~/project/server
+          paths: 
+            - .
 
   # deploy: # this can be any name you choose
   #   executor: node/default
