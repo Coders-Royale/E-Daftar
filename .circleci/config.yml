@@ -12,36 +12,33 @@ jobs:
           command: ls -la
           name: list files
       - run:
-          command: cd server/ && npm ci
-      - run:
-          command: npm run build:production
-          name: Build app
+          command: cd server/ && npm ci && npm run build:production
       - persist_to_workspace:
           root: ~/project/server
           paths: 
             - .
 
-  # deploy: # this can be any name you choose
-  #   executor: node/default
-  #   steps:
-  #     - attach_workspace:
-  #         at: ~/project/server
-  #     - azure-cli/install
-  #     - azure-cli/login-with-service-principal
-  #     - run:
-  #         name: Install Azure functions tools
-  #         command: sudo npm i -g azure-functions-core-tools@4 --unsafe-perm true
-  #     - run:
-  #         name: Deploy to Azure function App
-  #         command: func azure functionapp publish $FUNCTION_APP_NAME --javascript --worker-runtime node
+  deploy: # this can be any name you choose
+    executor: node/default
+    steps:
+      - attach_workspace:
+          at: ~/project/server
+      - azure-cli/install
+      - azure-cli/login-with-service-principal
+      - run:
+          name: Install Azure functions tools
+          command: sudo npm i -g azure-functions-core-tools@4 --unsafe-perm true
+      - run:
+          name: Deploy to Azure function App
+          command: func azure functionapp publish $FUNCTION_APP_NAME --javascript --worker-runtime node
 
 workflows:
   deploy-to-azure-function-app:
     jobs:
       - build
-      # - deploy:
-      #     requires:
-      #       - build # only deploy if the build job has completed
-      #     filters:
-      #       branches:
-      #         only: main # only deploy when on main
+      - deploy:
+          requires:
+            - build # only deploy if the build job has completed
+          filters:
+            branches:
+              only: main # only deploy when on main
