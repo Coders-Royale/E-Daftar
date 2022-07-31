@@ -37,18 +37,29 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
         const employee = new Employee();
         employee.name = body.name;
         employee.employeeId = "E" + employeeSNo.toString();
-        employee.email = employee.employeeId + "." + body.department.toLowerCase() + "@gmail.com";
+        employee.personal_email = body.personalEmail;
+        employee.contactNo = body.contactNo;
         employee.gender = body.gender;
         employee.dob = body.dob;
-        employee.address = body.address;
+        employee.addr_line1 = body.addr_line1;
+        employee.addr_line2 = body.addr_line2;
+        employee.city = body.city;
+        employee.state = body.state;
+        employee.office_branch = body.office_branch;
         employee.department = body.department.toLowerCase();
+        employee.email = employee.employeeId + "." + body.department.toLowerCase() + "@gmail.com";
         employee.password = password;
         employee.profile.name = body.name;
         employee.profile.employeeId = employee.employeeId;
+        employee.profile.contactNo = body.contactNo;
         employee.profile.email = employee.email;
         employee.profile.gender = body.gender;
         employee.profile.dob = body.dob;
-        employee.profile.address = body.address;
+        employee.profile.addr_line1 = body.addr_line1;
+        employee.profile.addr_line2 = body.addr_line2;
+        employee.profile.city = body.city;
+        employee.profile.state = body.state;
+        employee.profile.office_branch = body.office_branch;
         employee.profile.department = body.department.toLowerCase();
 
         // Send email to user about his Login Credentials

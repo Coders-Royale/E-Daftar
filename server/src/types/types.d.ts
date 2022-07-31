@@ -20,21 +20,30 @@ export class CreateAdminInput {
     @IsString()
     name: string
     @IsString()
+    personalEmail: string
+    @IsString()
+    contactNo: string
+    @IsString()
     gender: string
     @IsDate()
     dob: Date
     @IsString()
-    address: string;
+    addr_line1: string;
+    @IsString()
+    addr_line2: string;
+    @IsString()
+    city: string;
+    @IsString()
+    state: string;
+    @IsString()
+    office_branch: string;
     @IsString()
     department: string;
     @IsString()
     password: string;
 }
 
-export class CreateEmployeeInput extends CreateAdminInput {
-    @IsString()
-    personalEmail: string
-};
+export class CreateEmployeeInput extends CreateAdminInput { };
 
 export class CreateDocumentInput {
     @IsString()
