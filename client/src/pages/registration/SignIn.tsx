@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SideBg from "../../components/SideBg";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -22,10 +22,18 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Error[]>([]);
   var errLength = 0;
+  const navigate = useNavigate();
 
   const { mutateAsync: loginData } = useMutateLogin({
-    onSuccess: () => {
-      console.log("login success");
+    onSuccess: (data: any) => {
+      if (data.message === "Login successful") {
+        if (rememberMe) {
+          localStorage.setItem("token", data.token);
+        }
+        navigate(
+          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/primary"
+        );
+      }
     },
     onError: () => {
       console.log("login error");
@@ -33,16 +41,11 @@ export default function SignIn() {
     onMutate: () => {
       setLoading(true);
     },
-  });
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   interface Error {
     type: string;
     message: string;
-  }
-
-  interface LoginData {
-    empId: string;
-    password: string;
   }
 
   const validate = () => {
@@ -209,19 +212,19 @@ export default function SignIn() {
             Forgot Password?
           </Link>
         </div>
-        <DiveIn
-          text={"Dive In !!!"}
-          toUrl="/"
-          validate={validate}
-          click={(e: React.FormEvent<HTMLFormElement>) => {
+        <div
+          onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
             e.preventDefault();
             validate() &&
-              loginData<LoginData>({
-                empId: empId,
+              loginData({
+                employeeId: empId,
                 password: password,
+                role: empId.substring(0, 1) === "E" ? "employee" : "admin",
               });
           }}
-        />
+        >
+          <DiveIn text={"Dive In !!!"} toUrl="/" />
+        </div>
       </div>
     </div>
   );

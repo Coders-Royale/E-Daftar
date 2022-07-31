@@ -76,11 +76,7 @@ const ForgotPassword = () => {
             : null}
         </div>
         <RegistrationBackButton toUrl="/sign-in" />
-        <RegistrationButton
-          toUrl="/new-password"
-          text="Reset Password"
-          validate={validate}
-        />
+        <RegistrationButton toUrl="/new-password" text="Reset Password" />
       </div>
     </div>
   );

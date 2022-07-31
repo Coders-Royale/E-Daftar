@@ -6,25 +6,26 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import Dp from "../../images/profile_page_dp.png";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
 }
+
+interface Error {
+  type: string;
+  message: string;
+}
+
 const Profile = ({ selected, setSelected }: Props) => {
   useEffect(() => {
     setSelected(7);
@@ -43,7 +44,6 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [gender, setGender] = useState<string>("");
-
   const [uppercase, setUppercase] = useState(false);
   const [number, setNumber] = useState(false);
   const [special, setSpecial] = useState(false);
@@ -55,29 +55,22 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState<Error[]>([]);
 
   const clearInputs = () => {
-    (document.getElementById("firstName") as HTMLInputElement)!.value = "";
-    (document.getElementById("lastName") as HTMLInputElement)!.value = "";
-    (document.getElementById("employeeCode") as HTMLInputElement)!.value = "";
-    (document.getElementById("gender") as HTMLInputElement)!.value = "";
-    (document.getElementById("dob") as HTMLInputElement)!.value = "";
-    (document.getElementById("addressLine1") as HTMLInputElement)!.value = "";
-    (document.getElementById("emailid") as HTMLInputElement)!.value = "";
-    (document.getElementById("mobileno") as HTMLInputElement)!.value = "";
-    (document.getElementById("department") as HTMLInputElement)!.value = "";
-    (document.getElementById("officeBranch") as HTMLInputElement)!.value = "";
-    (document.getElementById("oldPassword") as HTMLInputElement)!.value = "";
-    (document.getElementById("newPassword") as HTMLInputElement)!.value = "";
-    (document.getElementById("confirmPassword") as HTMLInputElement)!.value =
-      "";
+    setFirstName("");
+    setLastName("");
+    setEmployeeCode("");
+    setDepartment("");
+    setDob("");
+    setMobileNo("");
+    setOfficeBranch("");
+    setLine1("");
+    setLine2("");
+    setCity("");
+    setState("");
+    setGender("");
   };
-
-  interface Error {
-    type: string;
-    message: string;
-  }
-  const [errors, setErrors] = useState<Error[]>([]);
 
   var errLength = 0;
 
@@ -267,6 +260,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter First Name"
+                    value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -297,6 +291,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     disabled
                     className="w-full flex-auto"
                     placeholder="Enter Email ID"
+                    value={emailId}
                     onChange={(e) => setEmailId(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -326,6 +321,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Employee Code"
+                    value={employeeCode}
                     onChange={(e) => setEmployeeCode(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -355,6 +351,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter department"
+                    value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -422,6 +419,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Last Name"
+                    value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -451,6 +449,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Mobile Number"
+                    value={mobileNo}
                     onChange={(e) => setMobileNo(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -485,11 +484,14 @@ const Profile = ({ selected, setSelected }: Props) => {
                       className="w-full"
                     >
                       <MenuItem value="">
-                        <em>Select</em>
+                        <em>Select Gender</em>
                       </MenuItem>
-                      <MenuItem value="Male">Male</MenuItem>
+                      {/* <MenuItem value="Male">Male</MenuItem>
                       <MenuItem value="Female">Female</MenuItem>
-                      <MenuItem value="Other">Other</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem> */}
+                      {["Male", "Female", "Other"].map((item, index) => {
+                        return <MenuItem value={item}>{item}</MenuItem>;
+                      })}
                     </Select>
                   </FormControl>
                 </div>
@@ -517,6 +519,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter office branch"
+                    value={officeBranch}
                     onChange={(e) => setOfficeBranch(e.target.value)}
                     variant="outlined"
                     size="small"
@@ -554,6 +557,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="House/Flat No./Building Name"
+                  value={line1}
                   onChange={(e) => setLine1(e.target.value)}
                   variant="outlined"
                   size="small"
@@ -583,6 +587,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="Street/Area/Locality"
+                  value={line2}
                   onChange={(e) => setLine2(e.target.value)}
                   variant="outlined"
                   size="small"
@@ -612,6 +617,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   id="filled-search"
                   className="w-full flex-auto"
                   placeholder="City"
+                  value={city}
                   onChange={(e) => setCity(e.target.value)}
                   variant="outlined"
                   size="small"
@@ -633,18 +639,67 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
             <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
               <h1 className="font-normal text-base text-gray-650 w-36">
-                State
+                State / UT
               </h1>
-
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  id="filled-search"
-                  className="w-full flex-auto"
-                  placeholder="State"
-                  onChange={(e) => setState(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+              <div className="bg-white w-full shadow-md rounded flex-auto">
+                <FormControl fullWidth>
+                  <Select
+                    id="state"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    displayEmpty
+                    size="small"
+                    className="w-full"
+                  >
+                    <MenuItem value="">
+                      <em>Select State / UT</em>
+                    </MenuItem>
+                    {[
+                      "Andaman and Nicobar Islands",
+                      "Andhra Pradesh",
+                      "Arunachal Pradesh",
+                      "Assam",
+                      "Bihar",
+                      "Chandigarh",
+                      "Chhattisgarh",
+                      "Dadra and Nagar Haveli",
+                      "Daman and Diu",
+                      "Delhi",
+                      "Goa",
+                      "Gujarat",
+                      "Haryana",
+                      "Himachal Pradesh",
+                      "Jammu and Kashmir",
+                      "Jharkhand",
+                      "Karnataka",
+                      "Kerala",
+                      "Lakshadweep",
+                      "Madhya Pradesh",
+                      "Maharashtra",
+                      "Manipur",
+                      "Meghalaya",
+                      "Mizoram",
+                      "Nagaland",
+                      "Odisha",
+                      "Puducherry",
+                      "Punjab",
+                      "Rajasthan",
+                      "Sikkim",
+                      "Tamil Nadu",
+                      "Telangana",
+                      "Tripura",
+                      "Uttar Pradesh",
+                      "Uttarakhand",
+                      "West Bengal",
+                    ].map((item, index) => {
+                      return (
+                        <MenuItem key={index} value={item}>
+                          {item}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
               </div>
               <div className="mt-1 mb-1 text-left">
                 {errors.length > 0
@@ -769,7 +824,7 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
 
             <div>
-              <div className="flex flex-row gap-6 items-center mb-4">
+              <div className="flex flex-row gap-6 items-center">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   New Password
                 </h1>
@@ -871,7 +926,7 @@ const Profile = ({ selected, setSelected }: Props) => {
 
         <div className="pt-16 flex flex-row gap-8 mx-auto w-80 pb-44">
           <div className="flex-auto">
-            <RegistrationButton text="Update" toUrl="/" validate={validate} />
+            <RegistrationButton text="Update" toUrl="/" />
           </div>
           <div className="flex-auto">
             <button
