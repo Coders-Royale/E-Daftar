@@ -282,87 +282,158 @@ components:
     Employee:
       type: object
       properties:
-        name:
+        name: 
           type: string
-        employeeID:
+        employeeId: 
           type: string
-        email:
+        email: 
           type: string
-        gender:
+        personal_email: 
           type: string
-        dob:
+        contactNo: 
+          type: string
+        gender: 
+          type: string
+        dob: 
           type: string
           format: date-time
-        address:
+        addr_line1: 
           type: string
-        password:
+        addr_line2: 
+          type: string
+        city: 
+          type: string
+        state: 
+          type: string
+        country: 
+          type: string
+          default: India
+        office_branch: 
+          type: string
+        password: 
           type: string
         role: 
           type: string
-        department:
+          default: employee
+        department: 
           type: string
+        resetPasswordToken: 
+          type: string
+          default: null
+        resetPasswordExpires: 
+          type: string
+          format: date-time
         profile:
           type: object
           properties:
-            name:
+            name: 
               type: string
-            employeeID:
+            employeeId: 
               type: string
-            email:
+            email: 
               type: string
-            gender:
+            contactNo: 
               type: string
-            dob:
+            gender: 
+              type: string
+            dob: 
               type: string
               format: date-time
-            address:
+            addr_line1: 
+              type: string
+            addr_line2: 
+              type: string
+            city: 
+              type: string
+            state: 
+              type: string
+            country: 
+              type: string
+              default: India
+            office_branch: 
               type: string
             role: 
               type: string
-            department:
+              default: employee
+            department: 
               type: string
     Admin:
       type: object
       properties:
-        name:
+        name: 
           type: string
-        employeeID:
+        employeeId: 
           type: string
-        email:
+        email: 
           type: string
-        gender:
+        personal_email: 
           type: string
-        dob:
+        contactNo: 
+          type: string
+        gender: 
+          type: string
+        dob: 
           type: string
           format: date-time
-        address:
+        addr_line1: 
           type: string
-        password:
+        addr_line2: 
+          type: string
+        city: 
+          type: string
+        state: 
+          type: string
+        country: 
+          type: string
+          default: India
+        office_branch: 
+          type: string
+        password: 
           type: string
         role: 
           type: string
-        department:
+          default: admin
+        department: 
           type: string
+        resetPasswordToken: 
+          type: string
+        resetPasswordExpires: 
+          type: string
+          format: date-time
         profile:
           type: object
           properties:
-            name:
+            name: 
               type: string
-            employeeID:
+            employeeId: 
               type: string
-            email:
+            email: 
               type: string
-            gender:
+            contactNo: 
               type: string
-            dob:
+            gender: 
+              type: string
+            dob: 
               type: string
               format: date-time
-            address:
+            addr_line1: 
+              type: string
+            addr_line2: 
+              type: string
+            city: 
+              type: string
+            state: 
+              type: string
+            country: 
+              type: string
+              default: India
+            office_branch: 
               type: string
             role: 
               type: string
-            department:
-              type: string 
+              default: admin
+            department: 
+              type: string
     Conversation:
       type: object
       properties:
@@ -442,34 +513,62 @@ components:
     CreateAdminInput:
       type: object
       properties:
-        name:
+        name: 
           type: string
-        password:
+        personal_email: 
           type: string
-        address:
+        contactNo: 
           type: string
-        gender:
+        gender: 
           type: string
-        dob:
+        dob: 
           type: string
           format: date-time
-        department:
+        addr_line1: 
+          type: string
+        addr_line2: 
+          type: string
+        city: 
+          type: string
+        state: 
+          type: string
+        office_branch: 
+          type: string
+        role: 
+          type: string
+        department: 
+          type: string
+        password:
           type: string
     CreateEmployeeInput:
       type: object
       properties:
-        name:
+        name: 
           type: string
-        address:
+        personal_email: 
           type: string
-        gender:
+        contactNo: 
           type: string
-        dob:
+        gender: 
+          type: string
+        dob: 
           type: string
           format: date-time
-        department:
+        addr_line1: 
           type: string
-        personalEmail: 
+        addr_line2: 
+          type: string
+        city: 
+          type: string
+        state: 
+          type: string
+        office_branch: 
+          type: string
+        role: 
+          type: string
+        department: 
+          type: string
+        password:
           type: string
     LoginInput:
       type: object
