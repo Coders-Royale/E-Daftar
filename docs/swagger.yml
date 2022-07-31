@@ -277,6 +277,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Conversation'
+  /trackStatus:
+    get:
+      tags:
+        - employee
+      security:
+        - bearerAuth: []
+      summary: Track the status of a document
+      operationId: trackStatus
+      parameters: 
+        - in: query
+          name: documentId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Status tracked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackStatusResponse'
 components:
   schemas:
     Employee:
@@ -666,6 +696,29 @@ components:
           type: string
         employeeAssignedName:
           type: string
+    TrackStatusResponse:
+      type: array
+      items:
+        properties:
+          employeeName: 
+            type: string
+          employeeId: 
+            type: string
+          employeeDepartment: 
+            type: string
+          time_elapsed: 
+            type: integer
+            format: int32
+          status:
+            type: string
+          time_recieved:
+            type: string
+            format: date-time
+          time_returned:
+            type: string
+            format: date-time
+          rejection_reason:
+            type: string
   securitySchemes:
     bearerAuth:
       type: http
