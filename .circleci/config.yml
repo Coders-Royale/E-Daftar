@@ -20,7 +20,7 @@ jobs:
           command: sudo npm i -g azure-functions-core-tools@4 --unsafe-perm true
       - run:
           name: Deploy to Azure function App
-          command: cd server && ls -la
+          command: cd server && ls -la && func azure functionapp publish $FUNCTION_APP_NAME --javascript --worker-runtime node
 
   # deploy: # this can be any name you choose
   #   executor: node/default
