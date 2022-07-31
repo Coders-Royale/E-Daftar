@@ -61,7 +61,7 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
         employee.profile.state = body.state;
         employee.profile.office_branch = body.office_branch;
         employee.profile.department = body.department.toLowerCase();
-
+        employee.profile.role = "employee";
         // Send email to user about his Login Credentials
         const credentailMail = await sendCredentialEmail(body.personalEmail, employee.employeeId, password);
         if (credentailMail.error) {

@@ -30,19 +30,32 @@ export const createAdmin = async (body: CreateAdminInput) => {
         const admin = new Admin();
         admin.name = body.name;
         admin.employeeId = "A" + employeeSNo.toString();
-        admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
+        admin.personal_email = body.personalEmail;
+        admin.contactNo = body.contactNo;
         admin.gender = body.gender;
         admin.dob = body.dob;
-        admin.address = body.address;
+        admin.addr_line1 = body.addr_line1;
+        admin.addr_line2 = body.addr_line2;
+        admin.city = body.city;
+        admin.state = body.state;
+        admin.office_branch = body.office_branch;
+        admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.department = body.department.toLowerCase();
         admin.password = body.password;
         admin.profile.name = body.name;
         admin.profile.employeeId = admin.employeeId;
-        admin.profile.email = "admin." + body.department.toLowerCase() + "@gmail.com";
+        admin.profile.contactNo = body.contactNo;
         admin.profile.gender = body.gender;
         admin.profile.dob = body.dob;
-        admin.profile.address = body.address;
+        admin.profile.addr_line1 = body.addr_line1;
+        admin.profile.addr_line2 = body.addr_line2;
+        admin.profile.city = body.city;
+        admin.profile.state = body.state;
+        admin.profile.office_branch = body.office_branch;
+        admin.profile.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.profile.department = body.department.toLowerCase();
+        admin.profile.role = "admin";
+
         await admin.save();
         return {
             error: false,

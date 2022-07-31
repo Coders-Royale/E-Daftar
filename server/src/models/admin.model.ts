@@ -6,21 +6,33 @@ export type AdminDocument = mongoose.Document & {
     employeeId: string;
     email: string;
     personal_email: string;
+    contactNo: string;
     gender: string;
     dob: Date;
-    address: string;
-    department: string;
+    addr_line1: string;
+    addr_line2: string;
+    city: string;
+    state: string;
+    country: string;
+    office_branch: string;
     password: string;
     role: string;
+    department: string;
     resetPasswordToken: string | null,
     resetPasswordExpires: Date | null,
     profile: {
         name: string;
         employeeId: string;
         email: string;
+        contactNo: string;
         gender: string;
         dob: Date;
-        address: string;
+        addr_line1: string;
+        addr_line2: string;
+        city: string;
+        state: string;
+        country: string;
+        office_branch: string;
         department: string;
         role: string;
     }
@@ -35,9 +47,15 @@ const AdminSchema = new mongoose.Schema<AdminDocument>(
         employeeId: { type: String, required: true },
         email: { type: String, required: true },
         personal_email: { type: String, required: true },
+        contactNo: { type: String, required: true },
         gender: { type: String, required: true },
         dob: { type: Date, required: true },
-        address: { type: String, required: true },
+        addr_line1: { type: String },
+        addr_line2: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String, default: "India" },
+        office_branch: { type: String, required: true },
         department: { type: String, required: true },
         password: String,
         role: { type: String, default: "admin" },
@@ -47,9 +65,15 @@ const AdminSchema = new mongoose.Schema<AdminDocument>(
             name: { type: String, required: true },
             employeeId: { type: String, required: true },
             email: { type: String, required: true },
+            contactNo: { type: String, required: true },
             gender: { type: String, required: true },
             dob: { type: Date, required: true },
-            address: { type: String, required: true },
+            addr_line1: { type: String },
+            addr_line2: { type: String },
+            city: { type: String },
+            state: { type: String },
+            country: { type: String, default: "India" },
+            office_branch: { type: String, required: true },
             department: { type: String, required: true },
             role: { type: String, default: "admin" }
         }
