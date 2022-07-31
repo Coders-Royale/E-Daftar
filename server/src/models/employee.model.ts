@@ -6,9 +6,15 @@ export type EmployeeDocument = mongoose.Document & {
     employeeId: string;
     email: string;
     personal_email: string;
+    contactNo: string;
     gender: string;
     dob: Date;
-    address: string;
+    addr_line1: string;
+    addr_line2: string;
+    city: string;
+    state: string;
+    country: string;
+    office_branch: string;
     password: string;
     role: string;
     department: string;
@@ -17,10 +23,16 @@ export type EmployeeDocument = mongoose.Document & {
     profile: {
         name: string;
         employeeId: string;
+        contactNo: string;
+        office_branch: string;
         email: string;
         gender: string;
         dob: Date;
-        address: string;
+        addr_line1: string;
+        addr_line2: string;
+        city: string;
+        state: string;
+        country: string;
         department: string;
         role: string;
     }
@@ -35,9 +47,15 @@ const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
         employeeId: { type: String, required: true },
         email: { type: String, required: true },
         personal_email: { type: String, required: true },
+        contactNo: { type: String, required: true },
         gender: { type: String, required: true },
         dob: { type: Date, required: true },
-        address: { type: String, required: true },
+        addr_line1: { type: String },
+        addr_line2: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String, default: "India" },
+        office_branch: { type: String, required: true },
         department: { type: String, required: true },
         password: String,
         role: { type: String, default: "employee" },
@@ -46,10 +64,16 @@ const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
         profile: {
             name: { type: String, required: true },
             employeeId: { type: String, required: true },
+            contactNo: { type: String, required: true },
+            office_branch: { type: String, required: true },
             email: { type: String, required: true },
             gender: { type: String, required: true },
             dob: { type: Date, required: true },
-            address: { type: String, required: true },
+            addr_line1: { type: String },
+            addr_line2: { type: String },
+            city: { type: String },
+            state: { type: String },
+            country: { type: String, default: "India" },
             department: { type: String, required: true },
             role: { type: String, default: "employee" }
         }
