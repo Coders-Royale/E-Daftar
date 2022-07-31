@@ -568,8 +568,6 @@ components:
           type: string
         department: 
           type: string
-        password:
-          type: string
     CreateEmployeeInput:
       type: object
       properties:
@@ -597,8 +595,6 @@ components:
         role: 
           type: string
         department: 
-          type: string
-        password:
           type: string
     LoginInput:
       type: object
