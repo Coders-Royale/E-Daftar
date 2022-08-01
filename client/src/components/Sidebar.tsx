@@ -37,7 +37,6 @@ export default function Sidebar({ selected, setSelected }: Props) {
 
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params.user);
 
   interface SidebarContent1 {
     iconLight: string;
