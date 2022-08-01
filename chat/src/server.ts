@@ -11,7 +11,13 @@ httpServer.listen(PORT);
 httpServer.on("listening", onListening);
 httpServer.on("error", onError);
 
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
 
 io.on("connection", (socket) => {
     console.log("Socket.io connected");
