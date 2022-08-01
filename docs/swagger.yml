@@ -348,7 +348,7 @@ components:
           type: string
         email: 
           type: string
-        personalEmail: 
+        personal_email: 
           type: string
         contactNo: 
           type: string
@@ -575,7 +575,7 @@ components:
       properties:
         name: 
           type: string
-        personal_email: 
+        personalEmail: 
           type: string
         contactNo: 
           type: string
@@ -603,7 +603,7 @@ components:
       properties:
         name: 
           type: string
-        personal_email: 
+        personalEmail: 
           type: string
         contactNo: 
           type: string
