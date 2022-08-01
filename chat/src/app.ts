@@ -39,7 +39,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
-app.use(cors());
+app.use(cors(
+    {
+        origin: ["http://localhost:3000", "https://sih-2022.vercel.app", "https://sih-2022-server.azurewebsites.net"],
+    }
+));
 app.use(logger("dev"));
 app.use("/api/chat", router);
 
