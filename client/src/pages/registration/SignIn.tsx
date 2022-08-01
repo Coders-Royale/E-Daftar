@@ -28,6 +28,7 @@ export default function SignIn() {
     onSuccess: (data: any) => {
       if (data.message === "Login successful") {
         localStorage.setItem("jwtToken", data.token);
+        localStorage.setItem("empId", empId);
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true");
         }

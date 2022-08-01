@@ -3,6 +3,7 @@ const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 const apiEndPoints = {
   login: `/login`,
   createEmployee: `/createEmployee`,
+  getEmployee: `/getEmployee`,
 };
 
 // export async function getStudentDetails(params) {
@@ -54,6 +55,25 @@ export async function createEmployee(data) {
         },
         body: JSON.stringify(data),
       }).then((res) => res.json())
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getEmployee(params) {
+	try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.getEmployee + `?departmentId=${params.departmentId}` + `&employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
     );
     return res;
   } catch (error) {

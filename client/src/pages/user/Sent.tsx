@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Socket } from "socket.io-client";
+import { useEmployeeInfo } from "../../queries/hooks";
 
 import Sidebar from "../../components/Sidebar";
 import Middlebar from "../../components/Middlebar";
@@ -16,10 +18,6 @@ import Email1 from "../../images/tracking_page_email_1.png";
 import Email2 from "../../images/tracking_page_email_2.png";
 import Email3 from "../../images/tracking_page_email_3.png";
 import Dp from "../../images/profile_page_dp.png";
-
-// import getSocket from "../../helpers/socket";
-
-// const socket = getSocket();
 
 enum Status {
   Pending = "Pending",
@@ -45,12 +43,23 @@ Yours Sincerely,
 John Doe
 `;
 
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  register: (userId: string, userName: string) => void;
+}
+
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
-const Sent = ({ selected, setSelected }: Props) => {
+const Sent = ({ selected, setSelected, socketConnection }: Props) => {
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
@@ -82,6 +91,20 @@ const Sent = ({ selected, setSelected }: Props) => {
 
     return false;
   };
+
+  // These lines should be on the landing page. Change it to /primary afterwards.
+
+  const employeeInfo = useEmployeeInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  useEffect(() => {
+    socketConnection.emit("register", localStorage.getItem("empId")!, employeeInfo.data?.employee.name);
+    console.log(employeeInfo.data?.employee.name);
+  }, [employeeInfo.isSuccess === true]);
+
+  // These lines should be on the landing page. Change it to /primary afterwards.
 
   return (
     <div className="h-screen flex bg-white overflow-hidden">
