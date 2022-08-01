@@ -307,6 +307,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TrackStatusResponse'
+  /getEmployee:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Get all employees from a department or get a specific employee(use either the employeeId or documentId, not both)
+      operationId: getEmployee
+      parameters: 
+        - in: query
+          name: departmentId
+          schema:
+            type: string
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Employees fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
 components:
   schemas:
     Employee:
@@ -545,7 +575,7 @@ components:
       properties:
         name: 
           type: string
-        personal_email: 
+        personalEmail: 
           type: string
         contactNo: 
           type: string
@@ -567,15 +597,13 @@ components:
         role: 
           type: string
         department: 
-          type: string
-        password:
           type: string
     CreateEmployeeInput:
       type: object
       properties:
         name: 
           type: string
-        personal_email: 
+        personalEmail: 
           type: string
         contactNo: 
           type: string
@@ -597,8 +625,6 @@ components:
         role: 
           type: string
         department: 
-          type: string
-        password:
           type: string
     LoginInput:
       type: object
