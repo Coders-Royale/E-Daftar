@@ -181,7 +181,13 @@ export default function Sidebar({ selected, setSelected }: Props) {
       </div>
       <div>
         <hr className="text-gray-450 my-5" />
-        <div className="flex gap-4 items-center py-3 px-5">
+        <div
+          className="flex gap-4 items-center py-3 px-5 cursor-pointer"
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/sign-in");
+          }}
+        >
           <img src={logoutDark} alt="" className="w-5 h-5" />
           <p className="text-sm font-semibold text-gray-750">Logout</p>
         </div>
