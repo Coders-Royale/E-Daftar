@@ -1,5 +1,4 @@
 import { IsArray, IsString } from "class-validator";
-import { participants } from "../models/conversation.model";
 
 export class CreateRoomInput {
     @IsString()
