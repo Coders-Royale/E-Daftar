@@ -1,5 +1,5 @@
 const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const passwordLength = 7;
+const passwordLength = 8;
 
 export function genPassword() {
     let password = "";
