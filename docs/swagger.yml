@@ -348,7 +348,7 @@ components:
           type: string
         email: 
           type: string
-        personal_email: 
+        personalEmail: 
           type: string
         contactNo: 
           type: string
