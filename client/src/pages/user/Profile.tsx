@@ -258,6 +258,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="firstName"
                     className="w-full flex-auto"
                     placeholder="Enter First Name"
                     value={firstName}
@@ -288,6 +289,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="email"
                     disabled
                     className="w-full flex-auto"
                     placeholder="Enter Email ID"
@@ -319,6 +321,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="employeeCode"
                     className="w-full flex-auto"
                     placeholder="Enter Employee Code"
                     value={employeeCode}
@@ -349,6 +352,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="department"
                     className="w-full flex-auto"
                     placeholder="Enter department"
                     value={department}
@@ -417,6 +421,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="lastName"
                     className="w-full flex-auto"
                     placeholder="Enter Last Name"
                     value={lastName}
@@ -447,6 +452,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="mobileNumber"
                     className="w-full flex-auto"
                     placeholder="Enter Mobile Number"
                     value={mobileNo}
@@ -477,6 +483,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   <FormControl fullWidth>
                     <Select
                       id="gender"
+                      name="gender"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                       displayEmpty
@@ -517,6 +524,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
                     id="filled-search"
+                    name="officeBranch"
                     className="w-full flex-auto"
                     placeholder="Enter office branch"
                     value={officeBranch}
@@ -555,6 +563,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
                   id="filled-search"
+                  name="addressLine1"
                   className="w-full flex-auto"
                   placeholder="House/Flat No./Building Name"
                   value={line1}
@@ -585,6 +594,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
                   id="filled-search"
+                  name="addressLine2"
                   className="w-full flex-auto"
                   placeholder="Street/Area/Locality"
                   value={line2}
@@ -615,6 +625,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
                   id="filled-search"
+                  name="city"
                   className="w-full flex-auto"
                   placeholder="City"
                   value={city}
@@ -645,6 +656,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <FormControl fullWidth>
                   <Select
                     id="state"
+                    name="state"
                     value={state}
                     onChange={(e) => setState(e.target.value)}
                     displayEmpty
@@ -734,6 +746,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
                       id="outlined-adornment-password"
+                      name="oldPassword"
                       type={showOldPassword ? "text" : "password"}
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
@@ -781,6 +794,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
                       id="outlined-adornment-password"
+                      name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -833,6 +847,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
                       id="outlined-adornment-password"
+                      name="newPassword"
                       type={showNewPassword ? "text" : "password"}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}

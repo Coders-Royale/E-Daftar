@@ -8,6 +8,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
+import { useMutateCreateEmployee } from "../../queries/mutations";
 
 interface Props {
   selected: number;
@@ -53,6 +54,12 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
     setState("");
     setGender("");
   };
+
+  const { mutateAsync: createEmployeeData } = useMutateCreateEmployee({
+    onSuccess: (data: any) => {},
+    onError: () => {},
+    onMutate: () => {},
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   var errLength = 0;
 
@@ -208,7 +215,6 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
                   id="filled-search"
-                  disabled
                   className="w-full flex-auto"
                   placeholder="Enter Email ID"
                   value={emailId}
@@ -634,8 +640,28 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
         </div>
 
         <div className="pt-16 flex flex-row gap-8 mx-auto w-80 pb-16">
-          <div className="flex-auto">
-            <RegistrationButton text="Update" toUrl="/" />
+          <div
+            className="flex-auto"
+            onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
+              e.preventDefault();
+              validate() &&
+                createEmployeeData({
+                  name: firstName + " " + lastName,
+                  personalEmail: emailId,
+                  contactNo: mobileNo,
+                  gender: gender,
+                  dob: dob,
+                  addr_line1: line1,
+                  addr_line2: line2,
+                  city: city,
+                  state: state,
+                  office_branch: officeBranch,
+                  role: null,
+                  department: department,
+                });
+            }}
+          >
+            <RegistrationButton text="Create" toUrl="" />
           </div>
           <div className="flex-auto">
             <button

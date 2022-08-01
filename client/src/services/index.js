@@ -2,6 +2,7 @@ const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 
 const apiEndPoints = {
   login: `/login`,
+  createEmployee: `/createEmployee`,
 };
 
 // export async function getStudentDetails(params) {
@@ -31,6 +32,24 @@ export async function login(data) {
       await fetch(baseUrl + apiEndPoints.login, {
         method: "POST",
         headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json())
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function createEmployee(data) {
+  try {
+    const res = (
+      await fetch(baseUrl + apiEndPoints.createEmployee, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           "Content-type": "application/json",
         },
         body: JSON.stringify(data),

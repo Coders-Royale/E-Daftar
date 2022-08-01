@@ -27,11 +27,12 @@ export default function SignIn() {
   const { mutateAsync: loginData } = useMutateLogin({
     onSuccess: (data: any) => {
       if (data.message === "Login successful") {
+        localStorage.setItem("jwtToken", data.token);
         if (rememberMe) {
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("rememberMe", "true");
         }
         navigate(
-          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/primary"
+          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/profile"
         );
       }
     },
@@ -67,13 +68,13 @@ export default function SignIn() {
       ]);
       errLength++;
     }
-    if (password.length > 0 && password.length < 8) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        { type: "password", message: "Password must be atleast 8 characters" },
-      ]);
-      errLength++;
-    }
+    // if (password.length > 0 && password.length < 8) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     { type: "password", message: "Password must be atleast 8 characters" },
+    //   ]);
+    //   errLength++;
+    // }
     if (password.length > 0 && password.match(/[a-z]/g) === null) {
       setErrors((errors: Error[]) => [
         ...errors,
