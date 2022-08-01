@@ -27,10 +27,11 @@ const App: React.FC = () => {
 
   // Auto Login
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    if (
+      localStorage.getItem("rememberMe") === "true" &&
+      localStorage.getItem("jwtToken")
+    ) {
       navigate("/user/profile");
-    } else {
-      navigate("/");
     }
   }, []);
 
