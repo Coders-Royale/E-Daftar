@@ -1,4 +1,4 @@
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsNumber, IsString } from "class-validator";
 
 export class CreateRoomInput {
     @IsString()
@@ -14,6 +14,13 @@ export class JoinRoomInput {
     employeeId: string;
     @IsString()
     name: string;
+}
+
+export class LoadMessageInput {
+    @IsString()
+    employeeId: string;
+    @IsNumber()
+    pageNo: number;
 }
 
 // export class SocketJoinRoomInput {
