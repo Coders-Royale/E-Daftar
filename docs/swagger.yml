@@ -369,6 +369,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+  /listDocument:
+    get:
+      tags:
+        - employee
+      security:
+        - bearerAuth: []
+      summary: List all the documents created by an employee
+      operationId: listDocument
+      parameters: 
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Documents fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
 components:
   schemas:
     Employee:
