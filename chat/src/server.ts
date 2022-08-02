@@ -24,6 +24,7 @@ io.on("connection", (socket) => {
 
     socket.on("register", async (data) => {
         try {
+            console.log(data);
             if (typeof data === "string") {
                 data = JSON.parse(data);
             }
@@ -65,7 +66,6 @@ io.on("connection", (socket) => {
     //         return;
     //     }
     // });
-
     socket.on("leave-room", async (data) => {
         try {
             if (typeof data === "string") {
