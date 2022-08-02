@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Conversation } from "../models/conversation.model";
 import { Message } from "../models/message.model";
 import * as Sentry from "@sentry/node";
-import { CreateRoomInput, JoinRoomInput } from "../types/types";
+import { CreateRoomInput, JoinRoomInput, LoadMessageInput } from "../types/types";
 
 export const createRoom = async (req: Request, res: Response) => {
     try {
@@ -192,6 +192,65 @@ export const getConversation = async (req: Request, res: Response) => {
             error: false,
             message: "Conversation fetched successfully",
             data: conversation
+        });
+    }
+    catch (err) {
+        Sentry.captureException(err);
+        await Sentry.flush(2000);
+        res.status(500).json({
+            error: true,
+            message: err.message
+        });
+    }
+}
+
+export const loadMessage = async (req: Request, res: Response) => {
+    try {
+        if (!req.body) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "Invalid request to load message",
+            });
+        }
+        const body = req.body as LoadMessageInput;
+        if (!body.pageNo || !body.employeeId) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "Invalid request to load message",
+            });
+        }
+        const conversations = await Conversation.find({
+            "participants.id": body.employeeId
+        });
+        if (!conversations) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "No conversation found",
+            });
+        }
+        const allMessages = [];
+        for (const conversation of conversations) {
+            const messages = await Message.find({
+                conversationId: conversation._id
+            });
+            allMessages.push(...messages);
+        }
+        if (allMessages.length === 0) {
+            return res.status(400).json({
+                error: true,
+                mesaage: "No message found",
+            });
+        }
+        // sort the messages in decreasing order of createdAt
+        const sorrtedMessages = allMessages.sort((a, b) => {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+        // In a single page return 20 messages
+        const messages = sorrtedMessages.slice((body.pageNo - 1) * 20, body.pageNo * 20);
+        return res.status(200).json({
+            error: false,
+            message: "Messages fetched successfully",
+            data: messages
         });
     }
     catch (err) {

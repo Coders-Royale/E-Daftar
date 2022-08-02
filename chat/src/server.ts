@@ -13,7 +13,7 @@ httpServer.on("error", onError);
 
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ["http://localhost:3000", "https://sih-2022.vercel.app", "https://sih-2022-server.azurewebsites.net"],
         methods: ["GET", "POST"],
         credentials: true
     }

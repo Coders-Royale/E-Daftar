@@ -337,6 +337,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Employee'
+  /loadMessages:
+    get:
+      tags:
+        - chat
+      security:
+        - bearerAuth: []
+      summary: Load all messages for an employee in descending order of creation
+      operationId: loadMessages
+      parameters: 
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: pageNo
+          schema:
+            type: number
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Messages loaded successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
 components:
   schemas:
     Employee:
@@ -528,6 +560,12 @@ components:
           type: string
         senderName: 
           type: string
+        createdAt: 
+          type: string
+          format: date-time
+        updatedAt: 
+          type: string
+          format: date-time
     Document:
       type: object
       properties:

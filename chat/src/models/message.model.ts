@@ -6,6 +6,8 @@ type Message = mongoose.Document & {
     content: string;
     conversationId: string;
     senderName: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const MessageSchema = new mongoose.Schema<Message>(
