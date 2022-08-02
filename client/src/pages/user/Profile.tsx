@@ -26,7 +26,7 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-  register: (userId: string, userName: string) => void;
+  register: (userIdName: string) => void;
 }
 
 interface Props {
@@ -232,8 +232,8 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
 
   useEffect(() => {
     if(employeeInfo.data !== undefined) {
-      socketConnection.emit("register", localStorage.getItem("empId")!, employeeInfo.data.employee.name);
-      console.log("calling");
+      socketConnection.emit("register", JSON.stringify({ userId: localStorage.getItem("empId"), userName: employeeInfo.data.employee.name }));
+      console.log("registered!");
     }
   }, [employeeInfo.isFetched === true]);
 

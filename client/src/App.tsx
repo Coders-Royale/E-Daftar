@@ -84,11 +84,11 @@ const App: React.FC = () => {
               <Notifications selected={selected} setSelected={setSelected} />
             }
           />
+          {/* Make the primary page as the landing page when the page is ready. */}
           <Route
             path="/:user/profile"
             element={<Profile selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
           />
-          {/* Make the primary page as the landing page when the page is ready. */}
           <Route
             path="/:user/sent"
             element={<Sent selected={selected} setSelected={setSelected} />}
