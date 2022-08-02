@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -13,6 +14,20 @@ import Notifications from "./pages/admin/Notifications";
 import Profile from "./pages/user/Profile";
 import Sent from "./pages/user/Sent";
 
+import getSocket from "./helpers/socket";
+
+const socket = getSocket(); // returns an instance of getSocket.
+
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  hello: () => void;
+}
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -23,6 +38,7 @@ export const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
+  const [socketConnection, setSocketConnection] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
 
   // Auto Login
@@ -70,8 +86,9 @@ const App: React.FC = () => {
           />
           <Route
             path="/:user/profile"
-            element={<Profile selected={selected} setSelected={setSelected} />}
+            element={<Profile selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
           />
+          {/* Make the primary page as the landing page when the page is ready. */}
           <Route
             path="/:user/sent"
             element={<Sent selected={selected} setSelected={setSelected} />}

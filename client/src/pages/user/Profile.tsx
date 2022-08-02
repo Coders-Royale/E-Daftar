@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
+import { Socket } from "socket.io-client";
+import { useEmployeeInfo } from "../../queries/hooks";
+
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
@@ -16,9 +19,20 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
 
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  register: (userId: string, userName: string) => void;
+}
+
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
 interface Error {
@@ -26,7 +40,7 @@ interface Error {
   message: string;
 }
 
-const Profile = ({ selected, setSelected }: Props) => {
+const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   useEffect(() => {
     setSelected(7);
   }, [setSelected]);
@@ -209,6 +223,22 @@ const Profile = ({ selected, setSelected }: Props) => {
     }
   };
 
+  // These lines should be on the landing page. Move this code to /primary afterwards.
+
+  const employeeInfo = useEmployeeInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  useEffect(() => {
+    if(employeeInfo.data !== undefined) {
+      socketConnection.emit("register", localStorage.getItem("empId")!, employeeInfo.data.employee.name);
+      console.log("calling");
+    }
+  }, [employeeInfo.isFetched === true]);
+
+  // These lines should be on the landing page. Change it to /primary afterwards.
+
   useEffect(() => {
     validateNewPassword(newPassword);
   }, [newPassword]);
@@ -257,7 +287,7 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
+                    id=""
                     name="firstName"
                     className="w-full flex-auto"
                     placeholder="Enter First Name"
@@ -288,7 +318,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="email"
                     disabled
                     className="w-full flex-auto"
@@ -320,7 +349,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="employeeCode"
                     className="w-full flex-auto"
                     placeholder="Enter Employee Code"
@@ -351,7 +379,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="department"
                     className="w-full flex-auto"
                     placeholder="Enter department"
@@ -420,7 +447,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="lastName"
                     className="w-full flex-auto"
                     placeholder="Enter Last Name"
@@ -451,7 +477,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="mobileNumber"
                     className="w-full flex-auto"
                     placeholder="Enter Mobile Number"
@@ -493,11 +518,8 @@ const Profile = ({ selected, setSelected }: Props) => {
                       <MenuItem value="">
                         <em>Select Gender</em>
                       </MenuItem>
-                      {/* <MenuItem value="Male">Male</MenuItem>
-                      <MenuItem value="Female">Female</MenuItem>
-                      <MenuItem value="Other">Other</MenuItem> */}
                       {["Male", "Female", "Other"].map((item, index) => {
-                        return <MenuItem value={item}>{item}</MenuItem>;
+                        return <MenuItem value={item} key={index}>{item}</MenuItem>;
                       })}
                     </Select>
                   </FormControl>
@@ -523,7 +545,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    id="filled-search"
                     name="officeBranch"
                     className="w-full flex-auto"
                     placeholder="Enter office branch"
@@ -562,7 +583,6 @@ const Profile = ({ selected, setSelected }: Props) => {
               </h1>
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
-                  id="filled-search"
                   name="addressLine1"
                   className="w-full flex-auto"
                   placeholder="House/Flat No./Building Name"
@@ -593,7 +613,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
-                  id="filled-search"
                   name="addressLine2"
                   className="w-full flex-auto"
                   placeholder="Street/Area/Locality"
@@ -624,7 +643,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
               <div className="bg-white w-full rounded drop-shadow">
                 <TextField
-                  id="filled-search"
                   name="city"
                   className="w-full flex-auto"
                   placeholder="City"
@@ -745,7 +763,6 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full rounded drop-shadow">
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
-                      id="outlined-adornment-password"
                       name="oldPassword"
                       type={showOldPassword ? "text" : "password"}
                       value={oldPassword}
@@ -793,7 +810,6 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
-                      id="outlined-adornment-password"
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
@@ -846,7 +862,6 @@ const Profile = ({ selected, setSelected }: Props) => {
                 <div className="bg-white w-full  rounded drop-shadow">
                   <FormControl variant="outlined" className="w-full">
                     <OutlinedInput
-                      id="outlined-adornment-password"
                       name="newPassword"
                       type={showNewPassword ? "text" : "password"}
                       value={newPassword}

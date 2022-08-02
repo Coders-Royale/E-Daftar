@@ -1,8 +1,8 @@
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
 const SOCKET_API = "https://sih-email.herokuapp.com";
 
-const getSocket = () => {
+function getSocket () {
     return io(SOCKET_API);
 }
 
