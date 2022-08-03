@@ -52,7 +52,7 @@ const Notifications = ({ selected, setSelected }: Props) => {
         </h1>
 
         {notificationContent1.map((item, index) => (
-          <div className="bg-white h-18 rounded-2xl mb-4 shadow-xl px-8 py-4">
+          <div className="bg-white h-18 rounded-2xl mb-4 shadow-xl px-8 py-4" key={index}>
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-4 items-center">
                 <img src={Man} alt="" className="w-10 h-10 rounded-full" />
