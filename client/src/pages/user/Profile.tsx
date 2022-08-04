@@ -231,8 +231,23 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   });
 
   useEffect(() => {
-    if(employeeInfo.data !== undefined) {
-      socketConnection.emit("register", JSON.stringify({ userId: localStorage.getItem("empId"), userName: employeeInfo.data.employee.name }));
+    setEmailId(employeeInfo?.data?.employee?.email);
+    setMobileNo(employeeInfo?.data?.employee?.mobileNo);
+    setEmployeeCode(employeeInfo?.data?.employee?.employeeId);
+    setGender(employeeInfo?.data?.employee?.gender);
+    setDepartment(employeeInfo?.data?.employee?.department);
+    setOfficeBranch(employeeInfo?.data?.employee?.department);
+  }, [employeeInfo.isSuccess]);
+
+  useEffect(() => {
+    if (employeeInfo.data !== undefined) {
+      socketConnection.emit(
+        "register",
+        JSON.stringify({
+          userId: localStorage.getItem("empId"),
+          userName: employeeInfo.data.employee.name,
+        })
+      );
       console.log("registered!");
     }
   }, [employeeInfo.isFetched === true]);
@@ -519,7 +534,11 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                         <em>Select Gender</em>
                       </MenuItem>
                       {["Male", "Female", "Other"].map((item, index) => {
-                        return <MenuItem value={item} key={index}>{item}</MenuItem>;
+                        return (
+                          <MenuItem value={item} key={index}>
+                            {item}
+                          </MenuItem>
+                        );
                       })}
                     </Select>
                   </FormControl>

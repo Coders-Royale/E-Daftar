@@ -3,6 +3,7 @@ const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 const apiEndPoints = {
   // GET REQUESTS
   getEmployee: `/getEmployee`,
+  getAdmin: `/getAdmin`,
   trackStatus: `/trackStatus`,
   listDocument: `/listDocument`,
 
@@ -31,6 +32,26 @@ export async function getEmployee(params) {
     );
     return res;
   } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAdmin(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.getAdmin + `?departmentId=${params.departmentId}` + `&adminId=${params.adminId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
     console.log(error);
   }
 }

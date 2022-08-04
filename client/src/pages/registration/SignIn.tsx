@@ -29,16 +29,27 @@ export default function SignIn() {
       if (data.message === "Login successful") {
         localStorage.setItem("jwtToken", data.token);
         localStorage.setItem("empId", empId);
+        localStorage.setItem("adminId", empId);
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true");
         }
         navigate(
-          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/profile"
+          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/sent"
         );
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
       }
+      setLoading(false);
     },
     onError: () => {
-      console.log("login error");
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Login failed" },
+      ]);
+      setLoading(false);
     },
     onMutate: () => {
       setLoading(true);
@@ -69,13 +80,15 @@ export default function SignIn() {
       ]);
       errLength++;
     }
-    // if (password.length > 0 && password.length < 8) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     { type: "password", message: "Password must be atleast 8 characters" },
-    //   ]);
-    //   errLength++;
-    // }
+
+    if (password.length > 0 && password.length < 8) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "password", message: "Password must be atleast 8 characters" },
+      ]);
+      errLength++;
+    }
+
     if (password.length > 0 && password.match(/[a-z]/g) === null) {
       setErrors((errors: Error[]) => [
         ...errors,
@@ -214,6 +227,19 @@ export default function SignIn() {
             Forgot Password?
           </Link>
         </div>
+        <div className="flex justify-center mb-1">
+          {errors.length > 0
+            ? errors.map((item, index) => {
+                if (item.type === "unknown") {
+                  return (
+                    <p className="text-red-500 text-xs italic" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
         <div
           onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
             e.preventDefault();
@@ -225,7 +251,7 @@ export default function SignIn() {
               });
           }}
         >
-          <DiveIn text={"Dive In !!!"} toUrl="/" />
+          <DiveIn text={loading ? "Diving In..." : "Dive In !!!"} toUrl="/" />
         </div>
       </div>
     </div>

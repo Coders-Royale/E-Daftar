@@ -39,7 +39,8 @@ export const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
-  const [socketConnection, setSocketConnection] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
+  const [socketConnection, setSocketConnection] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
 
   // Auto Login
@@ -48,7 +49,7 @@ const App: React.FC = () => {
       localStorage.getItem("rememberMe") === "true" &&
       localStorage.getItem("jwtToken")
     ) {
-      navigate("/user/profile");
+      navigate("/user/sent");
     }
   }, [navigate]);
 
@@ -88,7 +89,13 @@ const App: React.FC = () => {
           {/* Make the primary page as the landing page when the page is ready. */}
           <Route
             path="/:user/profile"
-            element={<Profile selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
+            element={
+              <Profile
+                selected={selected}
+                setSelected={setSelected}
+                socketConnection={socketConnection}
+              />
+            }
           />
           <Route
             path="/:user/sent"
@@ -96,7 +103,9 @@ const App: React.FC = () => {
           />
           <Route
             path="/:user/new-message"
-            element={<NewMessage selected={selected} setSelected={setSelected} />}
+            element={
+              <NewMessage selected={selected} setSelected={setSelected} />
+            }
           />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
