@@ -63,7 +63,7 @@ export const assignDocument = async (body: AssignDocumentInput) => {
         const joinRoomRequest = {
             roomId: conversation._id,
             employeeId: employee.employeeId,
-            name: employee.name
+            name: employee.firstName + " " + employee.lastName,
         };
         const joinRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest, {
             headers: headers
@@ -81,7 +81,7 @@ export const assignDocument = async (body: AssignDocumentInput) => {
             message: "Document assigned successfully",
             data: {
                 employeeAssignedId: employee.employeeId,
-                employeeAssignedName: employee.name
+                employeeAssignedName: employee.firstName + " " + employee.lastName,
             }
         };
     }

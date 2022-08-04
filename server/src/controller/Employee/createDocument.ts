@@ -85,7 +85,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
         const joinRoomRequest = {
             roomId: createRoomResponse.data.data._id,
             employeeId: document.employeeId,
-            name: employee.name
+            name: employee.firstName + " " + employee.lastName,
         };
         const joinRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest, { headers: headers });
         if (joinRoomResponse.status !== 200) {
@@ -98,7 +98,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
         const joinRoomRequest2 = {
             roomId: createRoomResponse.data.data._id,
             employeeId: admin.employeeId,
-            name: admin.name
+            name: admin.firstName + " " + admin.lastName,
         };
         const joinRoomResponse2 = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest2, { headers: headers });
         if (joinRoomResponse2.status !== 200) {

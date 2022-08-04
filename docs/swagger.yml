@@ -396,12 +396,117 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Document'
+  /getAdmin: 
+    get:
+      tags:
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Get all admin from a department or get a specific admin(use either the employeeId or documentId, not both)
+      operationId: getAdmin
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Admins fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+  /requestForgotPassword:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Request a forgot password link on your personal email
+      operationId: requestForgotPassword
+      parameters: 
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Forgot password link sent successfully
+  /forgotPassword:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Reset your password
+      operationId: forgotPassword
+      parameters: 
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: newPassword
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Password reset successfully
+  /changePassword:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Change your password when you are logged in
+      operationId: changePassword
+      parameters: 
+        - in: query
+          name: oldPassword
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: newPassword
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Password changed successfully
 components:
   schemas:
     Employee:
       type: object
       properties:
-        name: 
+        firstName: 
+          type: string
+        lastName:
           type: string
         employeeId: 
           type: string
@@ -445,7 +550,9 @@ components:
         profile:
           type: object
           properties:
-            name: 
+            firstName: 
+              type: string
+            lastName:
               type: string
             employeeId: 
               type: string
@@ -479,7 +586,9 @@ components:
     Admin:
       type: object
       properties:
-        name: 
+        firstName: 
+          type: string
+        lastName:
           type: string
         employeeId: 
           type: string
@@ -522,7 +631,9 @@ components:
         profile:
           type: object
           properties:
-            name: 
+            firstName: 
+              type: string
+            lastName:
               type: string
             employeeId: 
               type: string
@@ -638,7 +749,9 @@ components:
     CreateAdminInput:
       type: object
       properties:
-        name: 
+        firstName: 
+          type: string
+        lastName:
           type: string
         personalEmail: 
           type: string
@@ -666,7 +779,9 @@ components:
     CreateEmployeeInput:
       type: object
       properties:
-        name: 
+        firstName: 
+          type: string
+        lastName:
           type: string
         personalEmail: 
           type: string

@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 export type EmployeeDocument = mongoose.Document & {
-    name: string;
+    firstName: string;
+    lastName: string;
     employeeId: string;
     email: string;
     personal_email: string;
@@ -21,7 +22,8 @@ export type EmployeeDocument = mongoose.Document & {
     resetPasswordToken: string | null,
     resetPasswordExpires: Date | null,
     profile: {
-        name: string;
+        firstName: string;
+        lastName: string;
         employeeId: string;
         contactNo: string;
         office_branch: string;
@@ -43,7 +45,8 @@ type comparePasswordFunction = (candidatePassword: string) => Promise<boolean>;
 
 const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
     {
-        name: { type: String, required: true },
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
         employeeId: { type: String, required: true },
         email: { type: String, required: true },
         personal_email: { type: String, required: true },
@@ -62,7 +65,8 @@ const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
         resetPasswordToken: { type: String, default: null },
         resetPasswordExpires: { type: Date, default: null },
         profile: {
-            name: { type: String, required: true },
+            firstName: { type: String, required: true },
+            lastName: { type: String, required: true },
             employeeId: { type: String, required: true },
             contactNo: { type: String, required: true },
             office_branch: { type: String, required: true },
