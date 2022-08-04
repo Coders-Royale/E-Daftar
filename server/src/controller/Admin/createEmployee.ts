@@ -12,6 +12,14 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
                 message: "Body cannot be empty"
             };
         }
+        // Check if any employee exists with this personal email
+        const checkIfExists = await Employee.findOne({ personal_email: body.personalEmail });
+        if (checkIfExists) {
+            return {
+                error: true,
+                message: "Employee with that email already exists"
+            };
+        }
         let employeeSNo;
         const noOfDocuments = await Employee.countDocuments();
         if (noOfDocuments == 0) {
