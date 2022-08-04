@@ -396,6 +396,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Document'
+  /getAdmin: 
+    get:
+      tags:
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Get all admin from a department or get a specific admin(use either the employeeId or documentId, not both)
+      operationId: getAdmin
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Admins fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
 components:
   schemas:
     Employee:
