@@ -37,8 +37,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         context.res = {
             status: 200,
             body: {
-                message: message2,
-                data: newUser
+                message: message2
             },
             headers: HEADERS
         };
