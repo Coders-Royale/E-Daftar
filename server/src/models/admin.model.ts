@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 export type AdminDocument = mongoose.Document & {
-    name: string;
+    firstName: string;
+    lastName: string;
     employeeId: string;
     email: string;
     personal_email: string;
@@ -21,7 +22,8 @@ export type AdminDocument = mongoose.Document & {
     resetPasswordToken: string | null,
     resetPasswordExpires: Date | null,
     profile: {
-        name: string;
+        firstName: string;
+        lastName: string;
         employeeId: string;
         email: string;
         contactNo: string;
@@ -43,7 +45,8 @@ type comparePasswordFunction = (candidatePassword: string) => Promise<boolean>;
 
 const AdminSchema = new mongoose.Schema<AdminDocument>(
     {
-        name: { type: String, required: true },
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
         employeeId: { type: String, required: true },
         email: { type: String, required: true },
         personal_email: { type: String, required: true },
@@ -62,7 +65,8 @@ const AdminSchema = new mongoose.Schema<AdminDocument>(
         resetPasswordToken: { type: String, default: null },
         resetPasswordExpires: { type: Date, default: null },
         profile: {
-            name: { type: String, required: true },
+            firstName: { type: String, required: true },
+            lastName: { type: String, required: true },
             employeeId: { type: String, required: true },
             email: { type: String, required: true },
             contactNo: { type: String, required: true },

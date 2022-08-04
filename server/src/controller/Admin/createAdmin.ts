@@ -28,7 +28,8 @@ export const createAdmin = async (body: CreateAdminInput) => {
             }
         }
         const admin = new Admin();
-        admin.name = body.name;
+        admin.firstName = body.firstName;
+        admin.lastName = body.lastName;
         admin.employeeId = "A" + employeeSNo.toString();
         admin.personal_email = body.personalEmail;
         admin.contactNo = body.contactNo;
@@ -42,7 +43,8 @@ export const createAdmin = async (body: CreateAdminInput) => {
         admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.department = body.department.toLowerCase();
         admin.password = body.password;
-        admin.profile.name = body.name;
+        admin.profile.firstName = body.firstName;
+        admin.profile.lastName = body.lastName;
         admin.profile.employeeId = admin.employeeId;
         admin.profile.contactNo = body.contactNo;
         admin.profile.gender = body.gender;

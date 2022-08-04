@@ -64,7 +64,7 @@ export const trackStatus = async (documentId: string, employeeId: string) => {
             else {
                 assignedEmployee = await Admin.findOne({ employeeId: employeeId });
             }
-            const employeeName = assignedEmployee.name;
+            const employeeName = assignedEmployee.firstName + " " + assignedEmployee.lastName;
             const employeeDepartment = assignedEmployee.department;
             const time_received = document.time_recieved[i];
             const status = document.status[i];

@@ -57,7 +57,7 @@ export const forwardToAdmin = async (body: ForwardToAdminInput) => {
         const joinRoomRequest = {
             roomId: conversation._id,
             employeeId: admin.employeeId,
-            name: admin.name
+            name: admin.firstName + " " + admin.lastName,
         };
         const joinRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest, {
             headers: headers
@@ -75,7 +75,7 @@ export const forwardToAdmin = async (body: ForwardToAdminInput) => {
             message: "Document forwarded successfully",
             data: {
                 employeeAssignedId: admin.employeeId,
-                employeeAssignedName: admin.name
+                employeeAssignedName: admin.firstName + " " + admin.lastName,
             }
         };
     }

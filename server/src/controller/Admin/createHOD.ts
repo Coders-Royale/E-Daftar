@@ -34,7 +34,8 @@ export const createHOD = async (body: CreateEmployeeInput) => {
         const password = genPassword();
 
         const employee = new Employee();
-        employee.name = body.name;
+        employee.firstName = body.firstName;
+        employee.lastName = body.lastName;
         employee.employeeId = "E" + employeeSNo.toString();
         employee.personal_email = body.personalEmail;
         employee.contactNo = body.contactNo;
@@ -49,7 +50,8 @@ export const createHOD = async (body: CreateEmployeeInput) => {
         employee.email = employee.employeeId + "." + "HOD" + "." + body.department.toLowerCase() + "@gmail.com";
         employee.password = password;
         employee.role = "hod";
-        employee.profile.name = body.name;
+        employee.profile.firstName = body.firstName;
+        employee.profile.lastName = body.lastName;
         employee.profile.employeeId = employee.employeeId;
         employee.profile.contactNo = body.contactNo;
         employee.profile.email = employee.email;

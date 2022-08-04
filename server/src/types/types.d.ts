@@ -18,7 +18,9 @@ export class LoginInput {
 
 export class CreateAdminInput {
     @IsString()
-    name: string
+    firstName: string
+    @IsString()
+    lastName: string
     @IsString()
     personalEmail: string
     @IsString()
