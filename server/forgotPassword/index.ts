@@ -12,6 +12,16 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     try {
         const token = req.query.token;
         const newPassword = req.query.newPassword;
+        if (!token || !newPassword) {
+            context.res = {
+                status: 400,
+                body: {
+                    message: "Missing required parameters!"
+                },
+                headers: HEADERS
+            };
+            return;
+        }
         const { error, message, data } = await valdiateForgotPasswordToken(token);
         if (error) {
             context.res = {
