@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Socket } from "socket.io-client";
 import { useEmployeeInfo } from "../../queries/hooks";
+import { useMutateChangePassword } from "../../queries/mutations";
 
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
@@ -69,6 +70,7 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [file, setFile] = useState<any>();
   const [errors, setErrors] = useState<Error[]>([]);
 
   const clearInputs = () => {
@@ -230,13 +232,26 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     employeeId: localStorage.getItem("empId"),
   });
 
+  const { mutateAsync: changePasswordData } = useMutateChangePassword({
+    onSuccess: () => {},
+    onError: () => {},
+    onMutate: () => {},
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
+
   useEffect(() => {
+    setFirstName(employeeInfo.data?.employee?.firstName);
+    setLastName(employeeInfo.data?.employee?.lastName);
     setEmailId(employeeInfo?.data?.employee?.email);
-    setMobileNo(employeeInfo?.data?.employee?.mobileNo);
+    setMobileNo(employeeInfo?.data?.employee?.contactNo);
     setEmployeeCode(employeeInfo?.data?.employee?.employeeId);
     setGender(employeeInfo?.data?.employee?.gender);
     setDepartment(employeeInfo?.data?.employee?.department);
-    setOfficeBranch(employeeInfo?.data?.employee?.department);
+    setOfficeBranch(employeeInfo?.data?.employee?.office_branch);
+    setDob(employeeInfo?.data?.employee?.dob);
+    setLine1(employeeInfo?.data?.employee?.addr_line1);
+    setLine2(employeeInfo?.data?.employee?.addr_line2);
+    setCity(employeeInfo?.data?.employee?.city);
+    setState(employeeInfo?.data?.employee?.state);
   }, [employeeInfo.isSuccess]);
 
   useEffect(() => {
@@ -258,6 +273,12 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     validateNewPassword(newPassword);
   }, [newPassword]);
 
+  function handleChange(e: any) {
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
+
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
@@ -269,15 +290,30 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
         </h1>
 
         <div className="flex flex-row gap-6">
-          <img src={Dp} alt="profile_dp" className="w-50 h-50" />
+          <img
+            src={file || Dp}
+            alt="profile_dp"
+            className="w-48 h-48 object-cover rounded-lg"
+          />
           <div className="flex flex-col justify-end">
-            <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold">
-              <h1 className="font-medium text-sm text-gray-150">
-                <span className="pr-2">
-                  <KeyboardTabIcon />
-                </span>
+            <button
+              className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+              onClick={() => hiddenFileInput.current?.click()}
+            >
+              <input
+                // className="font-medium text-sm text-gray-150 hidden"
+                style={{ display: "none" }}
+                onChange={handleChange}
+                ref={hiddenFileInput}
+                type="file"
+              ></input>
+              <label
+                htmlFor="file-upload"
+                className="inline-block cursor-pointer"
+              >
+                <KeyboardTabIcon />
                 Choose an image
-              </h1>
+              </label>
             </button>
             <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
               Acceptable format .jpg, .png only
@@ -397,6 +433,7 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     name="department"
                     className="w-full flex-auto"
                     placeholder="Enter department"
+                    disabled
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     variant="outlined"
@@ -567,6 +604,7 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     name="officeBranch"
                     className="w-full flex-auto"
                     placeholder="Enter office branch"
+                    disabled
                     value={officeBranch}
                     onChange={(e) => setOfficeBranch(e.target.value)}
                     variant="outlined"
@@ -764,6 +802,20 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                   : null}
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-8">
+          <div className="flex-auto">
+            <RegistrationButton text="Update Information" toUrl="/" />
+          </div>
+          <div className="flex-auto">
+            <button
+              className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+              onClick={clearInputs}
+            >
+              Cancel
+            </button>
           </div>
         </div>
 
@@ -973,9 +1025,19 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
           </div>
         </div>
 
-        <div className="pt-16 flex flex-row gap-8 mx-auto w-80 pb-44">
-          <div className="flex-auto">
-            <RegistrationButton text="Update" toUrl="/" />
+        <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-44">
+          <div
+            className="flex-auto"
+            onClick={(e: any) => {
+              e.preventDefault();
+              changePasswordData({
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword,
+              });
+            }}
+          >
+            <RegistrationButton text="Change Password" toUrl="/" />
           </div>
           <div className="flex-auto">
             <button
