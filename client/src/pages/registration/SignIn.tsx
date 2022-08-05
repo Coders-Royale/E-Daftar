@@ -81,57 +81,57 @@ export default function SignIn() {
       errLength++;
     }
 
-    if (password.length > 0 && password.length < 8) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        { type: "password", message: "Password must be atleast 8 characters" },
-      ]);
-      errLength++;
-    }
+    // if (password.length > 0 && password.length < 8) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     { type: "password", message: "Password must be at least 8 characters" },
+    //   ]);
+    //   errLength++;
+    // }
 
-    if (password.length > 0 && password.match(/[a-z]/g) === null) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        {
-          type: "password",
-          message: "Password must contain atleast one lowercase letter",
-        },
-      ]);
-      errLength++;
-    }
-    if (password.length > 0 && password.match(/[A-Z]/g) === null) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        {
-          type: "password",
-          message: "Password must contain atleast one uppercase letter",
-        },
-      ]);
-      errLength++;
-    }
-    if (password.length > 0 && password.match(/[0-9]/g) === null) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        {
-          type: "password",
-          message: "Password must contain atleast one number",
-        },
-      ]);
-      errLength++;
-    }
-    if (
-      password.length > 0 &&
-      password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g) === null
-    ) {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        {
-          type: "password",
-          message: "Password must contain atleast one special character",
-        },
-      ]);
-      errLength++;
-    }
+    // if (password.length > 0 && password.match(/[a-z]/g) === null) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     {
+    //       type: "password",
+    //       message: "Password must contain at least one lowercase letter",
+    //     },
+    //   ]);
+    //   errLength++;
+    // }
+    // if (password.length > 0 && password.match(/[A-Z]/g) === null) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     {
+    //       type: "password",
+    //       message: "Password must contain at least one uppercase letter",
+    //     },
+    //   ]);
+    //   errLength++;
+    // }
+    // if (password.length > 0 && password.match(/[0-9]/g) === null) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     {
+    //       type: "password",
+    //       message: "Password must contain at least one number",
+    //     },
+    //   ]);
+    //   errLength++;
+    // }
+    // if (
+    //   password.length > 0 &&
+    //   password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g) === null
+    // ) {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     {
+    //       type: "password",
+    //       message: "Password must contain at least one special character",
+    //     },
+    //   ]);
+    //   errLength++;
+    // }
 
     if (errLength == 0) return true;
 
