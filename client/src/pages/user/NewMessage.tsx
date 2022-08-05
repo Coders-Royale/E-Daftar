@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import axios from "axios";
+import { FilesContext } from "../../contexts/files.context";
+
+import LinearProgress from '@mui/material/LinearProgress';
+import { styled } from '@mui/material/styles';
 
 import Sidebar from "../../components/Sidebar";
 import Middlebar from "../../components/Middlebar";
 import TimelineComponent from "../../components/TimelineComponent";
-import RegistrationButton from "../../components/buttons/RegistrationButton";
 
 import EditPen from "../../images/icons/newmessage_page_newpen.svg";
 import Email1 from "../../images/tracking_page_email_1.png";
@@ -14,13 +17,6 @@ import Attach from "../../images/icons/newmessage_page_attach.svg";
 import Photos from "../../images/icons/newmessage_page_photos.svg";
 import Link from "../../images/icons/newmessage_page_link.svg";
 import Send from "../../images/icons/newmessage_page_send.svg";
-
-enum Status {
-  Pending = "Pending",
-  Forwarded = "Forwarded",
-  Rejected = "Rejected",
-  Approved = "Approved",
-}
 
 const emailContent = `
 To
@@ -44,13 +40,72 @@ interface Props {
   setSelected: (selected: number) => void;
 }
 
+const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+
+const Input = styled('input')({
+  display: 'none',
+})
+
 const NewMessage = ({ selected, setSelected }: Props) => {
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
 
-  const navigate = useNavigate();
-  const [additionalMessage, setAdditionalMessage] = useState<string>("");
+  const { files, setFiles } = useContext(FilesContext);
+  console.log(files);
+
+  const [percentage, setPercentage] = useState(0);
+  const [uploadLoader, setUploadLoader] = useState(false);
+
+  const selectFile = async (e: React.ChangeEvent<HTMLInputElement>)  => {
+    const selectedFiles = Array.from(e.currentTarget.files || []);
+    const selectedFile = selectedFiles[0]
+    console.log(selectedFile.name);
+
+    var bodyFormData = new FormData();
+    bodyFormData.append('photo', selectedFile);
+
+    const options = {
+      headers: {
+        "Content-type": "multipart/form-data",
+        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+      onUploadProgress: (progressEvent: any) => {
+        const { loaded, total } = progressEvent
+        let percent = Math.floor(loaded * 100 / total)
+        console.log(`${percent} %`)
+
+        if(percent <= 100) {
+          setPercentage(percent)
+        }
+      }
+    }
+
+    setUploadLoader(true);
+    const res = await axios.post(
+      `${baseUrl}/uploadFile?filename=${selectedFile.name}`,
+      bodyFormData,
+      options
+    );
+    setUploadLoader(false);
+
+    e.target.value = "";
+    const updatedFiles = [...files, res.data.url];
+    setFiles(updatedFiles);
+    localStorage.setItem("files", JSON.stringify(updatedFiles)); // clear the localstorage when the createDocument api has been called.
+    console.log(updatedFiles);
+    console.log(res.data.url);
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPercentage(0);
+    }, 5000);
+  }, [percentage === 100]);
+
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const hiddenPhotoInput = useRef<HTMLInputElement>(null);
+  const hiddenLinkInput = useRef<HTMLInputElement>(null);
 
   return (
     <div className="h-screen flex bg-white overflow-hidden">
@@ -94,19 +149,33 @@ const NewMessage = ({ selected, setSelected }: Props) => {
             </div>
           </div>
 
-          <div className="mt-40 mb-20 flex flex-row justify-between">
+          <div className={`${percentage > 0 ? "mt-20" : "mt-40"}`}>
+            {percentage > 0 && <LinearProgress variant='determinate' value={percentage} />}
+          </div>
+
+          <div className="mt-20 mb-20 flex flex-row justify-between">
             <div className="flex flex-row gap-4">
-              <button className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
-                <img src={Attach} alt="" className="w-5 h-5 mx-auto my-2" />
-              </button>
+              <label htmlFor="contained-button-file">
+                <button className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450" onClick={() => {hiddenFileInput.current!.click()}}>
+                  <img src={Attach} alt="" className="w-5 h-5 mx-auto my-2" />
+                </button>
+                <Input accept='application/pdf' ref={hiddenFileInput} id='contained-button-file' multiple type='file' onChange={selectFile} />
+              </label>
 
-              <div className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
-                <img src={Photos} alt="" className="w-5 h-5 mx-auto my-2" />
-              </div>
+              <label htmlFor="contained-button-photo">
+                <button className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450" onClick={() => {hiddenPhotoInput.current!.click()}}>
+                  <img src={Photos} alt="" className="w-5 h-5 mx-auto my-2" />
+                </button>
+                <Input accept='image/jpeg,image/png' ref={hiddenPhotoInput} id='contained-button-photo' multiple type='file' onChange={selectFile} />
+              </label>
 
-              <div className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
-                <img src={Link} alt="" className="w-5 h-5 mx-auto my-2" />
-              </div>
+              <label htmlFor="contained-button-link">
+                <button className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450" onClick={() => {hiddenLinkInput.current!.click()}}>
+                  <img src={Link} alt="" className="w-5 h-5 mx-auto my-2" />
+                </button>
+                <Input accept='image/jpeg,image/png' ref={hiddenLinkInput} id='contained-button-link' multiple type='file' onChange={selectFile} />
+              </label>
+
             </div>
 
             <div className="w-24">
@@ -115,7 +184,7 @@ const NewMessage = ({ selected, setSelected }: Props) => {
               </button>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>

@@ -15,6 +15,8 @@ import Profile from "./pages/user/Profile";
 import Sent from "./pages/user/Sent";
 import NewMessage from "./pages/user/NewMessage";
 
+import { FilesProvider } from "./contexts/files.context";
+
 import getSocket from "./helpers/socket";
 
 const socket = getSocket(); // returns an instance of getSocket.
@@ -104,7 +106,9 @@ const App: React.FC = () => {
           <Route
             path="/:user/new-message"
             element={
-              <NewMessage selected={selected} setSelected={setSelected} />
+              <FilesProvider>
+                <NewMessage selected={selected} setSelected={setSelected} />
+              </FilesProvider>
             }
           />
         </Routes>
