@@ -11,6 +11,7 @@ const apiEndPoints = {
   login: `/login`,
   createEmployee: `/createEmployee`,
   createDocument: `/createDocument`,
+  uploadFile: `/uploadFile`,
   assignDocument: `/assignDocument`,
   forwardToAdmin: `/forwardToAdmin`,
   rejectDocument: `/rejectDocument`,
@@ -130,6 +131,24 @@ export async function createEmployee(data) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function uploadFile(data) {
+	try {
+		const res = (
+			await fetch(baseUrl + apiEndPoints.uploadFile, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+					"Content-type": "multipart/form-data",
+				},
+				body: JSON.stringify(data),
+			}).then((res) => res.json())
+		);
+		return res;
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 export async function createDocument(data) {

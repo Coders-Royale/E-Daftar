@@ -96,9 +96,9 @@ const NewMessage = ({ selected, setSelected }: Props) => {
 
           <div className="mt-40 mb-20 flex flex-row justify-between">
             <div className="flex flex-row gap-4">
-              <div className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
+              <button className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
                 <img src={Attach} alt="" className="w-5 h-5 mx-auto my-2" />
-              </div>
+              </button>
 
               <div className="w-10 h-10 rounded-full bg-gray-350 border border-gray-450">
                 <img src={Photos} alt="" className="w-5 h-5 mx-auto my-2" />
