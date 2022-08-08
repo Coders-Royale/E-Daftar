@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 
 import Sidebar from "../../components/Sidebar";
 import Middlebar from "../../components/Middlebar";
-import TimelineComponent from "../../components/TimelineComponent";
+import PDFIcon from "../../components/PDFIcon";
 
 import EditPen from "../../images/icons/newmessage_page_newpen.svg";
 import Email1 from "../../images/tracking_page_email_1.png";
@@ -17,6 +17,9 @@ import Attach from "../../images/icons/newmessage_page_attach.svg";
 import Photos from "../../images/icons/newmessage_page_photos.svg";
 import Link from "../../images/icons/newmessage_page_link.svg";
 import Send from "../../images/icons/newmessage_page_send.svg";
+
+import { useMutateCreateDocument } from "../../queries/mutations";
+import { useEmployeeInfo } from "../../queries/hooks";
 
 const emailContent = `
 To
@@ -40,6 +43,11 @@ interface Props {
   setSelected: (selected: number) => void;
 }
 
+interface Error {
+  type: string;
+  message: string;
+}
+
 const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 
 const Input = styled('input')({
@@ -56,51 +64,92 @@ const NewMessage = ({ selected, setSelected }: Props) => {
 
   const [percentage, setPercentage] = useState(0);
   const [uploadLoader, setUploadLoader] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const [errors, setErrors] = useState<Error[]>([]);
+  const [firstName, setFirstName] = useState<string>("");
 
   const selectFile = async (e: React.ChangeEvent<HTMLInputElement>)  => {
     const selectedFiles = Array.from(e.currentTarget.files || []);
-    const selectedFile = selectedFiles[0]
-    console.log(selectedFile.name);
 
-    var bodyFormData = new FormData();
-    bodyFormData.append('photo', selectedFile);
+    let updatedFiles = [...files];
 
-    const options = {
-      headers: {
-        "Content-type": "multipart/form-data",
-        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
-      },
-      onUploadProgress: (progressEvent: any) => {
-        const { loaded, total } = progressEvent
-        let percent = Math.floor(loaded * 100 / total)
-        console.log(`${percent} %`)
+    for(let i=0; i < selectedFiles.length; i++) {
+      const selectedFile = selectedFiles[i];
+      console.log(selectedFile.name);
 
-        if(percent <= 100) {
-          setPercentage(percent)
+      var bodyFormData = new FormData();
+      bodyFormData.append('photo', selectedFile);
+
+      const options = {
+        headers: {
+          "Content-type": "multipart/form-data",
+          "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+        onUploadProgress: (progressEvent: any) => {
+          const { loaded, total } = progressEvent
+          let percent = Math.floor(loaded * 100 / total)
+          console.log(`${percent} %`)
+
+          if(percent <= 100) {
+            setPercentage(percent)
+          }
         }
       }
+
+      setUploadLoader(true);
+      const res = await axios.post(
+        `${baseUrl}/uploadFile?filename=${selectedFile.name}`,
+        bodyFormData,
+        options
+      );
+      setUploadLoader(false);
+
+      e.target.value = "";
+      updatedFiles = [...updatedFiles, res.data.url];
+      setFiles(updatedFiles);
+      localStorage.setItem("files", JSON.stringify(updatedFiles)); // clear the localstorage when the createDocument api has been called.
     }
-
-    setUploadLoader(true);
-    const res = await axios.post(
-      `${baseUrl}/uploadFile?filename=${selectedFile.name}`,
-      bodyFormData,
-      options
-    );
-    setUploadLoader(false);
-
-    e.target.value = "";
-    const updatedFiles = [...files, res.data.url];
-    setFiles(updatedFiles);
-    localStorage.setItem("files", JSON.stringify(updatedFiles)); // clear the localstorage when the createDocument api has been called.
-    console.log(updatedFiles);
-    console.log(res.data.url);
   }
+
+  const employeeInfo = useEmployeeInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  useEffect(() => {
+    setFirstName(employeeInfo.data?.employee?.firstName);
+  }, [employeeInfo.isSuccess]);
+
+  const { mutateAsync: createDocumentData } = useMutateCreateDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Employee created successfully") {
+        setMessage(data.message);
+        setMessage("Employee created successfully");
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   useEffect(() => {
     setTimeout(() => {
       setPercentage(0);
-    }, 5000);
+    }, 2000);
   }, [percentage === 100]);
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -149,6 +198,14 @@ const NewMessage = ({ selected, setSelected }: Props) => {
             </div>
           </div>
 
+          <div className="mt-12">
+            <div className="grid grid-cols-6">
+              {files.map((item, index) => (
+                <PDFIcon key={index} file={item} />
+              ))}
+            </div>
+          </div>
+
           <div className={`${percentage > 0 ? "mt-20" : "mt-40"}`}>
             {percentage > 0 && <LinearProgress variant='determinate' value={percentage} />}
           </div>
@@ -179,7 +236,20 @@ const NewMessage = ({ selected, setSelected }: Props) => {
             </div>
 
             <div className="w-24">
-              <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-gray-150 py-3 w-full rounded-lg font-medium flex flex-row gap-2 px-4">
+              <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-gray-150 py-3 w-full rounded-lg font-medium flex flex-row gap-2 px-4"
+              onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
+                e.preventDefault();
+                createDocumentData({
+                  employeeId: localStorage.getItem("empId"),
+                  employee_name: firstName,
+                  subject: "",
+                  description: "",
+                  main_file: JSON.parse(localStorage.getItem("files")!),
+                  reference_file: [], // currently no feature of reference files.
+                  forwarding_dept: "",
+                  category: "",
+                })
+              }}>
                 <img src={Send} alt="send" className="h-5 w-5" /> Send
               </button>
             </div>
