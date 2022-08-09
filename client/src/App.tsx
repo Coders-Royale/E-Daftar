@@ -53,7 +53,7 @@ const App: React.FC = () => {
     ) {
       navigate("/user/sent");
     }
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="font-roboto">
