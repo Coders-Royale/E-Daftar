@@ -6,6 +6,10 @@ const apiEndPoints = {
   getAdmin: `/getAdmin`,
   trackStatus: `/trackStatus`,
   listDocument: `/listDocument`,
+  rooms: `/rooms`,
+  messages: `/messages`,
+  conversation: `/conversation`,
+  loadMessages: `/loadMessages`,
 
   // POST REQUESTS
   login: `/login`,
@@ -83,6 +87,26 @@ export async function listDocument(params) {
     const res = (
       await fetch(
         baseUrl + apiEndPoints.listDocument + `?employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getRooms(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.rooms + `?employeeId=${params.employeeId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

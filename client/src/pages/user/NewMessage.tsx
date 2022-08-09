@@ -53,7 +53,7 @@ const NewMessage = ({ selected, setSelected }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [errors, setErrors] = useState<Error[]>([]);
-  const [firstName, setFirstName] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
   const [subject, setSubject] = useState("");
   const [templateName, setTemplateName] = useState("");
@@ -66,7 +66,6 @@ const NewMessage = ({ selected, setSelected }: Props) => {
 
     for (let i = 0; i < selectedFiles.length; i++) {
       const selectedFile = selectedFiles[i];
-      console.log(selectedFile.name);
 
       var bodyFormData = new FormData();
       bodyFormData.append("photo", selectedFile);
@@ -79,7 +78,6 @@ const NewMessage = ({ selected, setSelected }: Props) => {
         onUploadProgress: (progressEvent: any) => {
           const { loaded, total } = progressEvent;
           let percent = Math.floor((loaded * 100) / total);
-          console.log(`${percent} %`);
 
           if (percent <= 100) {
             setPercentage(percent);
@@ -108,15 +106,18 @@ const NewMessage = ({ selected, setSelected }: Props) => {
   });
 
   useEffect(() => {
-    setFirstName(employeeInfo.data?.employee?.firstName);
-  }, [employeeInfo.isSuccess]);
+    if (employeeInfo.data !== undefined) {
+      setName(employeeInfo.data?.employee?.name);
+    }
+  }, [employeeInfo.isFetched === true]);
 
   const { mutateAsync: createDocumentData } = useMutateCreateDocument({
     onSuccess: (data: any) => {
-      if (data.message === "Employee created successfully") {
+      if (data.message === "Document created successfully") {
         setMessage(data.message);
-        setMessage("Employee created successfully");
         setLoading(false);
+        localStorage.setItem("files", "");
+        window.location.reload();
       } else {
         setErrors((errors: Error[]) => [
           ...errors,
@@ -295,8 +296,6 @@ Kind regards,
 [Your name]`);
     }
   }, [templateName]);
-
-  console.log(templateName);
 
   return (
     <div className="h-screen flex bg-white overflow-hidden">
@@ -482,13 +481,13 @@ Kind regards,
                   e.preventDefault();
                   createDocumentData({
                     employeeId: localStorage.getItem("empId"),
-                    employee_name: firstName,
-                    subject: "",
-                    description: "",
+                    employee_name: name,
+                    subject: subject,
+                    description: emailContent,
                     main_file: JSON.parse(localStorage.getItem("files")!),
                     reference_file: [], // currently no feature of reference files.
-                    forwarding_dept: "",
-                    category: "",
+                    forwarding_dept: department.toLowerCase(),
+                    category: templateName,
                   });
                 }}
               >

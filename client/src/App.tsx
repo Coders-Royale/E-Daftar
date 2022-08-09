@@ -14,6 +14,7 @@ import Notifications from "./pages/admin/Notifications";
 import Profile from "./pages/user/Profile";
 import Sent from "./pages/user/Sent";
 import NewMessage from "./pages/user/NewMessage";
+import Primary from "./pages/user/Primary";
 
 import { FilesProvider } from "./contexts/files.context";
 
@@ -110,6 +111,10 @@ const App: React.FC = () => {
                 <NewMessage selected={selected} setSelected={setSelected} />
               </FilesProvider>
             }
+          />
+          <Route
+            path="/:user/primary"
+            element={<Primary selected={selected} setSelected={setSelected} />}
           />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
