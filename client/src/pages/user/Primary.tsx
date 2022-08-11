@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
 import { useMutateCreateDocument } from "../../queries/mutations";
 import { useRooms } from "../../queries/hooks";
+import { useEmployeeInfo } from "../../queries/hooks";
 
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
@@ -23,9 +25,22 @@ import Send from "../../images/icons/newmessage_page_send.svg";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  register: (userIdName: string) => void;
+}
+
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  selectedMid: number;
+  setSelectedMid: (selectedMid: number) => void;
+  socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
 interface Error {
@@ -33,9 +48,31 @@ interface Error {
   message: string;
 }
 
+// For rooms.
+interface Info {
+    id: string;
+    name: string;
+}
+
+interface Participant {
+    info: Info;
+    id: string;
+    _id: string;
+}
+
+interface RoomObject {
+    _id: string;
+    conversationName: string;
+    documentId: string;
+    participants: Participant[];
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+}
+
 const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 
-const Primary = ({ selected, setSelected }: Props) => {
+const Primary = ({ selected, setSelected, selectedMid, setSelectedMid, socketConnection }: Props) => {
   useEffect(() => {
     setSelected(-1);
   }, [setSelected]);
@@ -44,7 +81,7 @@ const Primary = ({ selected, setSelected }: Props) => {
   const [message, setMessage] = useState<string>("");
   const [errors, setErrors] = useState<Error[]>([]);
   const [name, setName] = useState<string>("");
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<RoomObject[]>([]);
   var [emailContent, setEmailContent] = useState("");
 
   const receivedRooms = useRooms({
@@ -53,9 +90,28 @@ const Primary = ({ selected, setSelected }: Props) => {
 
   useEffect(() => {
     if (receivedRooms.data !== undefined) {
-      setRooms(receivedRooms.data);
+      setRooms(receivedRooms.data.data);
+      console.log(receivedRooms.data.data);
     }
   }, [receivedRooms.isFetched === true]);
+
+  const employeeInfo = useEmployeeInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  useEffect(() => {
+    if (employeeInfo.data !== undefined) {
+      socketConnection.emit(
+        "register",
+        JSON.stringify({
+          userId: localStorage.getItem("empId"),
+          userName: employeeInfo.data.employee.name,
+        })
+      );
+      console.log("registered!");
+    }
+  }, [employeeInfo.isFetched === true]);
 
   return (
     <div className="h-screen flex bg-white overflow-hidden">
@@ -64,7 +120,7 @@ const Primary = ({ selected, setSelected }: Props) => {
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
-          <Middlebar />
+          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} displayRooms={rooms}/>
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
           

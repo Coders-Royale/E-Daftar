@@ -1,4 +1,5 @@
 const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
 
 const apiEndPoints = {
   // GET REQUESTS
@@ -106,7 +107,7 @@ export async function getRooms(params) {
   try {
     const res = (
       await fetch(
-        baseUrl + apiEndPoints.rooms + `?employeeId=${params.employeeId}`,
+        baseUrlChat + apiEndPoints.rooms + `?employeeId=${params.employeeId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

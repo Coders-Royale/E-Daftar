@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar";
-import { Socket } from "socket.io-client";
 import { useEmployeeInfo } from "../../queries/hooks";
 import { useMutateChangePassword } from "../../queries/mutations";
 
@@ -20,20 +19,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
 
-interface ServerToClientEvents {
-  noArg: () => void;
-  basicEmit: (a: number, b: string, c: Buffer) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
-}
-
-interface ClientToServerEvents {
-  register: (userIdName: string) => void;
-}
-
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
-  socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
 interface Error {
@@ -41,7 +29,7 @@ interface Error {
   message: string;
 }
 
-const Profile = ({ selected, setSelected, socketConnection }: Props) => {
+const Profile = ({ selected, setSelected }: Props) => {
   useEffect(() => {
     setSelected(7);
   }, [setSelected]);
@@ -225,8 +213,6 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     }
   };
 
-  // These lines should be on the landing page. Move this code to /primary afterwards.
-
   const employeeInfo = useEmployeeInfo({
     departmentId: localStorage.getItem("depId"),
     employeeId: localStorage.getItem("empId"),
@@ -253,19 +239,6 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     setCity(employeeInfo?.data?.employee?.city);
     setState(employeeInfo?.data?.employee?.state);
   }, [employeeInfo.isSuccess]);
-
-  useEffect(() => {
-    if (employeeInfo.data !== undefined) {
-      socketConnection.emit(
-        "register",
-        JSON.stringify({
-          userId: localStorage.getItem("empId"),
-          userName: employeeInfo.data.employee.name,
-        })
-      );
-      console.log("registered!");
-    }
-  }, [employeeInfo.isFetched === true]);
 
   // These lines should be on the landing page. Change it to /primary afterwards.
 

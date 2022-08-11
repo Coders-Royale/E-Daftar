@@ -27,6 +27,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  selectedMid: number;
+  setSelectedMid: (selected: number) => void;
 }
 
 interface Error {
@@ -40,7 +42,7 @@ const Input = styled("input")({
   display: "none",
 });
 
-const NewMessage = ({ selected, setSelected }: Props) => {
+const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Props) => {
   useEffect(() => {
     setSelected(-1);
   }, [setSelected]);
@@ -117,7 +119,12 @@ const NewMessage = ({ selected, setSelected }: Props) => {
         setMessage(data.message);
         setLoading(false);
         localStorage.setItem("files", "");
-        window.location.reload();
+        setFiles([]);
+        setDepartment("");
+        setSubject("");
+        setTemplateName("");
+        setMessage("");
+
       } else {
         setErrors((errors: Error[]) => [
           ...errors,
@@ -304,7 +311,7 @@ Kind regards,
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
-          <Middlebar />
+          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
           <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750">
@@ -502,3 +509,37 @@ Kind regards,
 };
 
 export default NewMessage;
+
+
+/* 
+{
+  "message": "Document created successfully",
+  "data": {
+    "roomId": "62f53d3273beee1961db7bad",
+    "main_file": [
+      "https://sih2022server.blob.core.windows.net/documents/sample1.pdf",
+      "https://sih2022server.blob.core.windows.net/documents/sample2.pdf",
+      "https://sih2022server.blob.core.windows.net/documents/sample3.pdf",
+      "https://sih2022server.blob.core.windows.net/documents/sample4.pdf"
+    ],
+    "reference_files": [],
+    "permissions": [
+      "A1"
+    ],
+    "status": [
+      "Pending"
+    ],
+    "time_recieved": [
+      "2022-08-11T17:32:33.902Z"
+    ],
+    "time_returned": [],
+    "_id": "62f53d311d0f4588bfdbab7a",
+    "documentId": "D1",
+    "employeeId": "E1",
+    "subject": "Budget Approval",
+    "description": "Dear Sir/Ma'am,\nThis is to inform you that I have prepared the budget for [department/project name]. It covers expenses for the coming [amount of time]. For your perusal, I have attached a copy herein.\n\nAt your convenience, I would appreciate it if you reviewed the budget. You can highlight any changes you would like made.\n\nIf there are none, please provide me with approval by [date] so I can have the budget implemented by the Accounts Department.\n\nThank you for your prompt action regarding this matter.\n\nSincerely,\n[Your name]\n[Your title]",
+    "category": "Budget Approval",
+    "__v": 0
+  }
+}
+*/
