@@ -1,4 +1,4 @@
-import React, { } from "react";
+import React from "react";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import newMessage from "../images/icons/new-message-white.svg";
 import primaryLight from "../images/icons/primary-light.svg";
@@ -130,10 +130,10 @@ export default function Sidebar({ selected, setSelected }: Props) {
     <div className="px-10 py-12 bg-white h-screen overflow-scroll flex flex-col justify-between">
       <div>
         <Link to={`/user/new-message`}>
-        <div className="flex gap-4 items-center py-3 px-5 bg-gradient-to-r from-blue-350 to-blue-150 rounded-lg">
-          <img src={newMessage} alt="" className="w-5 h-5" />
-          <p className="text-sm font-semibold text-white">New Message</p>
-        </div>
+          <div className="flex gap-4 items-center py-3 px-5 bg-gradient-to-r from-blue-350 to-blue-150 rounded-lg">
+            <img src={newMessage} alt="" className="w-5 h-5" />
+            <p className="text-sm font-semibold text-white">New Message</p>
+          </div>
         </Link>
         <div className="mt-6">
           {sidebarContent1
@@ -185,7 +185,8 @@ export default function Sidebar({ selected, setSelected }: Props) {
         <div
           className="flex gap-4 items-center py-3 px-5 cursor-pointer"
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("rememberMe");
             navigate("/sign-in");
           }}
         >

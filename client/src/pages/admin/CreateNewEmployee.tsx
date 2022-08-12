@@ -38,6 +38,8 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [gender, setGender] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
   const [errors, setErrors] = useState<Error[]>([]);
 
   const clearInputs = () => {
@@ -55,14 +57,41 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
     setGender("");
   };
 
+  console.log(dob);
+
   const { mutateAsync: createEmployeeData } = useMutateCreateEmployee({
-    onSuccess: (data: any) => {},
-    onError: () => {},
-    onMutate: () => {},
+    onSuccess: (data: any) => {
+      if (data.message === "Employee created successfully") {
+        setMessage(data.message);
+        clearInputs();
+        setMessage("Employee created successfully");
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
   }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
-  var errLength = 0;
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage("");
+    }, 5000);
+  }, [message]);
 
+  var errLength = 0;
   const validate = () => {
     errLength = 0;
     setErrors([]);
@@ -152,10 +181,46 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
       errLength++;
     }
 
+    if (dob !== "" && dob !== null) {
+      if (dob instanceof Date) {
+        if (dob.getFullYear() < 1900) {
+          setErrors((errors: Error[]) => [
+            ...errors,
+            { type: "dob", message: "Date of Birth is invalid" },
+          ]);
+          errLength++;
+        }
+      }
+    }
+
     if (line1 === "") {
       setErrors((errors: Error[]) => [
         ...errors,
-        { type: "addressLine1", message: "AddressLine1 is required" },
+        { type: "addressLine1", message: "Address Line 1 is required" },
+      ]);
+      errLength++;
+    }
+
+    if (line2 === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "addressLine2", message: "Address Line 2 is required" },
+      ]);
+      errLength++;
+    }
+
+    if (city === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "city", message: "City is required" },
+      ]);
+      errLength++;
+    }
+
+    if (state === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "state", message: "State is required" },
       ]);
       errLength++;
     }
@@ -177,15 +242,14 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
 
         <div className="mt-6 grid grid-cols-2 gap-20">
           <div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 First Name
               </h1>
-
-              <div className="bg-white w-full  rounded drop-shadow">
+              <div className="bg-white w-full rounded drop-shadow">
                 <TextField
                   id="filled-search"
-                  className="w-full flex-auto"
+                  className="w-full"
                   placeholder="Enter First Name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -193,22 +257,25 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "firstName") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "firstName") {
+                      return (
+                        <p
+                          className="text-red-500 text-xs text-right italic"
+                          key={index}
+                        >
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Email ID
               </h1>
 
@@ -223,22 +290,22 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "emailId") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "emailId") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Employee Code
               </h1>
 
@@ -253,22 +320,22 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "employeeCode") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "employeeCode") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Department
               </h1>
 
@@ -283,22 +350,22 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "department") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "department") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Date of Birth
               </h1>
 
@@ -314,25 +381,25 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   />
                 </LocalizationProvider>
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "dob") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
+            </div>
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "dob") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
             </div>
           </div>
 
           <div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Last Name
               </h1>
 
@@ -347,22 +414,22 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "lastName") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "lastName") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Mobile Number
               </h1>
 
@@ -377,22 +444,22 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "mobileNo") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "mobileNo") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Gender
               </h1>
               <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -408,31 +475,28 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                     <MenuItem value="">
                       <em>Select Gender</em>
                     </MenuItem>
-                    {/* <MenuItem value="Male">Male</MenuItem>
-                      <MenuItem value="Female">Female</MenuItem>
-                      <MenuItem value="Other">Other</MenuItem> */}
                     {["Male", "Female", "Other"].map((item, index) => {
                       return <MenuItem value={item}>{item}</MenuItem>;
                     })}
                   </Select>
                 </FormControl>
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "gender") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
             </div>
-            <div className="flex flex-row gap-6 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "gender") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
+            </div>
+            <div className="flex flex-row gap-4 items-center mb-2">
+              <h1 className="font-normal text-base text-gray-650 w-40">
                 Office Branch
               </h1>
 
@@ -447,19 +511,19 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   size="small"
                 />
               </div>
-              <div className="mt-1 mb-1 text-left">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "officeBranch") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
+            </div>
+            <div className="mb-2 text-right">
+              {errors.length > 0
+                ? errors.map((item, index) => {
+                    if (item.type === "officeBranch") {
+                      return (
+                        <p className="text-red-500 text-xs" key={index}>
+                          {item.message}
+                        </p>
+                      );
+                    }
+                  })
+                : null}
             </div>
           </div>
         </div>
@@ -469,22 +533,24 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
             ADDRESS
           </h1>
           <div className="flex flex-row gap-20">
-            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                Line 1
-              </h1>
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  id="filled-search"
-                  className="w-full flex-auto"
-                  placeholder="House/Flat No./Building Name"
-                  value={line1}
-                  onChange={(e) => setLine1(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+            <div className="w-full">
+              <div className="flex flex-row gap-4 w-full items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  Line 1
+                </h1>
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="House/Flat No./Building Name"
+                    value={line1}
+                    onChange={(e) => setLine1(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
                       if (item.type === "addressLine1") {
@@ -498,26 +564,28 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   : null}
               </div>
             </div>
-            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                Line 2
-              </h1>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 w-full items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  Line 2
+                </h1>
 
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  id="filled-search"
-                  className="w-full flex-auto"
-                  placeholder="Street/Area/Locality"
-                  value={line2}
-                  onChange={(e) => setLine2(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Street/Area/Locality"
+                    value={line2}
+                    onChange={(e) => setLine2(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "addressLine2") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -530,24 +598,28 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
             </div>
           </div>
           <div className="flex flex-row gap-20">
-            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">City</h1>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  City
+                </h1>
 
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  id="filled-search"
-                  className="w-full flex-auto"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "city") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -558,74 +630,76 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   : null}
               </div>
             </div>
-            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                State / UT
-              </h1>
-              <div className="bg-white w-full shadow-md rounded flex-auto">
-                <FormControl fullWidth>
-                  <Select
-                    id="state"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                    displayEmpty
-                    size="small"
-                    className="w-full"
-                  >
-                    <MenuItem value="">
-                      <em>Select State / UT</em>
-                    </MenuItem>
-                    {[
-                      "Andaman and Nicobar Islands",
-                      "Andhra Pradesh",
-                      "Arunachal Pradesh",
-                      "Assam",
-                      "Bihar",
-                      "Chandigarh",
-                      "Chhattisgarh",
-                      "Dadra and Nagar Haveli",
-                      "Daman and Diu",
-                      "Delhi",
-                      "Goa",
-                      "Gujarat",
-                      "Haryana",
-                      "Himachal Pradesh",
-                      "Jammu and Kashmir",
-                      "Jharkhand",
-                      "Karnataka",
-                      "Kerala",
-                      "Lakshadweep",
-                      "Madhya Pradesh",
-                      "Maharashtra",
-                      "Manipur",
-                      "Meghalaya",
-                      "Mizoram",
-                      "Nagaland",
-                      "Odisha",
-                      "Puducherry",
-                      "Punjab",
-                      "Rajasthan",
-                      "Sikkim",
-                      "Tamil Nadu",
-                      "Telangana",
-                      "Tripura",
-                      "Uttar Pradesh",
-                      "Uttarakhand",
-                      "West Bengal",
-                    ].map((item, index) => {
-                      return (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  State / UT
+                </h1>
+                <div className="bg-white w-full shadow-md rounded flex-auto">
+                  <FormControl fullWidth>
+                    <Select
+                      id="state"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      displayEmpty
+                      size="small"
+                      className="w-full"
+                    >
+                      <MenuItem value="">
+                        <em>Select State / UT</em>
+                      </MenuItem>
+                      {[
+                        "Andaman and Nicobar Islands",
+                        "Andhra Pradesh",
+                        "Arunachal Pradesh",
+                        "Assam",
+                        "Bihar",
+                        "Chandigarh",
+                        "Chhattisgarh",
+                        "Dadra and Nagar Haveli",
+                        "Daman and Diu",
+                        "Delhi",
+                        "Goa",
+                        "Gujarat",
+                        "Haryana",
+                        "Himachal Pradesh",
+                        "Jammu and Kashmir",
+                        "Jharkhand",
+                        "Karnataka",
+                        "Kerala",
+                        "Lakshadweep",
+                        "Madhya Pradesh",
+                        "Maharashtra",
+                        "Manipur",
+                        "Meghalaya",
+                        "Mizoram",
+                        "Nagaland",
+                        "Odisha",
+                        "Puducherry",
+                        "Punjab",
+                        "Rajasthan",
+                        "Sikkim",
+                        "Tamil Nadu",
+                        "Telangana",
+                        "Tripura",
+                        "Uttar Pradesh",
+                        "Uttarakhand",
+                        "West Bengal",
+                      ].map((item, index) => {
+                        return (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "state") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -639,14 +713,28 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
           </div>
         </div>
 
-        <div className="pt-16 flex flex-row gap-8 mx-auto w-80 pb-16">
+        <div className="text-center pt-12">
+          {errors.length > 0
+            ? errors.map((item, index) => {
+                if (item.type === "unknown") {
+                  return (
+                    <p className="text-red-500 text-xs" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
+        <div className="pt-4 flex flex-row gap-8 mx-auto w-80 pb-16">
           <div
             className="flex-auto"
             onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
               e.preventDefault();
               validate() &&
                 createEmployeeData({
-                  name: firstName + " " + lastName,
+                  firstName: firstName,
+                  lastName: lastName,
                   personalEmail: emailId,
                   contactNo: mobileNo,
                   gender: gender,
@@ -661,7 +749,10 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 });
             }}
           >
-            <RegistrationButton text="Create" toUrl="" />
+            <RegistrationButton
+              text={loading ? "Creating..." : "Create"}
+              toUrl=""
+            />
           </div>
           <div className="flex-auto">
             <button

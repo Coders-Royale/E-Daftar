@@ -22,6 +22,7 @@
     "@types/node": "^16.11.43",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "axios": "^0.27.2",
     "babel-plugin-macros": "^3.1.0",
     "chart.js": "^3.8.0",
     "date-fns": "^2.29.1",

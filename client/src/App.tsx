@@ -14,6 +14,9 @@ import Notifications from "./pages/admin/Notifications";
 import Profile from "./pages/user/Profile";
 import Sent from "./pages/user/Sent";
 import NewMessage from "./pages/user/NewMessage";
+import Primary from "./pages/user/Primary";
+
+import { FilesProvider } from "./contexts/files.context";
 
 import getSocket from "./helpers/socket";
 
@@ -39,7 +42,9 @@ export const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
-  const [socketConnection, setSocketConnection] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
+  const [selectedMid, setSelectedMid] = useState<number>(0);
+  const [socketConnection, setSocketConnection] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
 
   // Auto Login
@@ -48,9 +53,9 @@ const App: React.FC = () => {
       localStorage.getItem("rememberMe") === "true" &&
       localStorage.getItem("jwtToken")
     ) {
-      navigate("/user/profile");
+      navigate("/user/sent");
     }
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="font-roboto">
@@ -85,18 +90,30 @@ const App: React.FC = () => {
               <Notifications selected={selected} setSelected={setSelected} />
             }
           />
-          {/* Make the primary page as the landing page when the page is ready. */}
           <Route
             path="/:user/profile"
-            element={<Profile selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
+            element={
+              <Profile
+                selected={selected}
+                setSelected={setSelected}
+              />
+            }
           />
           <Route
             path="/:user/sent"
-            element={<Sent selected={selected} setSelected={setSelected} />}
+            element={<Sent selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} />}
           />
           <Route
             path="/:user/new-message"
-            element={<NewMessage selected={selected} setSelected={setSelected} />}
+            element={
+              <FilesProvider>
+                <NewMessage selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
+              </FilesProvider>
+            }
+          />
+          <Route
+            path="/:user/primary"
+            element={<Primary selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} socketConnection={socketConnection} />}
           />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
