@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Socket } from "socket.io-client";
 import { useEmployeeInfo } from "../../queries/hooks";
-import { useMutateChangePassword } from "../../queries/mutations";
 
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
@@ -72,6 +71,9 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [file, setFile] = useState<any>();
   const [errors, setErrors] = useState<Error[]>([]);
+  const [errorsChangePassword, setErrorsChangePassword] = useState<Error[]>([]);
+  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
+  const [passwordChangeMessage, setPasswordChangeMessage] = useState("");
 
   const clearInputs = () => {
     setFirstName("");
@@ -89,6 +91,7 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   };
 
   var errLength = 0;
+  var errLengthChangePassword = 0;
 
   const validate = () => {
     errLength = 0;
@@ -192,6 +195,43 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     return false;
   };
 
+  const validateChangePassword = () => {
+    errLengthChangePassword = 0;
+    setErrorsChangePassword([]);
+
+    if (oldPassword === "") {
+      setErrorsChangePassword((errorsChangePassword: Error[]) => [
+        ...errorsChangePassword,
+        { type: "oldPassword", message: "Old Password is required" },
+      ]);
+      errLengthChangePassword++;
+    }
+
+    if (confirmPassword === "") {
+      setErrorsChangePassword((errorsChangePassword: Error[]) => [
+        ...errorsChangePassword,
+        { type: "confirmPassword", message: "Confirm Password is required" },
+      ]);
+      errLengthChangePassword++;
+    }
+
+    if (confirmPassword !== newPassword) {
+      setErrorsChangePassword((errorsChangePassword: Error[]) => [
+        ...errorsChangePassword,
+        { type: "confirmPassword", message: "Password does not match" },
+      ]);
+      errLengthChangePassword++;
+    }
+
+    if (!match || !uppercase || !number || !special || !lowercase) {
+      errLengthChangePassword++;
+    }
+
+    if (errLengthChangePassword === 0) return true;
+
+    return false;
+  };
+
   const validateNewPassword = (newPassword: string) => {
     if (newPassword.length > 8) {
       setMatch(true);
@@ -231,12 +271,6 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
     departmentId: localStorage.getItem("depId"),
     employeeId: localStorage.getItem("empId"),
   });
-
-  const { mutateAsync: changePasswordData } = useMutateChangePassword({
-    onSuccess: () => {},
-    onError: () => {},
-    onMutate: () => {},
-  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   useEffect(() => {
     setFirstName(employeeInfo.data?.employee?.firstName);
@@ -278,6 +312,49 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
   }
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+
+  console.log(errors);
+  console.log(errLengthChangePassword);
+
+  const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+  const handleChangePassword = async () => {
+    const res = await fetch(
+      `${baseUrl}/changePassword` +
+        `?employeeId=${localStorage.getItem("empId")}` +
+        `&oldPassword=${oldPassword}` +
+        `&newPassword=${newPassword}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      }
+    );
+    const data = await res.json();
+    if (data.message === "Password changed successfully") {
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setErrorsChangePassword([]);
+      errLengthChangePassword = 0;
+      setPasswordChangeSuccess(true);
+    } else {
+      setErrorsChangePassword((errorsChangePassword: Error[]) => [
+        ...errorsChangePassword,
+        { type: "changePassword", message: data.message },
+      ]);
+
+      errLengthChangePassword++;
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPasswordChangeMessage("");
+      setPasswordChangeSuccess(false);
+    }, 3000);
+  }, [passwordChangeSuccess === true]);
 
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
@@ -331,16 +408,14 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   First Name
                 </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
+                <div className="bg-white w-full rounded drop-shadow">
                   <TextField
-                    id=""
-                    name="firstName"
-                    className="w-full flex-auto"
+                    id="filled-search"
+                    className="w-full"
                     placeholder="Enter First Name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
@@ -348,29 +423,31 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "firstName") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "firstName") {
+                        return (
+                          <p
+                            className="text-red-500 text-xs text-right italic"
+                            key={index}
+                          >
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Email ID
                 </h1>
 
                 <div className="bg-white w-full rounded drop-shadow">
                   <TextField
-                    name="email"
-                    disabled
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Email ID"
                     value={emailId}
@@ -379,28 +456,28 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "emailId") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "emailId") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Employee Code
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    name="employeeCode"
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Employee Code"
                     value={employeeCode}
@@ -409,53 +486,52 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "employeeCode") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "employeeCode") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Department
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    name="department"
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter department"
-                    disabled
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     variant="outlined"
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "department") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "department") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Date of Birth
                 </h1>
 
@@ -475,31 +551,31 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     />
                   </LocalizationProvider>
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "dob") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
+              </div>
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "dob") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
               </div>
             </div>
 
             <div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Last Name
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    name="lastName"
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Last Name"
                     value={lastName}
@@ -508,28 +584,28 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "lastName") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "lastName") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Mobile Number
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    name="mobileNumber"
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter Mobile Number"
                     value={mobileNo}
@@ -538,29 +614,28 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "mobileNo") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "mobileNo") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Gender
                 </h1>
                 <div className="bg-white w-full shadow-md rounded flex-auto">
                   <FormControl fullWidth>
                     <Select
                       id="gender"
-                      name="gender"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                       displayEmpty
@@ -571,59 +646,54 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                         <em>Select Gender</em>
                       </MenuItem>
                       {["Male", "Female", "Other"].map((item, index) => {
-                        return (
-                          <MenuItem value={item} key={index}>
-                            {item}
-                          </MenuItem>
-                        );
+                        return <MenuItem value={item}>{item}</MenuItem>;
                       })}
                     </Select>
                   </FormControl>
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "gender") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
-                <h1 className="font-normal text-base text-gray-650 w-36">
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "gender") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
                   Office Branch
                 </h1>
 
                 <div className="bg-white w-full  rounded drop-shadow">
                   <TextField
-                    name="officeBranch"
+                    id="filled-search"
                     className="w-full flex-auto"
                     placeholder="Enter office branch"
-                    disabled
                     value={officeBranch}
                     onChange={(e) => setOfficeBranch(e.target.value)}
                     variant="outlined"
                     size="small"
                   />
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "officeBranch") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
+              </div>
+              <div className="mb-2 text-right">
+                {errors.length > 0
+                  ? errors.map((item, index) => {
+                      if (item.type === "officeBranch") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
               </div>
             </div>
           </div>
@@ -634,22 +704,24 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
             ADDRESS
           </h1>
           <div className="flex flex-row gap-20">
-            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                Line 1
-              </h1>
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  name="addressLine1"
-                  className="w-full flex-auto"
-                  placeholder="House/Flat No./Building Name"
-                  value={line1}
-                  onChange={(e) => setLine1(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+            <div className="w-full">
+              <div className="flex flex-row gap-4 w-full items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  Line 1
+                </h1>
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="House/Flat No./Building Name"
+                    value={line1}
+                    onChange={(e) => setLine1(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
                       if (item.type === "addressLine1") {
@@ -663,26 +735,28 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                   : null}
               </div>
             </div>
-            <div className="flex flex-row gap-6 w-1/2 items-center mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                Line 2
-              </h1>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 w-full items-center mb-2">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  Line 2
+                </h1>
 
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  name="addressLine2"
-                  className="w-full flex-auto"
-                  placeholder="Street/Area/Locality"
-                  value={line2}
-                  onChange={(e) => setLine2(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="Street/Area/Locality"
+                    value={line2}
+                    onChange={(e) => setLine2(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "addressLine2") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -695,24 +769,28 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
             </div>
           </div>
           <div className="flex flex-row gap-20">
-            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">City</h1>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  City
+                </h1>
 
-              <div className="bg-white w-full rounded drop-shadow">
-                <TextField
-                  name="city"
-                  className="w-full flex-auto"
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  variant="outlined"
-                  size="small"
-                />
+                <div className="bg-white w-full rounded drop-shadow">
+                  <TextField
+                    id="filled-search"
+                    className="w-full flex-auto"
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "city") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -723,75 +801,76 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                   : null}
               </div>
             </div>
-            <div className="flex flex-row gap-6 items-center w-1/2 mb-4">
-              <h1 className="font-normal text-base text-gray-650 w-36">
-                State / UT
-              </h1>
-              <div className="bg-white w-full shadow-md rounded flex-auto">
-                <FormControl fullWidth>
-                  <Select
-                    id="state"
-                    name="state"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                    displayEmpty
-                    size="small"
-                    className="w-full"
-                  >
-                    <MenuItem value="">
-                      <em>Select State / UT</em>
-                    </MenuItem>
-                    {[
-                      "Andaman and Nicobar Islands",
-                      "Andhra Pradesh",
-                      "Arunachal Pradesh",
-                      "Assam",
-                      "Bihar",
-                      "Chandigarh",
-                      "Chhattisgarh",
-                      "Dadra and Nagar Haveli",
-                      "Daman and Diu",
-                      "Delhi",
-                      "Goa",
-                      "Gujarat",
-                      "Haryana",
-                      "Himachal Pradesh",
-                      "Jammu and Kashmir",
-                      "Jharkhand",
-                      "Karnataka",
-                      "Kerala",
-                      "Lakshadweep",
-                      "Madhya Pradesh",
-                      "Maharashtra",
-                      "Manipur",
-                      "Meghalaya",
-                      "Mizoram",
-                      "Nagaland",
-                      "Odisha",
-                      "Puducherry",
-                      "Punjab",
-                      "Rajasthan",
-                      "Sikkim",
-                      "Tamil Nadu",
-                      "Telangana",
-                      "Tripura",
-                      "Uttar Pradesh",
-                      "Uttarakhand",
-                      "West Bengal",
-                    ].map((item, index) => {
-                      return (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
+            <div className="w-full">
+              <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                <h1 className="font-normal text-base text-gray-650 w-40">
+                  State / UT
+                </h1>
+                <div className="bg-white w-full shadow-md rounded flex-auto">
+                  <FormControl fullWidth>
+                    <Select
+                      id="state"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      displayEmpty
+                      size="small"
+                      className="w-full"
+                    >
+                      <MenuItem value="">
+                        <em>Select State / UT</em>
+                      </MenuItem>
+                      {[
+                        "Andaman and Nicobar Islands",
+                        "Andhra Pradesh",
+                        "Arunachal Pradesh",
+                        "Assam",
+                        "Bihar",
+                        "Chandigarh",
+                        "Chhattisgarh",
+                        "Dadra and Nagar Haveli",
+                        "Daman and Diu",
+                        "Delhi",
+                        "Goa",
+                        "Gujarat",
+                        "Haryana",
+                        "Himachal Pradesh",
+                        "Jammu and Kashmir",
+                        "Jharkhand",
+                        "Karnataka",
+                        "Kerala",
+                        "Lakshadweep",
+                        "Madhya Pradesh",
+                        "Maharashtra",
+                        "Manipur",
+                        "Meghalaya",
+                        "Mizoram",
+                        "Nagaland",
+                        "Odisha",
+                        "Puducherry",
+                        "Punjab",
+                        "Rajasthan",
+                        "Sikkim",
+                        "Tamil Nadu",
+                        "Telangana",
+                        "Tripura",
+                        "Uttar Pradesh",
+                        "Uttarakhand",
+                        "West Bengal",
+                      ].map((item, index) => {
+                        return (
+                          <MenuItem key={index} value={item}>
+                            {item}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
-              <div className="mt-1 mb-1 text-left">
+              <div className="mb-2 text-right">
                 {errors.length > 0
                   ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
+                      if (item.type === "state") {
                         return (
                           <p className="text-red-500 text-xs" key={index}>
                             {item.message}
@@ -826,7 +905,7 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
 
           <div className="mt-6 grid grid-cols-2 gap-20">
             <div>
-              <div className="flex flex-row gap-6 items-center mb-4">
+              <div className="flex flex-row gap-4 items-center mb-2">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Old Password
                 </h1>
@@ -859,21 +938,21 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     />
                   </FormControl>
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "oldPassword") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex flex-row gap-6 items-center mb-4">
+              <div className="mb-2 text-right">
+                {errorsChangePassword.length > 0
+                  ? errorsChangePassword.map((item, index) => {
+                      if (item.type === "oldPassword") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+              <div className="flex flex-row gap-4 items-center mb-2">
                 <h1 className="font-normal text-base text-gray-650 w-36">
                   Confirm Password
                 </h1>
@@ -908,19 +987,19 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     />
                   </FormControl>
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "confirmPassword") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
+              </div>
+              <div className="mb-2 text-right">
+                {errorsChangePassword.length > 0
+                  ? errorsChangePassword.map((item, index) => {
+                      if (item.type === "confirmPassword") {
+                        return (
+                          <p className="text-red-500 text-xs" key={index}>
+                            {item.message}
+                          </p>
+                        );
+                      }
+                    })
+                  : null}
               </div>
             </div>
 
@@ -958,21 +1037,8 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
                     />
                   </FormControl>
                 </div>
-                <div className="mt-1 mb-1 text-left">
-                  {errors.length > 0
-                    ? errors.map((item, index) => {
-                        if (item.type === "newPassword") {
-                          return (
-                            <p className="text-red-500 text-xs" key={index}>
-                              {item.message}
-                            </p>
-                          );
-                        }
-                      })
-                    : null}
-                </div>
               </div>
-              <div className="flex">
+              <div className="flex mt-2">
                 <div className="w-1/2">
                   <p
                     className={`text-xs italic font-normal ${
@@ -1025,16 +1091,33 @@ const Profile = ({ selected, setSelected, socketConnection }: Props) => {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-44">
+        <div className="text-center pt-12">
+          {errorsChangePassword.length > 0
+            ? errorsChangePassword.map((item, index) => {
+                if (item.type === "changePassword") {
+                  return (
+                    <p className="text-red-500 text-xs italic" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
+
+        <div className="flex justify-center mb-2">
+          {passwordChangeMessage ? (
+            <p className="text-green-500 text-xs italic">
+              {passwordChangeMessage}
+            </p>
+          ) : null}
+        </div>
+
+        <div className="flex flex-row gap-8 mx-auto w-80 pb-16">
           <div
             className="flex-auto"
-            onClick={(e: any) => {
-              e.preventDefault();
-              changePasswordData({
-                oldPassword: oldPassword,
-                newPassword: newPassword,
-                confirmPassword: confirmPassword,
-              });
+            onClick={() => {
+              validateChangePassword() && handleChangePassword();
             }}
           >
             <RegistrationButton text="Change Password" toUrl="/" />

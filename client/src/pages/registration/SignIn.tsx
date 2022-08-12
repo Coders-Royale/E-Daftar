@@ -147,7 +147,7 @@ export default function SignIn() {
         <SignInButton />
         <div className="flex pt-8 gap-4">
           <TextField
-            label="Employee ID"
+            label="ID"
             id="employee-id"
             fullWidth
             size="small"
