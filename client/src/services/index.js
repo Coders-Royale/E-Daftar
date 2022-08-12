@@ -20,7 +20,6 @@ const apiEndPoints = {
   assignDocument: `/assignDocument`,
   forwardToAdmin: `/forwardToAdmin`,
   rejectDocument: `/rejectDocument`,
-  changePassword: `/changePassword`,
 };
 
 // GET REQUESTS
@@ -160,21 +159,21 @@ export async function createEmployee(data) {
 }
 
 export async function uploadFile(data) {
-	try {
-		const res = (
-			await fetch(baseUrl + apiEndPoints.uploadFile, {
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-					"Content-type": "multipart/form-data",
-				},
-				body: JSON.stringify(data),
-			}).then((res) => res.json())
-		);
-		return res;
-	} catch (error) {
-		console.log(error);
-	}
+  try {
+    const res = (
+      await fetch(baseUrl + apiEndPoints.uploadFile, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          "Content-type": "multipart/form-data",
+        },
+        body: JSON.stringify(data),
+      }).then((res) => res.json())
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function createDocument(data) {
@@ -236,24 +235,6 @@ export async function rejectDocument(data) {
   try {
     const res = (
       await fetch(baseUrl + apiEndPoints.rejectDocument, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }).then((res) => res.json())
-    );
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function changePassword(data) {
-  try {
-    const res = (
-      await fetch(baseUrl + apiEndPoints.changePassword, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

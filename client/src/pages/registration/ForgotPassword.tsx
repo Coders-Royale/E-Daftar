@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import SignInButton from "../../components/buttons/SignInButton";
 import SideBg from "../../components/SideBg";
 import TextField from "@mui/material/TextField";
@@ -8,12 +7,14 @@ import RegistrationBackButton from "../../components/buttons/RegistrationBackBut
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Error[]>([]);
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   interface Error {
     type: string;
     message: string;
   }
-  const [errors, setErrors] = useState<Error[]>([]);
 
   var errLength = 0;
 
@@ -46,6 +47,29 @@ const ForgotPassword = () => {
 
     return false;
   };
+
+  const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+  const handleRequestChangePassword = async () => {
+    const res = await fetch(
+      `${baseUrl}/requestForgotPassword` + `?email=${email}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    if (data.message === "Reset password email sent successfully!") {
+      setSuccessMessage(data.message);
+    } else {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: data.message },
+      ]);
+    }
+  };
+
   return (
     <div className="flex gap-32 items-center h-screen px-32 bg-gray-250">
       <div className="w-2/5">
@@ -75,8 +99,30 @@ const ForgotPassword = () => {
               })
             : null}
         </div>
+
         <RegistrationBackButton toUrl="/sign-in" />
-        <RegistrationButton toUrl="/new-password" text="Reset Password" />
+        <div className="mt-1 mb-1 text-center">
+          {errors.length > 0
+            ? errors.map((item, index) => {
+                if (item.type === "unknown") {
+                  return (
+                    <p className="text-red-500 text-xs italic" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
+        {/* Success Message */}
+        {successMessage ? (
+          <p className="text-green-500 text-xs italic text-center mt-1 mb-1">
+            {successMessage}
+          </p>
+        ) : null}
+        <div onClick={() => validate() && handleRequestChangePassword()}>
+          <RegistrationButton toUrl="/new-password" text="Reset Password" />
+        </div>
       </div>
     </div>
   );

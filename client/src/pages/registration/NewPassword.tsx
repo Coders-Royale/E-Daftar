@@ -10,6 +10,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import RegistrationBackButton from "../../components/buttons/RegistrationBackButton";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
+import { useNavigate } from "react-router-dom";
 
 const NewPassword = () => {
   const [uppercase, setUppercase] = useState(false);
@@ -17,12 +18,21 @@ const NewPassword = () => {
   const [special, setSpecial] = useState(false);
   const [lowercase, setLowercase] = useState(false);
   const [match, setMatch] = useState(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [showOldPassword, setShowOldPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState<Error[]>([]);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+
+  var errLength = 0;
+
+  interface Error {
+    type: string;
+    message: string;
+  }
+
+  const navigate = useNavigate();
 
   const validateNewPassword = (password: string) => {
     if (password.length > 8) {
@@ -57,6 +67,52 @@ const NewPassword = () => {
     }
   };
 
+  const validate = () => {
+    setErrors([]);
+    errLength = 0;
+
+    if (confirmPassword !== newPassword) {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "confirmPassword", message: "Passwords do not match" },
+      ]);
+      errLength++;
+    }
+
+    if (!match || !uppercase || !number || !special || !lowercase) {
+      errLength++;
+    }
+
+    if (errLength == 0) return true;
+
+    return false;
+  };
+
+  const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+  const handleNewPassword = async () => {
+    const res = await fetch(
+      `${baseUrl}/forgotPassword` +
+        `?token=${window.location.href.split("=")[1]}` +
+        `&newPassword=${newPassword}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    if (data.message === "Password changed successfully!") {
+      setSuccessMessage(data.message);
+      navigate("/sign-in");
+    } else {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: data.message },
+      ]);
+    }
+  };
+
   useEffect(() => {
     validateNewPassword(newPassword);
   }, [newPassword]);
@@ -72,32 +128,6 @@ const NewPassword = () => {
         <p className="mt-8 mb-4 h-5 text-gray-750 font-medium">
           Set New Password
         </p>
-        <div>
-          <FormControl variant="outlined" fullWidth size="small">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Old Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showOldPassword ? "text" : "password"}
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowOldPassword(!showOldPassword)}
-                    onMouseDown={(e) => e.preventDefault()}
-                    edge="end"
-                  >
-                    {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Old Password"
-            />
-          </FormControl>
-        </div>
         <div className="mt-4">
           <FormControl variant="outlined" fullWidth size="small">
             <InputLabel htmlFor="outlined-adornment-password">
@@ -196,8 +226,43 @@ const NewPassword = () => {
           </FormControl>
         </div>
 
+        <div className="mt-1 mb-1 text-left">
+          {errors.length > 0
+            ? errors.map((item, index) => {
+                if (item.type === "confirmPassword") {
+                  return (
+                    <p className="text-red-500 text-xs italic" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
+
         <RegistrationBackButton toUrl="/forgot-password" />
-        <RegistrationButton toUrl="/sign-in" text="Reset" />
+        <div className="mt-1 mb-1 text-center">
+          {errors.length > 0
+            ? errors.map((item, index) => {
+                if (item.type === "unknown") {
+                  return (
+                    <p className="text-red-500 text-xs italic" key={index}>
+                      {item.message}
+                    </p>
+                  );
+                }
+              })
+            : null}
+        </div>
+        {/* Success Message */}
+        {successMessage ? (
+          <p className="text-green-500 text-xs italic text-center mt-1 mb-1">
+            {successMessage}
+          </p>
+        ) : null}
+        <div onClick={() => validate() && handleNewPassword()}>
+          <RegistrationButton toUrl="/sign-in" text="Reset" />
+        </div>
       </div>
     </div>
   );
