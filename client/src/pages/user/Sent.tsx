@@ -44,14 +44,14 @@ John Doe
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
-  selectedMid: number;
-  setSelectedMid: (selectedMid: number) => void;
 }
 
-const Sent = ({ selected, setSelected, selectedMid, setSelectedMid }: Props) => {
+const Sent = ({ selected, setSelected }: Props) => {
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
+
+  const [selectedMid, setSelectedMid] = useState<number>(0);
 
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");

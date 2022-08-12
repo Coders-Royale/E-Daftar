@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 
-import { useMutateCreateDocument } from "../../queries/mutations";
 import { useRooms } from "../../queries/hooks";
 import { useEmployeeInfo } from "../../queries/hooks";
 
@@ -38,8 +37,6 @@ interface ClientToServerEvents {
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
-  selectedMid: number;
-  setSelectedMid: (selectedMid: number) => void;
   socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
@@ -72,10 +69,12 @@ interface RoomObject {
 
 const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
 
-const Primary = ({ selected, setSelected, selectedMid, setSelectedMid, socketConnection }: Props) => {
+const Primary = ({ selected, setSelected, socketConnection }: Props) => {
   useEffect(() => {
     setSelected(-1);
   }, [setSelected]);
+
+  const [selectedMid, setSelectedMid] = useState<number>(0);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
@@ -123,7 +122,25 @@ const Primary = ({ selected, setSelected, selectedMid, setSelectedMid, socketCon
           <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} displayRooms={rooms}/>
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
-          
+          <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750">
+            New Message
+          </h1>
+
+          {/*Render the messsages here.*/}
+
+          <div className="mt-20 mb-20 flex flex-row justify-between">
+
+            <div className="w-24">
+              <button
+                className="bg-gradient-to-r from-blue-450 to-blue-150 text-gray-150 py-3 w-full rounded-lg font-medium flex flex-row gap-2 px-4"
+                onClick={(e: React.MouseEvent<HTMLButtonElement> | any) => {
+                  e.preventDefault();
+                }}
+              >
+                <img src={Send} alt="send" className="h-5 w-5" /> Send
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

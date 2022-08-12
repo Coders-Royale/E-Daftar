@@ -42,7 +42,6 @@ export const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
-  const [selectedMid, setSelectedMid] = useState<number>(0);
   const [socketConnection, setSocketConnection] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
@@ -101,19 +100,19 @@ const App: React.FC = () => {
           />
           <Route
             path="/:user/sent"
-            element={<Sent selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} />}
+            element={<Sent selected={selected} setSelected={setSelected} />}
           />
           <Route
             path="/:user/new-message"
             element={
               <FilesProvider>
-                <NewMessage selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
+                <NewMessage selected={selected} setSelected={setSelected} socketConnection={socketConnection} />
               </FilesProvider>
             }
           />
           <Route
             path="/:user/primary"
-            element={<Primary selected={selected} setSelected={setSelected} selectedMid={selectedMid} setSelectedMid={setSelectedMid} socketConnection={socketConnection} />}
+            element={<Primary selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
           />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
