@@ -94,3 +94,22 @@ export class RejectDocumentInput {
     @IsString()
     reason: string
 }
+
+export class UpdateProfileInput {
+    @IsString()
+    employeeId: string
+    @IsString()
+    personal_email?: string
+    @IsString()
+    contactNo?: string
+    @IsString()
+    addr_line1?: string
+    @IsString()
+    addr_line2?: string
+    @IsString()
+    city?: string
+    @IsString()
+    state?: string
+    @IsString()
+    role: string
+}
