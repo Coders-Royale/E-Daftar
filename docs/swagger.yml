@@ -902,6 +902,8 @@ components:
       properties: 
         roomId: 
           type: string
+        assignedEmployeeName:
+          type: string
         documentId: 
           type: string
         subject: 
