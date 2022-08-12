@@ -15,7 +15,7 @@ servers:
   - description: Production Server
     url: https://sih-2022-server.azurewebsites.net/api/
   - description: Chat Server
-    url: https://sih-email.herokuapp.com/api/chat
+    url: https://sih-email.herokuapp.com/api/chat/
 paths:
   /createAdmin:
     post: 
@@ -499,6 +499,25 @@ paths:
           description: Internal Server Error
         '200':
           description: Password changed successfully
+  /updateProfile:
+    put:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Update your profile
+      operationId: updateProfile
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProfileInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Profile updated successfully
 components:
   schemas:
     Employee:
@@ -881,11 +900,64 @@ components:
     CreateDocumentResponse:
       type: object
       properties: 
+        roomId: 
+          type: string
         documentId: 
+          type: string
+        subject: 
+          type: string
+        description: 
           type: string
         employeeId: 
           type: string
-        roomId: 
+        main_file: 
+          type: array
+          items:
+            type: string
+        reference_files: 
+          type: array
+          items:
+            type: string
+        permissions: 
+          type: array
+          items:
+            type: string  
+        status: 
+          type: array
+          items:
+            type: string
+        time_recieved: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        time_returned: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        rejection_reason: 
+          type: string
+        category: 
+          type: string
+    UpdateProfileInput:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        personal_email:
+          type: string
+        contactNo: 
+          type: string
+        addr_line1:
+          type: string
+        addr_line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        role:
           type: string
     GetRoomsResponse:
       type: array
@@ -993,4 +1065,13 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/RejectDocumentInput'
+      required: true
+    UpdateProfileInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateProfileInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/UpdateProfileInput'
       required: true

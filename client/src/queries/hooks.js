@@ -4,6 +4,7 @@ import {
 	getEmployee,
 	trackStatus,
 	listDocument,
+	getRooms
 } from "../services";
 
 export const useEmployeeInfo = (params) => {
@@ -30,6 +31,16 @@ export const useListDocument = (params) => {
 	return useQuery(
 		[QUERY_KEYS.LIST_DOCUMENT, params.employeeId],
 		() => listDocument(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useRooms = (params) => {
+	return useQuery(
+		[QUERY_KEYS.GET_ROOMS, params.employeeId],
+		() => getRooms(params),
 		{
 			retry: false,
 		}

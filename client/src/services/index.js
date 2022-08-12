@@ -1,4 +1,5 @@
 const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
 
 const apiEndPoints = {
   // GET REQUESTS
@@ -6,6 +7,10 @@ const apiEndPoints = {
   getAdmin: `/getAdmin`,
   trackStatus: `/trackStatus`,
   listDocument: `/listDocument`,
+  rooms: `/rooms`,
+  messages: `/messages`,
+  conversation: `/conversation`,
+  loadMessages: `/loadMessages`,
 
   // POST REQUESTS
   login: `/login`,
@@ -97,6 +102,25 @@ export async function listDocument(params) {
   }
 }
 
+export async function getRooms(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrlChat + apiEndPoints.rooms + `?employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 
 // POST REQUESTS
 export async function login(data) {

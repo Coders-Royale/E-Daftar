@@ -44,9 +44,11 @@ John Doe
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  selectedMid: number;
+  setSelectedMid: (selectedMid: number) => void;
 }
 
-const Sent = ({ selected, setSelected }: Props) => {
+const Sent = ({ selected, setSelected, selectedMid, setSelectedMid }: Props) => {
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
@@ -86,7 +88,7 @@ const Sent = ({ selected, setSelected }: Props) => {
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
-          <Middlebar />
+          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
         </div>
 
         <div className="w-2/3 overflow-scroll px-10">
