@@ -17,6 +17,8 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
+import Loader from "../../components/Loader";
+import axios from "axios";
 
 interface Props {
   selected: number;
@@ -170,10 +172,46 @@ const Profile = ({ selected, setSelected }: Props) => {
       errLength++;
     }
 
+    if (dob !== "" && dob !== null) {
+      if (dob instanceof Date) {
+        if (dob.getFullYear() < 1900) {
+          setErrors((errors: Error[]) => [
+            ...errors,
+            { type: "dob", message: "Date of Birth is invalid" },
+          ]);
+          errLength++;
+        }
+      }
+    }
+
     if (line1 === "") {
       setErrors((errors: Error[]) => [
         ...errors,
-        { type: "addressLine1", message: "AddressLine1 is required" },
+        { type: "addressLine1", message: "Address Line 1 is required" },
+      ]);
+      errLength++;
+    }
+
+    if (line2 === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "addressLine2", message: "Address Line 2 is required" },
+      ]);
+      errLength++;
+    }
+
+    if (city === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "city", message: "City is required" },
+      ]);
+      errLength++;
+    }
+
+    if (state === "") {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "state", message: "State is required" },
       ]);
       errLength++;
     }
@@ -329,782 +367,796 @@ const Profile = ({ selected, setSelected }: Props) => {
     }, 3000);
   }, [passwordChangeSuccess === true]);
 
+  console.log(gender);
+
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
-      <div className="w-full px-10 overflow-scroll">
-        <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black">
-          PROFILE
-        </h1>
+      {employeeInfo?.data ? (
+        <div className="w-full px-10 overflow-scroll">
+          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black">
+            PROFILE
+          </h1>
 
-        <div className="flex flex-row gap-6">
-          <img
-            src={file || Dp}
-            alt="profile_dp"
-            className="w-48 h-48 object-cover rounded-lg"
-          />
-          <div className="flex flex-col justify-end">
-            <button
-              className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
-              onClick={() => hiddenFileInput.current?.click()}
-            >
-              <input
-                // className="font-medium text-sm text-gray-150 hidden"
-                style={{ display: "none" }}
-                onChange={handleChange}
-                ref={hiddenFileInput}
-                type="file"
-              ></input>
-              <label
-                htmlFor="file-upload"
-                className="inline-block cursor-pointer"
+          <div className="flex flex-row gap-6">
+            <img
+              src={file || Dp}
+              alt="profile_dp"
+              className="w-48 h-48 object-cover rounded-lg"
+            />
+            <div className="flex flex-col justify-end">
+              <button
+                className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+                onClick={() => hiddenFileInput.current?.click()}
               >
-                <KeyboardTabIcon />
-                Choose an image
-              </label>
-            </button>
-            <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
-              Acceptable format .jpg, .png only
+                <input
+                  // className="font-medium text-sm text-gray-150 hidden"
+                  style={{ display: "none" }}
+                  onChange={handleChange}
+                  ref={hiddenFileInput}
+                  type="file"
+                ></input>
+                <label
+                  htmlFor="file-upload"
+                  className="inline-block cursor-pointer"
+                >
+                  <KeyboardTabIcon />
+                  Choose an image
+                </label>
+              </button>
+              <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
+                Acceptable format .jpg, .png only
+              </h1>
+              <h1 className="text-xs font-medium text-gray-650 tracking-widest">
+                Max. file size is 500Kb and min. file size is 70Kb.
+              </h1>
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+              ACCOUNT INFORMATION
             </h1>
-            <h1 className="text-xs font-medium text-gray-650 tracking-widest">
-              Max. file size is 500Kb and min. file size is 70Kb.
+
+            <div className="mt-6 grid grid-cols-2 gap-20">
+              <div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    First Name
+                  </h1>
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full"
+                      placeholder="Enter First Name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "firstName") {
+                          return (
+                            <p
+                              className="text-red-500 text-xs text-right italic"
+                              key={index}
+                            >
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Email ID
+                  </h1>
+
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter Email ID"
+                      value={emailId}
+                      onChange={(e) => setEmailId(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "emailId") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Employee Code
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter Employee Code"
+                      value={employeeCode}
+                      onChange={(e) => setEmployeeCode(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "employeeCode") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Department
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter department"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "department") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Date of Birth
+                  </h1>
+
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DesktopDatePicker
+                        inputFormat="MM/dd/yyyy"
+                        value={dob}
+                        onChange={(date) => setDob(date)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="w-full"
+                            size="small"
+                          />
+                        )}
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "dob") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Last Name
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter Last Name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "lastName") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Mobile Number
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter Mobile Number"
+                      value={mobileNo}
+                      onChange={(e) => setMobileNo(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "mobileNo") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Gender
+                  </h1>
+                  <div className="bg-white w-full shadow-md rounded flex-auto">
+                    <FormControl fullWidth>
+                      <Select
+                        id="gender"
+                        value={gender || ""}
+                        onChange={(e) => setGender(e.target.value)}
+                        displayEmpty
+                        size="small"
+                        className="w-full"
+                      >
+                        <MenuItem value="">
+                          <em>Select Gender</em>
+                        </MenuItem>
+                        {["Male", "Female", "Other"].map((item, index) => {
+                          return (
+                            <MenuItem value={item} key={index}>
+                              {item}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "gender") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Office Branch
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Enter office branch"
+                      value={officeBranch}
+                      onChange={(e) => setOfficeBranch(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "officeBranch") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+              ADDRESS
             </h1>
-          </div>
-        </div>
-
-        <div className="mt-16">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
-            ACCOUNT INFORMATION
-          </h1>
-
-          <div className="mt-6 grid grid-cols-2 gap-20">
-            <div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  First Name
-                </h1>
-                <div className="bg-white w-full rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full"
-                    placeholder="Enter First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "firstName") {
-                        return (
-                          <p
-                            className="text-red-500 text-xs text-right italic"
-                            key={index}
-                          >
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Email ID
-                </h1>
-
-                <div className="bg-white w-full rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter Email ID"
-                    value={emailId}
-                    onChange={(e) => setEmailId(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "emailId") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Employee Code
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter Employee Code"
-                    value={employeeCode}
-                    onChange={(e) => setEmployeeCode(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "employeeCode") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Department
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter department"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "department") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Date of Birth
-                </h1>
-
-                <div className="bg-white w-full rounded drop-shadow">
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DesktopDatePicker
-                      inputFormat="MM/dd/yyyy"
-                      value={dob}
-                      onChange={(date) => setDob(date)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          className="w-full"
-                          size="small"
-                        />
-                      )}
+            <div className="flex flex-row gap-20">
+              <div className="w-full">
+                <div className="flex flex-row gap-4 w-full items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Line 1
+                  </h1>
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="House/Flat No./Building Name"
+                      value={line1}
+                      onChange={(e) => setLine1(e.target.value)}
+                      variant="outlined"
+                      size="small"
                     />
-                  </LocalizationProvider>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "addressLine1") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
                 </div>
               </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "dob") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
+              <div className="w-full">
+                <div className="flex flex-row gap-4 w-full items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    Line 2
+                  </h1>
+
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="Street/Area/Locality"
+                      value={line2}
+                      onChange={(e) => setLine2(e.target.value)}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "addressLine2") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
               </div>
             </div>
+            <div className="flex flex-row gap-20">
+              <div className="w-full">
+                <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    City
+                  </h1>
 
-            <div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Last Name
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "lastName") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Mobile Number
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter Mobile Number"
-                    value={mobileNo}
-                    onChange={(e) => setMobileNo(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "mobileNo") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Gender
-                </h1>
-                <div className="bg-white w-full shadow-md rounded flex-auto">
-                  <FormControl fullWidth>
-                    <Select
-                      id="gender"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      displayEmpty
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <TextField
+                      id="filled-search"
+                      className="w-full flex-auto"
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      variant="outlined"
                       size="small"
-                      className="w-full"
+                    />
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "city") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+              </div>
+              <div className="w-full">
+                <div className="flex flex-row gap-4 items-center mb-2 w-full">
+                  <h1 className="font-normal text-base text-gray-650 w-40">
+                    State / UT
+                  </h1>
+                  <div className="bg-white w-full shadow-md rounded flex-auto">
+                    <FormControl fullWidth>
+                      <Select
+                        id="state"
+                        value={state || ""}
+                        onChange={(e) => setState(e.target.value)}
+                        displayEmpty
+                        size="small"
+                        className="w-full"
+                      >
+                        <MenuItem value="">
+                          <em>Select State / UT</em>
+                        </MenuItem>
+                        {[
+                          "Andaman and Nicobar Islands",
+                          "Andhra Pradesh",
+                          "Arunachal Pradesh",
+                          "Assam",
+                          "Bihar",
+                          "Chandigarh",
+                          "Chhattisgarh",
+                          "Dadra and Nagar Haveli",
+                          "Daman and Diu",
+                          "Delhi",
+                          "Goa",
+                          "Gujarat",
+                          "Haryana",
+                          "Himachal Pradesh",
+                          "Jammu and Kashmir",
+                          "Jharkhand",
+                          "Karnataka",
+                          "Kerala",
+                          "Lakshadweep",
+                          "Madhya Pradesh",
+                          "Maharashtra",
+                          "Manipur",
+                          "Meghalaya",
+                          "Mizoram",
+                          "Nagaland",
+                          "Odisha",
+                          "Puducherry",
+                          "Punjab",
+                          "Rajasthan",
+                          "Sikkim",
+                          "Tamil Nadu",
+                          "Telangana",
+                          "Tripura",
+                          "Uttar Pradesh",
+                          "Uttarakhand",
+                          "West Bengal",
+                        ].map((item, index) => {
+                          return (
+                            <MenuItem key={index} value={item}>
+                              {item}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errors.length > 0
+                    ? errors.map((item, index) => {
+                        if (item.type === "state") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-8">
+            <div className="flex-auto">
+              <RegistrationButton text="Update Information" toUrl="/" />
+            </div>
+            <div className="flex-auto">
+              <button
+                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+                onClick={clearInputs}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-12">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+              UPDATE PASSWORD
+            </h1>
+
+            <div className="mt-6 grid grid-cols-2 gap-20">
+              <div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-36">
+                    Old Password
+                  </h1>
+
+                  <div className="bg-white w-full rounded drop-shadow">
+                    <FormControl variant="outlined" className="w-full">
+                      <OutlinedInput
+                        name="oldPassword"
+                        type={showOldPassword ? "text" : "password"}
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                        size="small"
+                        className="w-full"
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() =>
+                                setShowOldPassword(!showOldPassword)
+                              }
+                              onMouseDown={(e) => e.preventDefault()}
+                              edge="end"
+                            >
+                              {showOldPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errorsChangePassword.length > 0
+                    ? errorsChangePassword.map((item, index) => {
+                        if (item.type === "oldPassword") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+                <div className="flex flex-row gap-4 items-center mb-2">
+                  <h1 className="font-normal text-base text-gray-650 w-36">
+                    Confirm Password
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <FormControl variant="outlined" className="w-full">
+                      <OutlinedInput
+                        name="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        size="small"
+                        className="w-full"
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
+                              onMouseDown={(e) => e.preventDefault()}
+                              edge="end"
+                            >
+                              {showConfirmPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="mb-2 text-right">
+                  {errorsChangePassword.length > 0
+                    ? errorsChangePassword.map((item, index) => {
+                        if (item.type === "confirmPassword") {
+                          return (
+                            <p className="text-red-500 text-xs" key={index}>
+                              {item.message}
+                            </p>
+                          );
+                        }
+                      })
+                    : null}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex flex-row gap-6 items-center">
+                  <h1 className="font-normal text-base text-gray-650 w-36">
+                    New Password
+                  </h1>
+
+                  <div className="bg-white w-full  rounded drop-shadow">
+                    <FormControl variant="outlined" className="w-full">
+                      <OutlinedInput
+                        name="newPassword"
+                        type={showNewPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        size="small"
+                        className="w-full"
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() =>
+                                setShowNewPassword(!showNewPassword)
+                              }
+                              onMouseDown={(e) => e.preventDefault()}
+                              edge="end"
+                            >
+                              {showNewPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="flex mt-2">
+                  <div className="w-1/2">
+                    <p
+                      className={`text-xs italic font-normal ${
+                        uppercase ? "text-blue-150" : "text-gray-450"
+                      }`}
                     >
-                      <MenuItem value="">
-                        <em>Select Gender</em>
-                      </MenuItem>
-                      {["Male", "Female", "Other"].map((item, index) => {
-                        return <MenuItem value={item}>{item}</MenuItem>;
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "gender") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Office Branch
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Enter office branch"
-                    value={officeBranch}
-                    onChange={(e) => setOfficeBranch(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "officeBranch") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-16">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
-            ADDRESS
-          </h1>
-          <div className="flex flex-row gap-20">
-            <div className="w-full">
-              <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Line 1
-                </h1>
-                <div className="bg-white w-full rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="House/Flat No./Building Name"
-                    value={line1}
-                    onChange={(e) => setLine1(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "addressLine1") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-            <div className="w-full">
-              <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  Line 2
-                </h1>
-
-                <div className="bg-white w-full rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="Street/Area/Locality"
-                    value={line2}
-                    onChange={(e) => setLine2(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "addressLine2") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-row gap-20">
-            <div className="w-full">
-              <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  City
-                </h1>
-
-                <div className="bg-white w-full rounded drop-shadow">
-                  <TextField
-                    id="filled-search"
-                    className="w-full flex-auto"
-                    placeholder="City"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "city") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-            <div className="w-full">
-              <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 w-40">
-                  State / UT
-                </h1>
-                <div className="bg-white w-full shadow-md rounded flex-auto">
-                  <FormControl fullWidth>
-                    <Select
-                      id="state"
-                      value={state}
-                      onChange={(e) => setState(e.target.value)}
-                      displayEmpty
-                      size="small"
-                      className="w-full"
-                    >
-                      <MenuItem value="">
-                        <em>Select State / UT</em>
-                      </MenuItem>
-                      {[
-                        "Andaman and Nicobar Islands",
-                        "Andhra Pradesh",
-                        "Arunachal Pradesh",
-                        "Assam",
-                        "Bihar",
-                        "Chandigarh",
-                        "Chhattisgarh",
-                        "Dadra and Nagar Haveli",
-                        "Daman and Diu",
-                        "Delhi",
-                        "Goa",
-                        "Gujarat",
-                        "Haryana",
-                        "Himachal Pradesh",
-                        "Jammu and Kashmir",
-                        "Jharkhand",
-                        "Karnataka",
-                        "Kerala",
-                        "Lakshadweep",
-                        "Madhya Pradesh",
-                        "Maharashtra",
-                        "Manipur",
-                        "Meghalaya",
-                        "Mizoram",
-                        "Nagaland",
-                        "Odisha",
-                        "Puducherry",
-                        "Punjab",
-                        "Rajasthan",
-                        "Sikkim",
-                        "Tamil Nadu",
-                        "Telangana",
-                        "Tripura",
-                        "Uttar Pradesh",
-                        "Uttarakhand",
-                        "West Bengal",
-                      ].map((item, index) => {
-                        return (
-                          <MenuItem key={index} value={item}>
-                            {item}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errors.length > 0
-                  ? errors.map((item, index) => {
-                      if (item.type === "state") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-8">
-          <div className="flex-auto">
-            <RegistrationButton text="Update Information" toUrl="/" />
-          </div>
-          <div className="flex-auto">
-            <button
-              className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
-              onClick={clearInputs}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-12">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
-            UPDATE PASSWORD
-          </h1>
-
-          <div className="mt-6 grid grid-cols-2 gap-20">
-            <div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-36">
-                  Old Password
-                </h1>
-
-                <div className="bg-white w-full rounded drop-shadow">
-                  <FormControl variant="outlined" className="w-full">
-                    <OutlinedInput
-                      name="oldPassword"
-                      type={showOldPassword ? "text" : "password"}
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                      size="small"
-                      className="w-full"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => setShowOldPassword(!showOldPassword)}
-                            onMouseDown={(e) => e.preventDefault()}
-                            edge="end"
-                          >
-                            {showOldPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errorsChangePassword.length > 0
-                  ? errorsChangePassword.map((item, index) => {
-                      if (item.type === "oldPassword") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-              <div className="flex flex-row gap-4 items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-36">
-                  Confirm Password
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <FormControl variant="outlined" className="w-full">
-                    <OutlinedInput
-                      name="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      size="small"
-                      className="w-full"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() =>
-                              setShowConfirmPassword(!showConfirmPassword)
-                            }
-                            onMouseDown={(e) => e.preventDefault()}
-                            edge="end"
-                          >
-                            {showConfirmPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-              </div>
-              <div className="mb-2 text-right">
-                {errorsChangePassword.length > 0
-                  ? errorsChangePassword.map((item, index) => {
-                      if (item.type === "confirmPassword") {
-                        return (
-                          <p className="text-red-500 text-xs" key={index}>
-                            {item.message}
-                          </p>
-                        );
-                      }
-                    })
-                  : null}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-6 items-center">
-                <h1 className="font-normal text-base text-gray-650 w-36">
-                  New Password
-                </h1>
-
-                <div className="bg-white w-full  rounded drop-shadow">
-                  <FormControl variant="outlined" className="w-full">
-                    <OutlinedInput
-                      name="newPassword"
-                      type={showNewPassword ? "text" : "password"}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      size="small"
-                      className="w-full"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => setShowNewPassword(!showNewPassword)}
-                            onMouseDown={(e) => e.preventDefault()}
-                            edge="end"
-                          >
-                            {showNewPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
-                </div>
-              </div>
-              <div className="flex mt-2">
-                <div className="w-1/2">
-                  <p
-                    className={`text-xs italic font-normal ${
-                      uppercase ? "text-blue-150" : "text-gray-450"
-                    }`}
-                  >
-                    <span className="text-sm">&#9679;</span> Contain at least
-                    one uppercase
-                  </p>
-
-                  <p
-                    className={`text-xs italic font-normal ${
-                      number ? "text-blue-150" : "text-gray-450"
-                    }`}
-                  >
-                    <span className="text-sm">&#9679;</span> Contain at least
-                    one number
-                  </p>
-
-                  <p
-                    className={`text-xs italic font-normal ${
-                      special ? "text-blue-150" : "text-gray-450"
-                    }`}
-                  >
-                    <span className="text-sm">&#9679;</span> Contain at least
-                    one special character
-                  </p>
-                </div>
-                <div className="w-1/2">
-                  <p
-                    className={`text-xs italic font-normal ${
-                      lowercase ? "text-blue-150" : "text-gray-450"
-                    }`}
-                  >
-                    <span className="text-sm">&#9679;</span> Contain at least
-                    one lowercase
-                  </p>
-
-                  <p
-                    className={`text-xs italic font-normal ${
-                      match ? "text-blue-150" : "text-gray-450"
-                    }`}
-                  >
-                    <span className="text-sm">&#9679;</span> Password should be
-                    greater than 8 characters
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center pt-12">
-          {errorsChangePassword.length > 0
-            ? errorsChangePassword.map((item, index) => {
-                if (item.type === "changePassword") {
-                  return (
-                    <p className="text-red-500 text-xs italic" key={index}>
-                      {item.message}
+                      <span className="text-sm">&#9679;</span> Contain at least
+                      one uppercase
                     </p>
-                  );
-                }
-              })
-            : null}
-        </div>
 
-        <div className="flex justify-center mb-2">
-          {passwordChangeMessage ? (
-            <p className="text-green-500 text-xs italic">
-              {passwordChangeMessage}
-            </p>
-          ) : null}
-        </div>
+                    <p
+                      className={`text-xs italic font-normal ${
+                        number ? "text-blue-150" : "text-gray-450"
+                      }`}
+                    >
+                      <span className="text-sm">&#9679;</span> Contain at least
+                      one number
+                    </p>
 
-        <div className="flex flex-row gap-8 mx-auto w-80 pb-16">
-          <div
-            className="flex-auto"
-            onClick={() => {
-              validateChangePassword() && handleChangePassword();
-            }}
-          >
-            <RegistrationButton text="Change Password" toUrl="/" />
+                    <p
+                      className={`text-xs italic font-normal ${
+                        special ? "text-blue-150" : "text-gray-450"
+                      }`}
+                    >
+                      <span className="text-sm">&#9679;</span> Contain at least
+                      one special character
+                    </p>
+                  </div>
+                  <div className="w-1/2">
+                    <p
+                      className={`text-xs italic font-normal ${
+                        lowercase ? "text-blue-150" : "text-gray-450"
+                      }`}
+                    >
+                      <span className="text-sm">&#9679;</span> Contain at least
+                      one lowercase
+                    </p>
+
+                    <p
+                      className={`text-xs italic font-normal ${
+                        match ? "text-blue-150" : "text-gray-450"
+                      }`}
+                    >
+                      <span className="text-sm">&#9679;</span> Password should
+                      be greater than 8 characters
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex-auto">
-            <button
-              className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
-              onClick={clearInputs}
+
+          <div className="text-center pt-12">
+            {errorsChangePassword.length > 0
+              ? errorsChangePassword.map((item, index) => {
+                  if (item.type === "changePassword") {
+                    return (
+                      <p className="text-red-500 text-xs italic" key={index}>
+                        {item.message}
+                      </p>
+                    );
+                  }
+                })
+              : null}
+          </div>
+
+          <div className="flex justify-center mb-2">
+            {passwordChangeMessage ? (
+              <p className="text-green-500 text-xs italic">
+                {passwordChangeMessage}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="flex flex-row gap-8 mx-auto w-80 pb-16">
+            <div
+              className="flex-auto"
+              onClick={() => {
+                validateChangePassword() && handleChangePassword();
+              }}
             >
-              Cancel
-            </button>
+              <RegistrationButton text="Change Password" toUrl="/" />
+            </div>
+            <div className="flex-auto">
+              <button
+                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+                onClick={clearInputs}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };
