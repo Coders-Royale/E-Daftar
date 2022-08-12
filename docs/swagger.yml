@@ -499,6 +499,25 @@ paths:
           description: Internal Server Error
         '200':
           description: Password changed successfully
+  /updateProfile:
+    put:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Update your profile
+      operationId: updateProfile
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProfileInput'
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Profile updated successfully
 components:
   schemas:
     Employee:
@@ -921,6 +940,25 @@ components:
           type: string
         category: 
           type: string
+    UpdateProfileInput:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        personal_email:
+          type: string
+        contactNo: 
+          type: string
+        addr_line1:
+          type: string
+        addr_line2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        role:
+          type: string
     GetRoomsResponse:
       type: array
       items:
@@ -1027,4 +1065,13 @@ components:
         application/xml:
           schema:
             $ref: '#/components/schemas/RejectDocumentInput'
+      required: true
+    UpdateProfileInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateProfileInput'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/UpdateProfileInput'
       required: true
