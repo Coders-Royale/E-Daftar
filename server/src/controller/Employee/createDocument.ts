@@ -115,6 +115,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
             message: "Document created successfully",
             data: {
                 roomId: createRoomResponse.data.data._id,
+                assignedEmployeeName: admin.firstName + " " + admin.lastName,
                 ...document.toObject()
             }
         };
