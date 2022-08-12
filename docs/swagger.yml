@@ -15,7 +15,7 @@ servers:
   - description: Production Server
     url: https://sih-2022-server.azurewebsites.net/api/
   - description: Chat Server
-    url: https://sih-email.herokuapp.com/api/chat
+    url: https://sih-email.herokuapp.com/api/chat/
 paths:
   /createAdmin:
     post: 
@@ -881,11 +881,45 @@ components:
     CreateDocumentResponse:
       type: object
       properties: 
+        roomId: 
+          type: string
         documentId: 
+          type: string
+        subject: 
+          type: string
+        description: 
           type: string
         employeeId: 
           type: string
-        roomId: 
+        main_file: 
+          type: array
+          items:
+            type: string
+        reference_files: 
+          type: array
+          items:
+            type: string
+        permissions: 
+          type: array
+          items:
+            type: string  
+        status: 
+          type: array
+          items:
+            type: string
+        time_recieved: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        time_returned: 
+          type: array
+          items:
+            type: string
+            format: date-time
+        rejection_reason: 
+          type: string
+        category: 
           type: string
     GetRoomsResponse:
       type: array
