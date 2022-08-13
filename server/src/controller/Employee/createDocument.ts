@@ -51,6 +51,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
         }
         const document = new Document();
         document.documentId = docNo.message;
+        document.id = parseInt(docNo.message.split("D")[1]);
         document.employeeId = body.employeeId;
         document.subject = body.subject;
         document.description = body.description;
@@ -62,7 +63,6 @@ export const createDocument = async (body: CreateDocumentInput) => {
         document.status.push("Pending");
         document.time_recieved.push(new Date());
         document.category = body.category;
-
         // TODO:
         // Now we need to create a Room for this document and add the employee and admin to it
         // Send request to chat server :
@@ -143,8 +143,8 @@ async function getDocumentCount() {
             };
         }
         else {
-            // get last document from employee database
-            const docuemntList = await Document.find({}).sort({ "documentId": -1 });
+            // get last document from database
+            const docuemntList = await Document.find({}).sort({ "id": -1 });
             const lastDocument = docuemntList[0];
             if (!lastDocument) {
                 DocumentNo = 1;

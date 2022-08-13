@@ -37,6 +37,7 @@ export type EmployeeDocument = mongoose.Document & {
         country: string;
         department: string;
         role: string;
+        picture: string;
     }
     comparePassword: comparePasswordFunction;
 };
@@ -79,7 +80,8 @@ const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
             state: { type: String },
             country: { type: String, default: "India" },
             department: { type: String, required: true },
-            role: { type: String, default: "employee" }
+            role: { type: String, default: "employee" },
+            picture: { type: String, default: "https://camo.githubusercontent.com/08f07ded802405eb3391ff639265390efd2c71b3fdd757622119653984365172/68747470733a2f2f7261772e6769746875622e636f6d2f736568726775742f6e6f64652d7265747269636f6e2f6d61737465722f6578616d706c65732f696d616765732f6769746875622e706e67" }
         }
     },
     { timestamps: true }

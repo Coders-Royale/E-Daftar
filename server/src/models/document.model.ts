@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export type Document = mongoose.Document & {
     documentId: string;
+    id: number;
     subject: string;
     description: string;
     employeeId: string;
@@ -18,6 +19,7 @@ export type Document = mongoose.Document & {
 const DocumentSchema = new mongoose.Schema<Document>(
     {
         documentId: { type: String, required: true },
+        id: { type: Number, required: true },
         subject: { type: String, required: true },
         description: String,
         employeeId: { type: String, required: true },
