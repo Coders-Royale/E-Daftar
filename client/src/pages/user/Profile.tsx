@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar";
-import { useEmployeeInfo } from "../../queries/hooks";
+import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
@@ -64,6 +64,8 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [errorsChangePassword, setErrorsChangePassword] = useState<Error[]>([]);
   const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
   const [passwordChangeMessage, setPasswordChangeMessage] = useState("");
+  const [profileUpdateSuccess, setProfileUpdateSuccess] = useState(false);
+  const [profileUpdateMessage, setProfileUpdateMessage] = useState("");
 
   const clearInputs = () => {
     setFirstName("");
@@ -296,9 +298,14 @@ const Profile = ({ selected, setSelected }: Props) => {
     employeeId: localStorage.getItem("empId"),
   });
 
+  const adminInfo = useAdminInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
   useEffect(() => {
-    setFirstName(employeeInfo.data?.employee?.firstName);
-    setLastName(employeeInfo.data?.employee?.lastName);
+    setFirstName(employeeInfo?.data?.employee?.firstName);
+    setLastName(employeeInfo?.data?.employee?.lastName);
     setEmailId(employeeInfo?.data?.employee?.email);
     setMobileNo(employeeInfo?.data?.employee?.contactNo);
     setEmployeeCode(employeeInfo?.data?.employee?.employeeId);
@@ -311,6 +318,22 @@ const Profile = ({ selected, setSelected }: Props) => {
     setCity(employeeInfo?.data?.employee?.city);
     setState(employeeInfo?.data?.employee?.state);
   }, [employeeInfo.isSuccess]);
+
+  useEffect(() => {
+    setFirstName(adminInfo?.data?.employee?.firstName);
+    setLastName(adminInfo?.data?.employee?.lastName);
+    setEmailId(adminInfo?.data?.employee?.email);
+    setMobileNo(adminInfo?.data?.employee?.contactNo);
+    setEmployeeCode(adminInfo?.data?.employee?.employeeId);
+    setGender(adminInfo?.data?.employee?.gender);
+    setDepartment(adminInfo?.data?.employee?.department);
+    setOfficeBranch(adminInfo?.data?.employee?.office_branch);
+    setDob(adminInfo?.data?.employee?.dob);
+    setLine1(adminInfo?.data?.employee?.addr_line1);
+    setLine2(adminInfo?.data?.employee?.addr_line2);
+    setCity(adminInfo?.data?.employee?.city);
+    setState(adminInfo?.data?.employee?.state);
+  }, [adminInfo.isSuccess]);
 
   // These lines should be on the landing page. Change it to /primary afterwards.
 
@@ -360,6 +383,42 @@ const Profile = ({ selected, setSelected }: Props) => {
     }
   };
 
+  const handleUpdateProfile = async () => {
+    const res = await fetch(`${baseUrl}/updateProfile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+      body: JSON.stringify({
+        employeeId: employeeInfo.data?.employee?.employeeId,
+        personal_email:
+          emailId !== employeeInfo.data?.employee?.email ? emailId : null,
+        contactNo:
+          mobileNo !== employeeInfo.data?.employee?.contactNo ? mobileNo : null,
+        addr_line1:
+          line1 !== employeeInfo.data?.employee?.addr_line1 ? line1 : null,
+        addr_line2:
+          line2 !== employeeInfo.data?.employee?.addr_line2 ? line2 : null,
+        city: city !== employeeInfo.data?.employee?.city ? city : null,
+        state: state !== employeeInfo.data?.employee?.state ? state : null,
+        role: employeeInfo.data?.employee?.role,
+      }),
+    });
+    const data = await res.json();
+    if (data.message === "Profile updated successfully") {
+      setProfileUpdateSuccess(true);
+      errLength = 0;
+      setErrors([]);
+    } else {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "updateProfile", message: data.message },
+      ]);
+      errLength++;
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setPasswordChangeMessage("");
@@ -374,7 +433,7 @@ const Profile = ({ selected, setSelected }: Props) => {
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
-      {employeeInfo?.data ? (
+      {employeeInfo?.data || adminInfo?.data ? (
         <div className="w-full px-10 overflow-scroll">
           <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black">
             PROFILE
@@ -494,6 +553,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                       id="filled-search"
                       className="w-full flex-auto"
                       placeholder="Enter Employee Code"
+                      disabled
                       value={employeeCode}
                       onChange={(e) => setEmployeeCode(e.target.value)}
                       variant="outlined"
@@ -524,6 +584,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                       id="filled-search"
                       className="w-full flex-auto"
                       placeholder="Enter department"
+                      disabled
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
                       variant="outlined"
@@ -693,6 +754,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                       id="filled-search"
                       className="w-full flex-auto"
                       placeholder="Enter office branch"
+                      disabled
                       value={officeBranch}
                       onChange={(e) => setOfficeBranch(e.target.value)}
                       variant="outlined"
@@ -903,7 +965,10 @@ const Profile = ({ selected, setSelected }: Props) => {
           </div>
 
           <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-8">
-            <div className="flex-auto">
+            <div
+              className="flex-auto"
+              onClick={() => validate() && handleUpdateProfile()}
+            >
               <RegistrationButton text="Update Information" toUrl="/" />
             </div>
             <div className="flex-auto">
