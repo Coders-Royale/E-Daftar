@@ -518,6 +518,43 @@ paths:
           description: Internal Server Error
         '200':
           description: Profile updated successfully
+  /uploadProfilePics:
+    post:
+      tags:
+        - employee
+      security: 
+        - bearerAuth: []
+      summary: Upload Profile Picture
+      operationId: uploadProfilePics
+      parameters: 
+        - in: query
+          name: filename
+          description: filename
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                    type: string
+                    format: binary
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: File Uploaded Successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
 components:
   schemas:
     Employee:
@@ -969,6 +1006,8 @@ components:
         state:
           type: string
         role:
+          type: string
+        picture:
           type: string
     GetRoomsResponse:
       type: array
