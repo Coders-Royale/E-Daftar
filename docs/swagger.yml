@@ -947,6 +947,15 @@ components:
       properties:
         employeeId:
           type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        gender:
+          type: string
+        dob:
+          type: string
+          format: date-time
         personal_email:
           type: string
         contactNo: 
