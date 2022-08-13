@@ -52,6 +52,10 @@ module.exports = {
       dropShadow: {
         'blue': ['0 20px 13px rgb(18 226 239 / 0.03)', '0 8px 5px rgb(18 226 239  / 0.08)'],
       },
+      animation: {
+        bounce200: 'bounce 1s infinite 200ms',
+        bounce400: 'bounce 1s infinite 400ms',
+      },
     },
   },
   plugins: [],

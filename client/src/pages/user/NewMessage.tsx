@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { FilesContext } from "../../contexts/files.context";
+import { Socket } from "socket.io-client";
 
 import LinearProgress from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
@@ -24,11 +25,20 @@ import { useEmployeeInfo } from "../../queries/hooks";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  'private-message': (privatemessage: string) => void;
+}
+
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
-  selectedMid: number;
-  setSelectedMid: (selected: number) => void;
+  socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
 interface Error {
@@ -42,10 +52,12 @@ const Input = styled("input")({
   display: "none",
 });
 
-const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Props) => {
+const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
   useEffect(() => {
     setSelected(-1);
   }, [setSelected]);
+
+  const [selectedMid, setSelectedMid] = useState<number>(0);
 
   const { files, setFiles } = useContext(FilesContext);
   console.log(files);
@@ -59,6 +71,8 @@ const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Prop
   const [department, setDepartment] = useState<string>("");
   const [subject, setSubject] = useState("");
   const [templateName, setTemplateName] = useState("");
+  const[receiverId, setReceiverId] = useState<string>("");
+  const [receiverName, setReceiverName] = useState<string>("");
   var [emailContent, setEmailContent] = useState("");
 
   const selectFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +123,8 @@ const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Prop
 
   useEffect(() => {
     if (employeeInfo.data !== undefined) {
-      setName(employeeInfo.data?.employee?.name);
+      setName(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
+      console.log(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
     }
   }, [employeeInfo.isFetched === true]);
 
@@ -117,6 +132,7 @@ const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Prop
     onSuccess: (data: any) => {
       if (data.message === "Document created successfully") {
         setMessage(data.message);
+        console.log(data);
         setLoading(false);
         localStorage.setItem("files", "");
         setFiles([]);
@@ -124,6 +140,21 @@ const NewMessage = ({ selected, setSelected, selectedMid, setSelectedMid }: Prop
         setSubject("");
         setTemplateName("");
         setMessage("");
+        
+        socketConnection.emit(
+        "private-message",
+        JSON.stringify({
+          senderId: localStorage.getItem("empId"),
+          content: emailContent,
+          createdAt: new Date(),
+          senderName: name,
+          subject: subject,
+          receiverId: data.data.permissions[data.data.permissions.length-1],
+          receiverName: data.data.assignedEmployeeName,
+          documentId: data.data.documentId,
+        })
+      );
+
 
       } else {
         setErrors((errors: Error[]) => [
@@ -496,6 +527,7 @@ Kind regards,
                     forwarding_dept: department.toLowerCase(),
                     category: templateName,
                   });
+
                 }}
               >
                 <img src={Send} alt="send" className="h-5 w-5" /> Send
