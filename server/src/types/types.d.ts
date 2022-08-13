@@ -119,5 +119,7 @@ export class UpdateProfileInput {
     @IsString()
     state?: string
     @IsString()
+    picture?: string
+    @IsString()
     role: string
 }

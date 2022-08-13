@@ -58,6 +58,9 @@ export const updateProfile = async (body: UpdateProfileInput) => {
                 admin.state = body.state;
                 admin.profile.state = body.state;
             }
+            if (body.picture) {
+                admin.profile.picture = body.picture;
+            }
             await admin.save();
             return {
                 error: false,
@@ -111,6 +114,9 @@ export const updateProfile = async (body: UpdateProfileInput) => {
             if (body.state) {
                 employee.state = body.state;
                 employee.profile.state = body.state;
+            }
+            if (body.picture) {
+                employee.profile.picture = body.picture;
             }
             await employee.save();
             return {
