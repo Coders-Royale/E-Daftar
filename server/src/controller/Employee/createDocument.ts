@@ -51,6 +51,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
         }
         const document = new Document();
         document.documentId = docNo.message;
+        document.id = parseInt(docNo.message.split("D")[1]);
         document.employeeId = body.employeeId;
         document.subject = body.subject;
         document.description = body.description;
@@ -62,8 +63,6 @@ export const createDocument = async (body: CreateDocumentInput) => {
         document.status.push("Pending");
         document.time_recieved.push(new Date());
         document.category = body.category;
-        console.log(document.documentId);
-        console.log("Created document, noiw joining rooms");
         // TODO:
         // Now we need to create a Room for this document and add the employee and admin to it
         // Send request to chat server :
@@ -76,7 +75,6 @@ export const createDocument = async (body: CreateDocumentInput) => {
         const createRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/createRoom", createRoomReuqest, {
             headers: headers
         });
-        console.log(createRoomResponse);
         if (createRoomResponse.status !== 200) {
             return {
                 error: true,
@@ -90,7 +88,6 @@ export const createDocument = async (body: CreateDocumentInput) => {
             name: employee.firstName + " " + employee.lastName,
         };
         const joinRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest, { headers: headers });
-        console.log(joinRoomResponse);
         if (joinRoomResponse.status !== 200) {
             return {
                 error: true,
@@ -104,7 +101,6 @@ export const createDocument = async (body: CreateDocumentInput) => {
             name: admin.firstName + " " + admin.lastName,
         };
         const joinRoomResponse2 = await axios.post(process.env.CHAT_SERVER_URL + "/joinRoom", joinRoomRequest2, { headers: headers });
-        console.log(joinRoomResponse2);
         if (joinRoomResponse2.status !== 200) {
             return {
                 error: true,
@@ -161,7 +157,6 @@ async function getDocumentCount() {
             else {
                 const lastDocumentId = lastDocument.documentId;
                 const Sno = lastDocumentId.split("D")[1];
-                console.log("sno ", Sno);
                 DocumentNo = parseInt(Sno) + 1;
                 const docNo = "D" + DocumentNo.toString();
                 return {
