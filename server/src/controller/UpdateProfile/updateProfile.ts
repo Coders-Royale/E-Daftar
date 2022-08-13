@@ -19,23 +19,44 @@ export const updateProfile = async (body: UpdateProfileInput) => {
                     message: "Admin not found!"
                 };
             }
+            if (body.firstName) {
+                admin.firstName = body.firstName;
+                admin.profile.firstName = body.firstName;
+            }
+            if (body.lastName) {
+                admin.lastName = body.lastName;
+                admin.profile.lastName = body.lastName;
+            }
+            if (body.gender) {
+                admin.gender = body.gender;
+                admin.profile.gender = body.gender;
+            }
+            if (body.dob) {
+                admin.dob = body.dob;
+                admin.profile.dob = body.dob;
+            }
             if (body.personal_email) {
                 admin.personal_email = body.personal_email;
             }
             if (body.contactNo) {
                 admin.contactNo = body.contactNo;
+                admin.profile.contactNo = body.contactNo;
             }
             if (body.addr_line1) {
                 admin.addr_line1 = body.addr_line1;
+                admin.profile.addr_line1 = body.addr_line1;
             }
             if (body.addr_line2) {
                 admin.addr_line2 = body.addr_line2;
+                admin.profile.addr_line2 = body.addr_line2;
             }
             if (body.city) {
                 admin.city = body.city;
+                admin.profile.city = body.city;
             }
             if (body.state) {
                 admin.state = body.state;
+                admin.profile.state = body.state;
             }
             await admin.save();
             return {
@@ -52,23 +73,44 @@ export const updateProfile = async (body: UpdateProfileInput) => {
                     message: "Employee not found!"
                 };
             }
+            if (body.firstName) {
+                employee.firstName = body.firstName;
+                employee.profile.firstName = body.firstName;
+            }
+            if (body.lastName) {
+                employee.lastName = body.lastName;
+                employee.profile.lastName = body.lastName;
+            }
+            if (body.gender) {
+                employee.gender = body.gender;
+                employee.profile.gender = body.gender;
+            }
+            if (body.dob) {
+                employee.dob = body.dob;
+                employee.profile.dob = body.dob;
+            }
             if (body.personal_email) {
                 employee.personal_email = body.personal_email;
             }
             if (body.contactNo) {
                 employee.contactNo = body.contactNo;
+                employee.profile.contactNo = body.contactNo;
             }
             if (body.addr_line1) {
                 employee.addr_line1 = body.addr_line1;
+                employee.profile.addr_line1 = body.addr_line1;
             }
             if (body.addr_line2) {
                 employee.addr_line2 = body.addr_line2;
+                employee.profile.addr_line2 = body.addr_line2;
             }
             if (body.city) {
                 employee.city = body.city;
+                employee.profile.city = body.city;
             }
             if (body.state) {
                 employee.state = body.state;
+                employee.profile.state = body.state;
             }
             await employee.save();
             return {

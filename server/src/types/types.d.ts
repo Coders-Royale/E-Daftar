@@ -99,6 +99,14 @@ export class UpdateProfileInput {
     @IsString()
     employeeId: string
     @IsString()
+    firstName?: string
+    @IsString()
+    lastName?: string
+    @IsString()
+    gender?: string
+    @IsDate()
+    dob?: Date
+    @IsString()
     personal_email?: string
     @IsString()
     contactNo?: string
