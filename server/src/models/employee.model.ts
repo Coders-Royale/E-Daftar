@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 export type EmployeeDocument = mongoose.Document & {
+    id: string;
     firstName: string;
     lastName: string;
     employeeId: string;
@@ -46,6 +47,7 @@ type comparePasswordFunction = (candidatePassword: string) => Promise<boolean>;
 
 const EmployeeSchema = new mongoose.Schema<EmployeeDocument>(
     {
+        id: { type: String },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         employeeId: { type: String, required: true },
