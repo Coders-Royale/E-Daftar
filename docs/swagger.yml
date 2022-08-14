@@ -518,14 +518,14 @@ paths:
           description: Internal Server Error
         '200':
           description: Profile updated successfully
-  /uploadProfilePics:
+  /uploadProfilePicture:
     post:
       tags:
         - employee
       security: 
         - bearerAuth: []
       summary: Upload Profile Picture
-      operationId: uploadProfilePics
+      operationId: uploadProfilePicture
       parameters: 
         - in: query
           name: filename
