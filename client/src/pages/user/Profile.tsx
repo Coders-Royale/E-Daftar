@@ -4,7 +4,6 @@ import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import Dp from "../../images/profile_page_dp.png";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -19,6 +18,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
 import Loader from "../../components/Loader";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Face, Upload } from "@mui/icons-material";
 
 interface Props {
   selected: number;
@@ -59,13 +60,16 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [file, setFile] = useState<any>();
   const [errors, setErrors] = useState<Error[]>([]);
   const [errorsChangePassword, setErrorsChangePassword] = useState<Error[]>([]);
   const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
   const [passwordChangeMessage, setPasswordChangeMessage] = useState("");
   const [profileUpdateSuccess, setProfileUpdateSuccess] = useState(false);
   const [profileUpdateMessage, setProfileUpdateMessage] = useState("");
+  const [file, setFile] = useState<any>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [updated, setUpdated] = useState(false);
+  const params = useParams();
 
   const clearInputs = () => {
     setFirstName("");
@@ -341,9 +345,9 @@ const Profile = ({ selected, setSelected }: Props) => {
     validateNewPassword(newPassword);
   }, [newPassword]);
 
-  function handleChange(e: any) {
-    setFile(URL.createObjectURL(e.target.files[0]));
-  }
+  // function handleChange(e: any) {
+  //   setFile(URL.createObjectURL(e.target.files[0]));
+  // }
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -392,8 +396,14 @@ const Profile = ({ selected, setSelected }: Props) => {
       },
       body: JSON.stringify({
         employeeId: employeeInfo.data?.employee?.employeeId,
-        personal_email:
-          emailId !== employeeInfo.data?.employee?.email ? emailId : null,
+        firstName:
+          firstName !== employeeInfo.data?.employee?.firstName
+            ? firstName
+            : null,
+        lastName:
+          lastName !== employeeInfo.data?.employee?.lastName ? lastName : null,
+        gender: gender !== employeeInfo.data?.employee?.gender ? gender : null,
+        dob: dob !== employeeInfo.data?.employee?.dob ? dob : null,
         contactNo:
           mobileNo !== employeeInfo.data?.employee?.contactNo ? mobileNo : null,
         addr_line1:
@@ -419,14 +429,66 @@ const Profile = ({ selected, setSelected }: Props) => {
     }
   };
 
+  const photoUpload = (e: any) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    reader.onloadend = () => {
+      setFile(file);
+      setImagePreviewUrl(reader.result as string);
+      setUpdated(true);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const uploadProfilePicture = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("file", file);
+
+    const result = fetch(
+      baseUrl +
+        "/uploadProfilePicture" +
+        "?filename=" +
+        (params.user === "user"
+          ? employeeInfo?.data?.employee?.employeeId
+          : adminInfo?.data?.employee?.employeeId) +
+        "." +
+        file?.name?.split(".")[1],
+      // +
+      // "&id=" +
+      // (params.user === "user"
+      //   ? employeeInfo?.data?.employee?.employeeId
+      //   : adminInfo?.data?.employee?.employeeId),
+      {
+        method: "POST",
+        body: bodyFormData,
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.message === "File uploaded successfully") {
+          setUpdated(false);
+          // setMessage(data.message);
+          console.log("Profile pic updated successfully!");
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setPasswordChangeMessage("");
       setPasswordChangeSuccess(false);
     }, 3000);
   }, [passwordChangeSuccess === true]);
-
-  console.log(gender);
 
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
@@ -441,30 +503,45 @@ const Profile = ({ selected, setSelected }: Props) => {
 
           <div className="flex flex-row gap-6">
             <img
-              src={file || Dp}
+              src={
+                imagePreviewUrl ||
+                employeeInfo?.data?.employee?.picture ||
+                adminInfo?.data?.employee?.picture ||
+                Dp
+              }
               alt="profile_dp"
               className="w-48 h-48 object-cover rounded-lg"
             />
             <div className="flex flex-col justify-end">
-              <button
-                className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
-                onClick={() => hiddenFileInput.current?.click()}
-              >
-                <input
-                  // className="font-medium text-sm text-gray-150 hidden"
-                  style={{ display: "none" }}
-                  onChange={handleChange}
-                  ref={hiddenFileInput}
-                  type="file"
-                ></input>
-                <label
-                  htmlFor="file-upload"
-                  className="inline-block cursor-pointer"
+              {!updated ? (
+                <button
+                  className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+                  onClick={() => hiddenFileInput.current?.click()}
                 >
-                  <KeyboardTabIcon />
-                  Choose an image
-                </label>
-              </button>
+                  <input
+                    // className="font-medium text-sm text-gray-150 hidden"
+                    style={{ display: "none" }}
+                    onChange={photoUpload}
+                    ref={hiddenFileInput}
+                    type="file"
+                  ></input>
+                  <label
+                    htmlFor="file-upload"
+                    className="flex cursor-pointer gap-1 justify-center"
+                  >
+                    <Upload />
+                    Choose an image
+                  </label>
+                </button>
+              ) : (
+                <button
+                  className="bg-gradient-to-r flex gap-1 justify-center from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+                  onClick={() => uploadProfilePicture()}
+                >
+                  <Face />
+                  Set Profile Picture
+                </button>
+              )}
               <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
                 Acceptable format .jpg, .png only
               </h1>
