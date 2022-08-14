@@ -45,7 +45,8 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
   const clearInputs = () => {
     setFirstName("");
     setLastName("");
-    setEmployeeCode("");
+    setEmailId("");
+    // setEmployeeCode("");
     setDepartment("");
     setDob("");
     setMobileNo("");
@@ -141,13 +142,13 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
       errLength++;
     }
 
-    if (employeeCode === "") {
-      setErrors((errors: Error[]) => [
-        ...errors,
-        { type: "employeeCode", message: "Employee Code is required" },
-      ]);
-      errLength++;
-    }
+    // if (employeeCode === "") {
+    //   setErrors((errors: Error[]) => [
+    //     ...errors,
+    //     { type: "employeeCode", message: "Employee Code is required" },
+    //   ]);
+    //   errLength++;
+    // }
 
     if (gender === "") {
       setErrors((errors: Error[]) => [
@@ -304,7 +305,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                   })
                 : null}
             </div>
-            <div className="flex flex-row gap-4 items-center mb-2">
+            {/* <div className="flex flex-row gap-4 items-center mb-2">
               <h1 className="font-normal text-base text-gray-650 w-40">
                 Employee Code
               </h1>
@@ -333,7 +334,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                     }
                   })
                 : null}
-            </div>
+            </div> */}
             <div className="flex flex-row gap-4 items-center mb-2">
               <h1 className="font-normal text-base text-gray-650 w-40">
                 Department

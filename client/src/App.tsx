@@ -52,7 +52,13 @@ const App: React.FC = () => {
       localStorage.getItem("rememberMe") === "true" &&
       localStorage.getItem("jwtToken")
     ) {
-      navigate("/user/sent");
+      navigate(
+        "/" +
+          (localStorage.getItem("empId")?.slice(0, 1) === "E"
+            ? "user"
+            : "admin") +
+          "/sent"
+      );
     }
   }, []);
 
@@ -91,12 +97,7 @@ const App: React.FC = () => {
           />
           <Route
             path="/:user/profile"
-            element={
-              <Profile
-                selected={selected}
-                setSelected={setSelected}
-              />
-            }
+            element={<Profile selected={selected} setSelected={setSelected} />}
           />
           <Route
             path="/:user/sent"
@@ -106,13 +107,23 @@ const App: React.FC = () => {
             path="/:user/new-message"
             element={
               <FilesProvider>
-                <NewMessage selected={selected} setSelected={setSelected} socketConnection={socketConnection} />
+                <NewMessage
+                  selected={selected}
+                  setSelected={setSelected}
+                  socketConnection={socketConnection}
+                />
               </FilesProvider>
             }
           />
           <Route
             path="/:user/primary"
-            element={<Primary selected={selected} setSelected={setSelected} socketConnection={socketConnection} />}
+            element={
+              <Primary
+                selected={selected}
+                setSelected={setSelected}
+                socketConnection={socketConnection}
+              />
+            }
           />
         </Routes>
         <ReactQueryDevtools initialIsOpen={false} />
