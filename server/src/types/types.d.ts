@@ -41,8 +41,6 @@ export class CreateAdminInput {
     office_branch: string;
     @IsString()
     department: string;
-    @IsString()
-    password: string;
 }
 
 export class CreateEmployeeInput extends CreateAdminInput { };
