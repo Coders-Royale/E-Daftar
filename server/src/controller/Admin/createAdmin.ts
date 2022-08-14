@@ -1,6 +1,8 @@
 import { Admin } from "../../models/admin.model";
 import * as Sentry from "@sentry/node";
 import { CreateAdminInput } from "../../types/types";
+import { genPassword } from "../../utils/genPassword";
+import { sendCredentialEmail } from "../../utils/mailer";
 
 export const createAdmin = async (body: CreateAdminInput) => {
     try {
@@ -17,7 +19,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
             employeeSNo = 1;
         }
         else {
-            const lastEmployee = await Admin.findOne({}).sort({ "employeeId": -1 });
+            const lastEmployee = await Admin.findOne({}).sort({ "id": -1 });
             if (!lastEmployee) {
                 employeeSNo = 1;
             }
@@ -28,6 +30,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
             }
         }
         const admin = new Admin();
+        admin.id = employeeSNo
         admin.firstName = body.firstName;
         admin.lastName = body.lastName;
         admin.employeeId = "A" + employeeSNo.toString();
@@ -42,7 +45,7 @@ export const createAdmin = async (body: CreateAdminInput) => {
         admin.office_branch = body.office_branch;
         admin.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.department = body.department.toLowerCase();
-        admin.password = body.password;
+        admin.password = genPassword();
         admin.profile.firstName = body.firstName;
         admin.profile.lastName = body.lastName;
         admin.profile.employeeId = admin.employeeId;
@@ -57,6 +60,15 @@ export const createAdmin = async (body: CreateAdminInput) => {
         admin.profile.email = "admin." + body.department.toLowerCase() + "@gmail.com";
         admin.profile.department = body.department.toLowerCase();
         admin.profile.role = "admin";
+
+        // Send email to user about his Login Credentials
+        const credentailMail = await sendCredentialEmail(body.personalEmail, admin.employeeId, admin.password);
+        if (credentailMail.error) {
+            return {
+                error: true,
+                message: credentailMail.message
+            };
+        }
 
         await admin.save();
         return {

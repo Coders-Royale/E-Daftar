@@ -27,7 +27,7 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
         }
         else {
             // get last document from employee database
-            const employeeList = await Employee.find({}).sort({ "employeeId": -1 });
+            const employeeList = await Employee.find({}).sort({ "id": -1 });
             const lastEmployee = employeeList[0];
             if (!lastEmployee) {
                 employeeSNo = 1;
@@ -43,6 +43,7 @@ export const createEmployee = async (body: CreateEmployeeInput) => {
         const password = genPassword();
 
         const employee = new Employee();
+        employee.id = employeeSNo;
         employee.firstName = body.firstName;
         employee.lastName = body.lastName;
         employee.employeeId = "E" + employeeSNo.toString();
