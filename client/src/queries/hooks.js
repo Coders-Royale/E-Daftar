@@ -20,7 +20,7 @@ export const useEmployeeInfo = (params) => {
 
 export const useAdminInfo = (params) => {
 	return useQuery(
-		[QUERY_KEYS.GET_ADMIN, params.departmentId, params.adminId],
+		[QUERY_KEYS.GET_ADMIN, params.departmentId, params.employeeId],
 		() => getAdmin(params),
 		{
 			retry: false,
