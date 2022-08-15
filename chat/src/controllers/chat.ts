@@ -252,7 +252,7 @@ export const loadMessage = async (req: Request, res: Response) => {
             allMessages.push(...messages);
         }
         if (allMessages.length === 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 error: true,
                 mesaage: "No message found",
             });
