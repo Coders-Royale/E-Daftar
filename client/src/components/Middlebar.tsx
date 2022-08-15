@@ -13,30 +13,8 @@ interface MiddleBarData {
   attachment: boolean;
 }
 
-// For rooms.
-interface Info {
-    id: string;
-    name: string;
-}
-
-interface Participant {
-    info: Info;
-    id: string;
-    _id: string;
-}
-
-interface RoomObject {
-    _id: string;
-    conversationName: string; // title
-    documentId: string; // content, attachment true if documentId is present.
-    participants: Participant[]; // last item in this array => name  participants[participants.length-1].info.name
-    createdAt: Date;
-    updatedAt: Date;
-    __v: number;
-}
-
 interface Props {
-  displayRooms?: RoomObject[];
+  displayRooms?: any[];
   selectedMid: number;
   setSelectedMid: (selectedMid: number) => void;
 }
@@ -76,11 +54,11 @@ const MiddleBarContent: MiddleBarData[] = [
   },
 ];
 
-const findName = (room: RoomObject) => {
+const findName = (room: any) => {
   if(room.participants) {
     let participant;
     [participant] = room.participants.slice(-1);
-    return participant.info.id;
+    return participant.info.name;
   }
   else
     return room.conversationName;
@@ -127,3 +105,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
 }
 
 export default MiddleBar;
+
+// conversationName
+// updatedAt
+// documentId

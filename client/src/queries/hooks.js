@@ -5,7 +5,8 @@ import {
 	getAdmin,
 	trackStatus,
 	listDocument,
-	getRooms
+	getRooms,
+	loadMessages,
 } from "../services";
 
 export const useEmployeeInfo = (params) => {
@@ -52,6 +53,16 @@ export const useRooms = (params) => {
 	return useQuery(
 		[QUERY_KEYS.GET_ROOMS, params.employeeId],
 		() => getRooms(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useLoadMessages = (params) => {
+	return useQuery(
+		[QUERY_KEYS.LOAD_MESSAGES, params.employeeId, params.pageNo, params.filter],
+		() => loadMessages(params),
 		{
 			retry: false,
 		}

@@ -10,6 +10,7 @@ const QUERY_KEYS = {
   TRACK_STATUS: generateKeyName("track-status"),
   LIST_DOCUMENT: generateKeyName("list-document"),
   GET_ROOMS: generateKeyName("get-rooms"),
+  LOAD_MESSAGES: generateKeyName("load-messages"),
 };
 
 export default QUERY_KEYS;
