@@ -74,7 +74,6 @@ const findTime = (time: Date) => {
 
 const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
   const [selected, setSelected] = useState<Number>(0);
-  console.log(displayRooms);
 
   return (
     <div className="px-10 py-12 bg-gray-350 min-h-screen flex flex-col justify-start">
@@ -91,8 +90,8 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
 
       <div>
         {displayRooms ? displayRooms.map((item, index) => index === selected ?
-          <div key={index} onClick={() => setSelected(index)}><MiddleBarComponent image={Man} title={item.conversationName} name={findName(item)} time={findTime(item.updatedAt)} content={`Document: ${item.documentId}`} attachment={true} selected={true} /></div> :
-          <div key={index} onClick={() => setSelected(index)}><MiddleBarComponent image={Man} title={item.conversationName} name={findName(item)} time={findTime(item.updatedAt)} content={`Document: ${item.documentId}`} attachment={true} selected={false} /></div>
+          <div key={index} onClick={() => setSelected(index)}><MiddleBarComponent image={Man} title={item.conversationName} name={findName(item)} time={findTime(item.createdAt)} content={`Document: ${item.documentId}`} attachment={true} selected={true} /></div> :
+          <div key={index} onClick={() => setSelected(index)}><MiddleBarComponent image={Man} title={item.conversationName} name={findName(item)} time={findTime(item.createdAt)} content={`Document: ${item.documentId}`} attachment={true} selected={false} /></div>
         ) :
         MiddleBarContent.map((item, index) => index === selected ?
           <div key={index} onClick={() => setSelected(index)}><MiddleBarComponent image={item.image} title={item.title} name={item.name} time={item.time} content={item.content} attachment={item.attachment} selected={true} /></div> :
@@ -105,7 +104,3 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
 }
 
 export default MiddleBar;
-
-// conversationName
-// updatedAt
-// documentId

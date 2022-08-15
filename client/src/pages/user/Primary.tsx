@@ -15,7 +15,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 interface ServerToClientEvents {
   noArg: () => void;
-  'private-message': (privateMessageData: { senderId: string, content: string, createdAt: string, senderuserName: string, subject: string }) => void;
+  'private-message': (privateMessageData: { senderId: string, content: string, createdAt: Date, senderuserName: string, subject: string }) => void;
 }
 
 interface ClientToServerEvents {
@@ -61,21 +61,35 @@ const Primary = ({ selected, setSelected, socketConnection }: Props) => {
   }, [receivedMessages.isFetched === true]);
 
   const employeeInfo = useEmployeeInfo({
-    departmentId: localStorage.getItem("depId"),
     employeeId: localStorage.getItem("empId"),
+    departmentId: localStorage.getItem("depId"),
   });
 
   const adminInfo = useAdminInfo({
-    departmentId: localStorage.getItem("depId"),
     employeeId: localStorage.getItem("empId"),
+    departmentId: localStorage.getItem("depId"),
   });
 
   useEffect(() => {
-    if(adminInfo.data !== undefined) {
+    if(employeeInfo.data !== undefined && localStorage.getItem("empId")![0] === 'E') {
+      console.log(employeeInfo.data);
       socketConnection.emit(
         "register",
         JSON.stringify({
-          userId: localStorage.getItem("adminId"),
+          userId: localStorage.getItem("empId"),
+        })
+      );
+      console.log("registered!");
+    }
+  }, [employeeInfo.isFetched === true]);
+
+    useEffect(() => {
+    if(adminInfo.data !== undefined && localStorage.getItem("empId")![0] === 'A') {
+      console.log(adminInfo.data);
+      socketConnection.emit(
+        "register",
+        JSON.stringify({
+          userId: localStorage.getItem("empId"),
         })
       );
       console.log("registered!");
@@ -83,25 +97,12 @@ const Primary = ({ selected, setSelected, socketConnection }: Props) => {
   }, [adminInfo.isFetched === true]);
 
   useEffect(() => {
-    if (employeeInfo.data !== undefined && employeeInfo.data.message !== "Employee does not exist") {
-      socketConnection.emit(
-        "register",
-        JSON.stringify({
-          userId: localStorage.getItem("empId"),
-          userName: employeeInfo.data.employee.name,
-        })
-      );
-      console.log("registered!");
-    }
-  }, [employeeInfo.isFetched === true]);
-
-  useEffect(() => {
     socketConnection.on("private-message", (data) => {
       console.log(data);
       const { senderId, content, createdAt, senderuserName, subject } = data;
       setMessages((messages) => [
-        ...messages,
         { senderId, content, createdAt, senderuserName, subject },
+        ...messages,
       ]);
     });
   }, []);

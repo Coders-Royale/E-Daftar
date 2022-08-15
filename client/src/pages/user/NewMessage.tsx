@@ -20,7 +20,7 @@ import Link from "../../images/icons/newmessage_page_link.svg";
 import Send from "../../images/icons/newmessage_page_send.svg";
 
 import { useMutateCreateDocument } from "../../queries/mutations";
-import { useEmployeeInfo } from "../../queries/hooks";
+import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -121,12 +121,23 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
     employeeId: localStorage.getItem("empId"),
   });
 
+  const adminInfo = useAdminInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
   useEffect(() => {
-    if (employeeInfo.data !== undefined) {
+    if (employeeInfo.data !== undefined && employeeInfo.data.message !== "Employee does not exist") {
       setName(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
       console.log(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
     }
   }, [employeeInfo.isFetched === true]);
+
+  // useEffect(() => {
+  //   if(adminInfo.data !== undefined) {
+  //     setName(employeeInfo.data.)
+  //   }
+  // }, [adminInfo.isFetched === true]);
 
   const { mutateAsync: createDocumentData } = useMutateCreateDocument({
     onSuccess: (data: any) => {

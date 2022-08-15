@@ -46,7 +46,7 @@ export async function getAdmin(params) {
   try {
     const res = (
       await fetch(
-        baseUrl + apiEndPoints.getAdmin + `?departmentId=${params.departmentId}` + `&employeeId=${params.employeeId}`,
+        baseUrl + apiEndPoints.getAdmin + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
