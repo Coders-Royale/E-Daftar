@@ -7,3 +7,4 @@ Documentation is available at [https://sih-server-docs.herokuapp.com/docs/](http
 
 ## Server
 The server is available at [https://sih-2022-server.azurewebsites.net/api](https://sih-2022-server.azurewebsites.net/api)
+The chat server is available at [https://sih-email.herokuapp.com/](https://sih-email.herokuapp.com/)
