@@ -81,6 +81,8 @@ const Sent = ({ selected, setSelected }: Props) => {
     return false;
   };
 
+  const rooms: any[] = [];
+
   return (
     <div className="h-screen flex bg-white overflow-hidden">
       <div className="w-1/4">
@@ -88,7 +90,7 @@ const Sent = ({ selected, setSelected }: Props) => {
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
-          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
+          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} displayRooms={rooms} />
         </div>
 
         <div className="w-2/3 overflow-scroll px-10">
