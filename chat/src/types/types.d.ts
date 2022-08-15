@@ -21,6 +21,8 @@ export class LoadMessageInput {
     employeeId: string;
     @IsNumber()
     pageNo: number;
+    @IsString()
+    filter: string;
 }
 
 // export class SocketJoinRoomInput {

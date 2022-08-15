@@ -206,21 +206,29 @@ export const getConversation = async (req: Request, res: Response) => {
 
 export const loadMessage = async (req: Request, res: Response) => {
     try {
-        if (!req.body) {
+        if (!req.query) {
             return res.status(400).json({
                 error: true,
                 mesaage: "Invalid request to load message",
             });
         }
-        const body = req.body as LoadMessageInput;
-        if (!body.pageNo || !body.employeeId) {
+        const employeeId = req.query["employeeId"];
+        const pageNo = parseInt(req.query["pageNo"] as string);
+        const filter = req.query["filter"];
+        if (!employeeId || !pageNo || !filter) {
             return res.status(400).json({
                 error: true,
                 mesaage: "Invalid request to load message",
+            });
+        }
+        if (filter !== "primary" && filter !== "sent") {
+            return res.status(400).json({
+                error: true,
+                mesaage: "Invalid filter",
             });
         }
         const conversations = await Conversation.find({
-            "participants.id": body.employeeId
+            "participants.id": employeeId
         });
         if (!conversations) {
             return res.status(400).json({
@@ -230,9 +238,17 @@ export const loadMessage = async (req: Request, res: Response) => {
         }
         const allMessages = [];
         for (const conversation of conversations) {
-            const messages = await Message.find({
+            let messages = await Message.find({
                 conversationId: conversation._id
             });
+            if (filter === "primary") {
+                // Filter messages that are not sent by the employee
+                messages = messages.filter(message => message.senderId !== employeeId);
+            }
+            else if (filter === "sent") {
+                // Filter messages that are sent by the employee
+                messages = messages.filter(message => message.senderId === employeeId);
+            }
             allMessages.push(...messages);
         }
         if (allMessages.length === 0) {
@@ -246,7 +262,7 @@ export const loadMessage = async (req: Request, res: Response) => {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
         // In a single page return 20 messages
-        const messages = sorrtedMessages.slice((body.pageNo - 1) * 20, body.pageNo * 20);
+        const messages = sorrtedMessages.slice((pageNo - 1) * 20, pageNo * 20);
         return res.status(200).json({
             error: false,
             message: "Messages fetched successfully",
