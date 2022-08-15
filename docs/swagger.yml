@@ -343,7 +343,7 @@ paths:
         - chat
       security:
         - bearerAuth: []
-      summary: Load all messages for an employee in descending order of creation
+      summary: Load all messages(sent or primary) for an employee
       operationId: loadMessages
       parameters: 
         - in: query
@@ -355,6 +355,11 @@ paths:
           name: pageNo
           schema:
             type: number
+          required: true
+        - in: query
+          name: filter
+          schema:
+            type: string
           required: true
       responses:
         '400':
@@ -555,6 +560,43 @@ paths:
                 properties:
                   url:
                     type: string
+  /getDocument:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security:
+        - bearerAuth: []
+      summary: Get a specific document
+      operationId: getDocument
+      parameters: 
+        - in: query
+          name: documentId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: role
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Document fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
 components:
   schemas:
     Employee:
