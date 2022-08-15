@@ -139,6 +139,7 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
         setDepartment("");
         setSubject("");
         setTemplateName("");
+        setEmailContent("");
         setMessage("");
         
         socketConnection.emit(

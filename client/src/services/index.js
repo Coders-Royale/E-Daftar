@@ -27,7 +27,7 @@ export async function getEmployee(params) {
   try {
     const res = (
       await fetch(
-        baseUrl + apiEndPoints.getEmployee + `?departmentId=${params.departmentId}` + `&employeeId=${params.employeeId}`,
+        baseUrl + apiEndPoints.getEmployee + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}` ,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -107,6 +107,26 @@ export async function getRooms(params) {
     const res = (
       await fetch(
         baseUrlChat + apiEndPoints.rooms + `?employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export async function loadMessages(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrlChat + apiEndPoints.loadMessages + `?employeeId=${params.employeeId}` + `&pageNo=${params.pageNo}` + `&filter=${params.filter}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
