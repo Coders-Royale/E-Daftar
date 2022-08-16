@@ -58,8 +58,6 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
     setGender("");
   };
 
-  console.log(dob);
-
   const { mutateAsync: createEmployeeData } = useMutateCreateEmployee({
     onSuccess: (data: any) => {
       if (data.message === "Employee created successfully") {

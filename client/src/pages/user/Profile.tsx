@@ -69,6 +69,7 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [file, setFile] = useState<any>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [updated, setUpdated] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const params = useParams();
 
   const clearInputs = () => {
@@ -351,9 +352,6 @@ const Profile = ({ selected, setSelected }: Props) => {
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
-  console.log(errors);
-  console.log(errLengthChangePassword);
-
   const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
   const handleChangePassword = async () => {
     const res = await fetch(
@@ -469,17 +467,16 @@ const Profile = ({ selected, setSelected }: Props) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.message === "File uploaded successfully") {
           setUpdated(false);
           // setMessage(data.message);
-          console.log("Profile pic updated successfully!");
+          setImageLoading(false);
         } else {
-          console.log(data.message);
+          setImageLoading(false);
         }
       })
       .catch((err) => {
-        console.log(err);
+        setImageLoading(false);
       });
   };
 
@@ -536,10 +533,13 @@ const Profile = ({ selected, setSelected }: Props) => {
               ) : (
                 <button
                   className="bg-gradient-to-r flex gap-1 justify-center from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
-                  onClick={() => uploadProfilePicture()}
+                  onClick={() => {
+                    setImageLoading(true);
+                    uploadProfilePicture();
+                  }}
                 >
                   <Face />
-                  Set Profile Picture
+                  {imageLoading ? "Setting Up..." : "Set Profile Picture"}
                 </button>
               )}
               <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
