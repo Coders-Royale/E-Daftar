@@ -48,7 +48,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
       </div>
 
       <div>
-        {displayRooms.map((item, index) =>
+        {displayRooms?.map((item, index) =>
           docId.length > 0 ? (
             docId === item._id && (
               <div key={index} onClick={() => setSelected(index)}>

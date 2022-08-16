@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useLoadMessages } from "../../queries/hooks";
+import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
+
 import Sidebar from "../../components/Sidebar";
 import Middlebar from "../../components/Middlebar";
 import EmailContent from "../../components/EmailContent";
@@ -48,14 +51,16 @@ interface Props {
 }
 
 const Sent = ({ selected, setSelected }: Props) => {
+
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
 
   const [selectedMid, setSelectedMid] = useState<number>(0);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [additionalMessage, setAdditionalMessage] = useState<string>("");
 
   const navigate = useNavigate();
-  const [additionalMessage, setAdditionalMessage] = useState<string>("");
 
   interface Error {
     type: string;
@@ -82,7 +87,17 @@ const Sent = ({ selected, setSelected }: Props) => {
     return false;
   };
 
-  const rooms: any[] = [];
+  const receivedMessages = useLoadMessages({
+    employeeId: localStorage.getItem("empId"),
+    pageNo: 1,
+    filter: "sent",
+  });
+
+  useEffect(() => {
+    if (receivedMessages.data) {
+      setMessages(receivedMessages.data.data);
+    }
+  }, [receivedMessages.isSuccess === true]);
 
   return (
     <div className="h-screen flex bg-white overflow-hidden">
@@ -94,7 +109,7 @@ const Sent = ({ selected, setSelected }: Props) => {
           <Middlebar
             selectedMid={selectedMid}
             setSelectedMid={setSelectedMid}
-            displayRooms={rooms}
+            displayRooms={messages}
           />
         </div>
 

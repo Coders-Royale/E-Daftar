@@ -57,7 +57,7 @@ const App: React.FC = () => {
           (localStorage.getItem("empId")?.slice(0, 1) === "E"
             ? "user"
             : "admin") +
-          "/sent"
+          "/primary"
       );
     }
   }, []);

@@ -34,7 +34,7 @@ export default function SignIn() {
           localStorage.setItem("rememberMe", "true");
         }
         navigate(
-          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/sent"
+          "/" + (empId.slice(0, 1) === "E" ? "user" : "admin") + "/primary"
         );
       } else {
         setErrors((errors: Error[]) => [
@@ -81,61 +81,21 @@ export default function SignIn() {
       errLength++;
     }
 
-    // if (password.length > 0 && password.length < 8) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     { type: "password", message: "Password must be at least 8 characters" },
-    //   ]);
-    //   errLength++;
-    // }
-
-    // if (password.length > 0 && password.match(/[a-z]/g) === null) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     {
-    //       type: "password",
-    //       message: "Password must contain at least one lowercase letter",
-    //     },
-    //   ]);
-    //   errLength++;
-    // }
-    // if (password.length > 0 && password.match(/[A-Z]/g) === null) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     {
-    //       type: "password",
-    //       message: "Password must contain at least one uppercase letter",
-    //     },
-    //   ]);
-    //   errLength++;
-    // }
-    // if (password.length > 0 && password.match(/[0-9]/g) === null) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     {
-    //       type: "password",
-    //       message: "Password must contain at least one number",
-    //     },
-    //   ]);
-    //   errLength++;
-    // }
-    // if (
-    //   password.length > 0 &&
-    //   password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/g) === null
-    // ) {
-    //   setErrors((errors: Error[]) => [
-    //     ...errors,
-    //     {
-    //       type: "password",
-    //       message: "Password must contain at least one special character",
-    //     },
-    //   ]);
-    //   errLength++;
-    // }
-
     if (errLength == 0) return true;
 
     return false;
+  };
+
+  const onEnterPress = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      validate() &&
+        loginData({
+          employeeId: empId,
+          password: password,
+          role: empId.substring(0, 1) === "E" ? "employee" : "admin",
+        });
+    }
   };
 
   return (
@@ -182,6 +142,7 @@ export default function SignIn() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(event) => onEnterPress(event)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

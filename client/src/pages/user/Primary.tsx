@@ -128,7 +128,7 @@ const Primary = ({ selected, setSelected, socketConnection }: Props) => {
             displayRooms={messages}
           />
         </div>
-        {messages.length > 0 ? (
+        {messages?.length > 0 ? (
           <EmailContent
             selectedMid={selectedMid}
             setSelectedMid={setSelectedMid}
