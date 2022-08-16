@@ -349,6 +349,8 @@ Kind regards,
     }
   }, [templateName]);
 
+  const rooms: any[] = [];
+
   return (
     <div className="h-screen flex bg-white overflow-hidden">
       <div className="w-1/4">
@@ -359,6 +361,7 @@ Kind regards,
           <Middlebar
             selectedMid={selectedMid}
             setSelectedMid={setSelectedMid}
+            displayRooms={rooms}
           />
         </div>
         <div className="w-2/3 px-10 overflow-scroll">

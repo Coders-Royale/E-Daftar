@@ -4,83 +4,13 @@ import MiddleBarComponent from "../components/MiddleBarComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import Man from "../images/man.svg";
 
-interface MiddleBarData {
-  image: string;
-  title: string;
-  name: string;
-  time: number;
-  content: string;
-  attachment: boolean;
-}
-
-// For rooms.
-interface Info {
-  id: string;
-  name: string;
-}
-
-interface Participant {
-  info: Info;
-  id: string;
-  _id: string;
-}
-
-interface RoomObject {
-  _id: string;
-  subject: string; // title
-  content: any; // content, attachment true if content is present.
-  participants: Participant[]; // last item in this array => name  participants[participants.length-1].info.name
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
-}
-
 interface Props {
-  displayRooms?: RoomObject[];
+  displayRooms: any[];
   selectedMid: number;
   setSelectedMid: (selectedMidMid: number) => void;
 }
 
-const MiddleBarContent: MiddleBarData[] = [
-  {
-    image: Man,
-    title: "Leave Application",
-    name: "John Doe",
-    time: 0,
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis sit iaculis gravida amet, ma ... ",
-    attachment: false,
-  },
-  {
-    image: Man,
-    title: "Leave Application",
-    name: "John Doe",
-    time: 1,
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis sit iaculis gravida amet, ma ... ",
-    attachment: true,
-  },
-  {
-    image: Man,
-    title: "Leave Application",
-    name: "John Doe",
-    time: 3,
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis sit iaculis gravida amet, ma ... ",
-    attachment: true,
-  },
-  {
-    image: Man,
-    title: "Leave Application",
-    name: "John Doe",
-    time: 0,
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis sit iaculis gravida amet, ma ... ",
-    attachment: false,
-  },
-];
-
-const findName = (room: RoomObject) => {
+const findName = (room: any) => {
   if (room.participants) {
     let participant;
     [participant] = room.participants.slice(-1);
@@ -97,6 +27,9 @@ const findTime = (time: Date) => {
 };
 
 const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
+  const [selected, setSelected] = useState<Number>(0);
+  const [docId, setDocId] = useState<string>("");
+
   return (
     <div className="px-10 py-12 bg-gray-350 min-h-screen flex flex-col justify-start">
       <div>
@@ -108,67 +41,42 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
             <input
               className="bg-gray-100 h-8 my-auto mx-4 px-2 text-sm w-full"
               placeholder="Search Here"
+              onChange={(e) => setDocId(e.target.value)}
             ></input>
           </div>
         </div>
       </div>
 
       <div>
-        {displayRooms
-          ? displayRooms.map((item, index) =>
-              index === selectedMid ? (
-                <div key={index} onClick={() => setSelectedMid(index)}>
-                  <MiddleBarComponent
-                    image={Man}
-                    title={item.subject}
-                    name={findName(item)}
-                    time={findTime(item.updatedAt)}
-                    content={item.content}
-                    attachment={true}
-                    selected={true}
-                  />
-                </div>
-              ) : (
-                <div key={index} onClick={() => setSelectedMid(index)}>
-                  <MiddleBarComponent
-                    image={Man}
-                    title={item.subject}
-                    name={findName(item)}
-                    time={findTime(item.updatedAt)}
-                    content={item.content}
-                    attachment={true}
-                    selected={false}
-                  />
-                </div>
-              )
+        {displayRooms.map((item, index) =>
+          docId.length > 0 ? (
+            docId === item._id && (
+              <div key={index} onClick={() => setSelected(index)}>
+                <MiddleBarComponent
+                  image={Man}
+                  title={item.conversationName}
+                  name={findName(item)}
+                  time={findTime(item.updatedAt)}
+                  content={`Document: ${item.documentId}`}
+                  attachment={true}
+                  selected={true}
+                />
+              </div>
             )
-          : MiddleBarContent.map((item, index) =>
-              index === selectedMid ? (
-                <div key={index} onClick={() => setSelectedMid(index)}>
-                  <MiddleBarComponent
-                    image={item.image}
-                    title={item.title}
-                    name={item.name}
-                    time={item.time}
-                    content={item.content}
-                    attachment={item.attachment}
-                    selected={true}
-                  />
-                </div>
-              ) : (
-                <div key={index} onClick={() => setSelectedMid(index)}>
-                  <MiddleBarComponent
-                    image={item.image}
-                    title={item.title}
-                    name={item.name}
-                    time={item.time}
-                    content={item.content}
-                    attachment={item.attachment}
-                    selected={false}
-                  />
-                </div>
-              )
-            )}
+          ) : (
+            <div key={index} onClick={() => setSelected(index)}>
+              <MiddleBarComponent
+                image={Man}
+                title={item.conversationName}
+                name={findName(item)}
+                time={findTime(item.updatedAt)}
+                content={`Document: ${item.documentId}`}
+                attachment={true}
+                selected={false}
+              />
+            </div>
+          )
+        )}
       </div>
     </div>
   );
