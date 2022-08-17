@@ -20,7 +20,7 @@ import Link from "../../images/icons/newmessage_page_link.svg";
 import Send from "../../images/icons/newmessage_page_send.svg";
 
 import { useMutateCreateDocument } from "../../queries/mutations";
-import { useEmployeeInfo } from "../../queries/hooks";
+import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -32,7 +32,7 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-  'private-message': (privatemessage: string) => void;
+  "private-message": (privatemessage: string) => void;
 }
 
 interface Props {
@@ -60,7 +60,6 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
   const [selectedMid, setSelectedMid] = useState<number>(0);
 
   const { files, setFiles } = useContext(FilesContext);
-  console.log(files);
 
   const [percentage, setPercentage] = useState(0);
   const [uploadLoader, setUploadLoader] = useState(false);
@@ -71,7 +70,7 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
   const [department, setDepartment] = useState<string>("");
   const [subject, setSubject] = useState("");
   const [templateName, setTemplateName] = useState("");
-  const[receiverId, setReceiverId] = useState<string>("");
+  const [receiverId, setReceiverId] = useState<string>("");
   const [receiverName, setReceiverName] = useState<string>("");
   var [emailContent, setEmailContent] = useState("");
 
@@ -121,18 +120,34 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
     employeeId: localStorage.getItem("empId"),
   });
 
+  const adminInfo = useAdminInfo({
+    departmentId: localStorage.getItem("depId"),
+    employeeId: localStorage.getItem("empId"),
+  });
+
   useEffect(() => {
-    if (employeeInfo.data !== undefined) {
-      setName(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
-      console.log(employeeInfo.data?.employee?.firstName + " " + employeeInfo.data?.employee.lastName);
+    if (
+      employeeInfo.data !== undefined &&
+      employeeInfo.data.message !== "Employee does not exist"
+    ) {
+      setName(
+        employeeInfo.data?.employee?.firstName +
+          " " +
+          employeeInfo.data?.employee.lastName
+      );
     }
   }, [employeeInfo.isFetched === true]);
+
+  // useEffect(() => {
+  //   if(adminInfo.data !== undefined) {
+  //     setName(employeeInfo.data.)
+  //   }
+  // }, [adminInfo.isFetched === true]);
 
   const { mutateAsync: createDocumentData } = useMutateCreateDocument({
     onSuccess: (data: any) => {
       if (data.message === "Document created successfully") {
         setMessage(data.message);
-        console.log(data);
         setLoading(false);
         localStorage.setItem("files", "");
         setFiles([]);
@@ -141,22 +156,20 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
         setTemplateName("");
         setEmailContent("");
         setMessage("");
-        
+
         socketConnection.emit(
-        "private-message",
-        JSON.stringify({
-          senderId: localStorage.getItem("empId"),
-          content: emailContent,
-          createdAt: new Date(),
-          senderName: name,
-          subject: subject,
-          receiverId: data.data.permissions[data.data.permissions.length-1],
-          receiverName: data.data.assignedEmployeeName,
-          documentId: data.data.documentId,
-        })
-      );
-
-
+          "private-message",
+          JSON.stringify({
+            senderId: localStorage.getItem("empId"),
+            content: emailContent,
+            createdAt: new Date(),
+            senderName: name,
+            subject: subject,
+            receiverId: data.data.permissions[data.data.permissions.length - 1],
+            receiverName: data.data.assignedEmployeeName,
+            documentId: data.data.documentId,
+          })
+        );
       } else {
         setErrors((errors: Error[]) => [
           ...errors,
@@ -336,6 +349,8 @@ Kind regards,
     }
   }, [templateName]);
 
+  const rooms: any[] = [];
+
   return (
     <div className="h-screen flex bg-white overflow-hidden">
       <div className="w-1/4">
@@ -343,7 +358,11 @@ Kind regards,
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
-          <Middlebar selectedMid={selectedMid} setSelectedMid={setSelectedMid} />
+          <Middlebar
+            selectedMid={selectedMid}
+            setSelectedMid={setSelectedMid}
+            displayRooms={rooms}
+          />
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
           <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750">
@@ -528,7 +547,6 @@ Kind regards,
                     forwarding_dept: department.toLowerCase(),
                     category: templateName,
                   });
-
                 }}
               >
                 <img src={Send} alt="send" className="h-5 w-5" /> Send
@@ -542,7 +560,6 @@ Kind regards,
 };
 
 export default NewMessage;
-
 
 /* 
 {

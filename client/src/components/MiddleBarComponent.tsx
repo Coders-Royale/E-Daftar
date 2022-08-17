@@ -13,10 +13,10 @@ export interface MiddleBarComponentProps {
 }
 
 const getTimeInMinutes = (num: number) => {
-  const timeInMinutes: number =  Math.round(num / 1000 / 60);
+  const timeInMinutes: number = Math.round(num / 1000 / 60);
 
   return timeInMinutes.toString() + " minutes ago";
-}
+};
 
 export default function MiddleBarComponent({
   image,
@@ -54,10 +54,12 @@ export default function MiddleBarComponent({
             </div>
           </div>
 
-          <h1 className="text-sm font-normal text-gray-550">{getTimeInMinutes(time)}</h1>
+          <h1 className="text-sm font-normal text-gray-550">
+            {getTimeInMinutes(time)}
+          </h1>
         </div>
 
-        <h1 className="my-1 px-7 pl-12 text-sm font-normal text-gray-550">
+        <h1 className="my-1 px-7 pl-12 text-sm font-normal text-gray-550 truncate">
           {content}
         </h1>
       </div>

@@ -15,6 +15,9 @@ import Profile from "./pages/user/Profile";
 import Sent from "./pages/user/Sent";
 import NewMessage from "./pages/user/NewMessage";
 import Primary from "./pages/user/Primary";
+import Pending from "./pages/user/Pending";
+import Approved from "./pages/user/Approved";
+import Rejected from "./pages/user/Rejected";
 
 import { FilesProvider } from "./contexts/files.context";
 
@@ -57,7 +60,7 @@ const App: React.FC = () => {
           (localStorage.getItem("empId")?.slice(0, 1) === "E"
             ? "user"
             : "admin") +
-          "/sent"
+          "/primary"
       );
     }
   }, []);
@@ -102,6 +105,18 @@ const App: React.FC = () => {
           <Route
             path="/:user/sent"
             element={<Sent selected={selected} setSelected={setSelected} />}
+          />
+          <Route
+            path="/:user/pending"
+            element={<Pending selected={selected} setSelected={setSelected} />}
+          />
+          <Route
+            path="/:user/approved"
+            element={<Approved selected={selected} setSelected={setSelected} />}
+          />
+          <Route
+            path="/:user/rejected"
+            element={<Rejected selected={selected} setSelected={setSelected} />}
           />
           <Route
             path="/:user/new-message"

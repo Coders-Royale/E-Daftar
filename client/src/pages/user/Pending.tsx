@@ -50,10 +50,10 @@ interface Props {
   setSelected: (selected: number) => void;
 }
 
-const Sent = ({ selected, setSelected }: Props) => {
+const Pending = ({ selected, setSelected }: Props) => {
 
   useEffect(() => {
-    setSelected(1);
+    setSelected(4);
   }, [setSelected]);
 
   const [selectedMid, setSelectedMid] = useState<number>(0);
@@ -90,7 +90,7 @@ const Sent = ({ selected, setSelected }: Props) => {
   const receivedMessages = useLoadMessages({
     employeeId: localStorage.getItem("empId"),
     pageNo: 1,
-    filter: "sent",
+    filter: "pending",
   });
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const Sent = ({ selected, setSelected }: Props) => {
         <EmailContent
           selectedMid={selectedMid}
           setSelectedMid={setSelectedMid}
-          type="sent"
+          type="pending"
           emailContent={emailContent}
         />
       </div>
@@ -124,4 +124,4 @@ const Sent = ({ selected, setSelected }: Props) => {
   );
 };
 
-export default Sent;
+export default Pending;
