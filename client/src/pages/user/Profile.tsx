@@ -71,6 +71,7 @@ const Profile = ({ selected, setSelected }: Props) => {
   const [updated, setUpdated] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const params = useParams();
+  var image = "";
 
   const clearInputs = () => {
     setFirstName("");
@@ -393,24 +394,75 @@ const Profile = ({ selected, setSelected }: Props) => {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
       },
       body: JSON.stringify({
-        employeeId: employeeInfo.data?.employee?.employeeId,
+        employeeId:
+          employeeInfo.data?.employee?.employeeId ||
+          adminInfo.data?.employee?.employeeId,
         firstName:
-          firstName !== employeeInfo.data?.employee?.firstName
+          firstName !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.firstName
+            : adminInfo.data?.employee?.firstName)
             ? firstName
             : null,
         lastName:
-          lastName !== employeeInfo.data?.employee?.lastName ? lastName : null,
-        gender: gender !== employeeInfo.data?.employee?.gender ? gender : null,
-        dob: dob !== employeeInfo.data?.employee?.dob ? dob : null,
+          lastName !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.lastName
+            : adminInfo.data?.employee?.lastName)
+            ? lastName
+            : null,
+        gender:
+          gender !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.gender
+            : adminInfo.data?.employee?.gender)
+            ? gender
+            : null,
+        dob:
+          dob !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.dob
+            : adminInfo.data?.employee?.dob)
+            ? dob
+            : null,
         contactNo:
-          mobileNo !== employeeInfo.data?.employee?.contactNo ? mobileNo : null,
+          mobileNo !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.contactNo
+            : adminInfo.data?.employee?.contactNo)
+            ? mobileNo
+            : null,
         addr_line1:
-          line1 !== employeeInfo.data?.employee?.addr_line1 ? line1 : null,
+          line1 !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.addr_line1
+            : adminInfo.data?.employee?.addr_line1)
+            ? line1
+            : null,
         addr_line2:
-          line2 !== employeeInfo.data?.employee?.addr_line2 ? line2 : null,
-        city: city !== employeeInfo.data?.employee?.city ? city : null,
-        state: state !== employeeInfo.data?.employee?.state ? state : null,
-        role: employeeInfo.data?.employee?.role,
+          line2 !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.addr_line2
+            : adminInfo.data?.employee?.addr_line2)
+            ? line2
+            : null,
+        city:
+          city !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.city
+            : adminInfo.data?.employee?.city)
+            ? city
+            : null,
+        state:
+          state !==
+          (params.user === "user"
+            ? employeeInfo.data?.employee?.state
+            : adminInfo.data?.employee?.state)
+            ? state
+            : null,
+        role:
+          employeeInfo.data?.employee?.role || adminInfo.data?.employee?.role,
+        picture: image === "" ? null : image,
       }),
     });
     const data = await res.json();
@@ -470,6 +522,8 @@ const Profile = ({ selected, setSelected }: Props) => {
         if (data.message === "File uploaded successfully") {
           setUpdated(false);
           // setMessage(data.message);
+          image = data.url;
+          handleUpdateProfile();
           setImageLoading(false);
         } else {
           setImageLoading(false);
@@ -1044,6 +1098,7 @@ const Profile = ({ selected, setSelected }: Props) => {
           <div className="pt-8 flex flex-row gap-4 mx-auto w-80 pb-8">
             <div
               className="flex-auto"
+              // Pass image link as empty in handleUpdateProfile
               onClick={() => validate() && handleUpdateProfile()}
             >
               <RegistrationButton text="Update Information" toUrl="/" />

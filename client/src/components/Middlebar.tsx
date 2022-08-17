@@ -27,7 +27,6 @@ const findTime = (time: Date) => {
 };
 
 const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
-  const [selected, setSelected] = useState<Number>(0);
   const [docId, setDocId] = useState<string>("");
 
   return (
@@ -51,7 +50,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
         {displayRooms?.map((item, index) =>
           docId.length > 0 ? (
             docId === item._id && (
-              <div key={index} onClick={() => setSelected(index)}>
+              <div key={index} onClick={() => setSelectedMid(index)}>
                 <MiddleBarComponent
                   image={Man}
                   title={item.conversationName}
@@ -59,12 +58,12 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
                   time={findTime(item.updatedAt)}
                   content={`Document: ${item.documentId}`}
                   attachment={true}
-                  selected={true}
+                  selected={selectedMid === index ? true : false}
                 />
               </div>
             )
           ) : (
-            <div key={index} onClick={() => setSelected(index)}>
+            <div key={index} onClick={() => setSelectedMid(index)}>
               <MiddleBarComponent
                 image={Man}
                 title={item.conversationName}
@@ -72,7 +71,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
                 time={findTime(item.updatedAt)}
                 content={`Document: ${item.documentId}`}
                 attachment={true}
-                selected={false}
+                selected={selectedMid === index ? true : false}
               />
             </div>
           )
