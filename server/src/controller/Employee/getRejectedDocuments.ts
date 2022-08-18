@@ -28,7 +28,7 @@ export const getRejectedDocuments = async (employeeId: string) => {
         for (let document of documents) {
             const index = document.permissions.indexOf(employeeId);
             const yourStatus = document.status[index];
-            if (yourStatus == "rejected") {
+            if (yourStatus == "Rejected") {
                 yourRejectedDocuments.push(document);
             }
         }
