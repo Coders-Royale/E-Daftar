@@ -12,10 +12,33 @@ export interface MiddleBarComponentProps {
   selected: boolean;
 }
 
-const getTimeInMinutes = (num: number) => {
-  const timeInMinutes: number = Math.round(num / 1000 / 60);
+const getTimeInYearMonthDayMinutes = (num: number) => {
+  const year = Math.floor(num / 31536000);
+  num -= year * 31536000;
+  const month = Math.floor((num % 31536000) / 2592000);
+  num -= month * 2592000;
+  // calculate (and subtract) whole days
+  var days = Math.floor(num / 86400);
+  num -= days * 86400;
 
-  return timeInMinutes.toString() + " minutes ago";
+  // calculate (and subtract) whole hours
+  var hours = Math.floor(num / 3600) % 24;
+  num -= hours * 3600;
+
+  // calculate (and subtract) whole minutes
+  var minutes = Math.floor(num / 60) % 60;
+  num -= minutes * 60;
+
+  // Return the result as a string
+  return `${
+    year > 0
+      ? year + "y "
+      : month > 0
+      ? month + "m "
+      : days > 0
+      ? days + "d "
+      : (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "")
+  }ago`;
 };
 
 export default function MiddleBarComponent({
@@ -37,7 +60,7 @@ export default function MiddleBarComponent({
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-2">
             <img src={image} alt="man" className="w-10 h-10 rounded-full" />
-            <div className="">
+            <div className="w-full">
               <h1 className="text-sm font-bold text-gray-750">
                 {title}
                 <span
@@ -55,7 +78,7 @@ export default function MiddleBarComponent({
           </div>
 
           <h1 className="text-sm font-normal text-gray-550">
-            {getTimeInMinutes(time)}
+            {getTimeInYearMonthDayMinutes(time)}
           </h1>
         </div>
 

@@ -116,28 +116,30 @@ const Primary = ({ selected, setSelected, socketConnection }: Props) => {
   }, []);
 
   return (
-    <div className="h-screen flex bg-white overflow-hidden">
-      <div className="w-1/4">
+    <div className="h-screen w-full flex bg-white overflow-hidden">
+      <div className="w-1/5">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
-      <div className="flex flex-row w-full overflow-scroll">
-        <div className="w-1/3">
+      <div className="flex w-4/5">
+        <div className="w-1/3 overflow-scroll">
           <Middlebar
             selectedMid={selectedMid}
             setSelectedMid={setSelectedMid}
             displayRooms={messages}
           />
         </div>
-        {messages?.length > 0 ? (
-          <EmailContent
-            selectedMid={selectedMid}
-            setSelectedMid={setSelectedMid}
-            type="primary"
-            emailContent={messages[selectedMid]}
-          />
-        ) : (
-          <Loader />
-        )}
+        <div className="w-2/3 overflow-scroll">
+          {messages?.length > 0 ? (
+            <EmailContent
+              selectedMid={selectedMid}
+              setSelectedMid={setSelectedMid}
+              type="primary"
+              emailContent={messages[selectedMid]}
+            />
+          ) : (
+            <Loader />
+          )}
+        </div>
       </div>
     </div>
   );

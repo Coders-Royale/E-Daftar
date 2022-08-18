@@ -13,6 +13,7 @@ import Email1 from "../images/tracking_page_email_1.png";
 import Email2 from "../images/tracking_page_email_2.png";
 import Email3 from "../images/tracking_page_email_3.png";
 import Dp from "../images/profile_page_dp.png";
+import ActionsButton from "./buttons/ActionsButton";
 
 enum Status {
   Pending = "Pending",
@@ -60,6 +61,10 @@ export default function EmailContent({
   }
   const [errors, setErrors] = useState<Error[]>([]);
 
+  let [isOpenApprove, setIsOpenApprove] = useState(false);
+  let [isOpenForward, setIsOpenForward] = useState(false);
+  let [isOpenReject, setIsOpenReject] = useState(false);
+
   var errLength = 0;
 
   const validate = () => {
@@ -80,7 +85,7 @@ export default function EmailContent({
   };
 
   return (
-    <div className="w-2/3 overflow-scroll px-10">
+    <div className="w-full overflow-scroll px-10">
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
@@ -196,7 +201,9 @@ export default function EmailContent({
       ) : null}
 
       {/*EMAIL CONTENT*/}
-      <div className={`pl-[76px] ${type === "sent" ? "mt-16" : ""}`}>
+      <div
+        className={`pl-[76px] ${type === "sent" ? "mt-16" : "min-h-[60vh]"}`}
+      >
         {type === "sent" ? (
           <h1 className="text-sm font-bold text-gray-750 tracking-widest">
             EMAIL CONTENT
@@ -212,8 +219,36 @@ export default function EmailContent({
         </div>
       </div>
 
+      {/* ACTIONS */}
+      <div className="pl-[76px] flex item-center justify-between mt-8 gap-4">
+        <ActionsButton
+          bgColor="bg-green-150"
+          textColor="text-green-550"
+          borderColor="border-green-550"
+          text="Approve"
+          isOpen={isOpenApprove}
+          setIsOpen={setIsOpenApprove}
+        />
+        <ActionsButton
+          bgColor="bg-blue-25"
+          textColor="text-blue-350"
+          borderColor="border-blue-350"
+          text="Forward"
+          isOpen={isOpenForward}
+          setIsOpen={setIsOpenForward}
+        />
+        <ActionsButton
+          bgColor="bg-red-150"
+          textColor="text-red-550"
+          borderColor="border-red-550"
+          text="Reject"
+          isOpen={isOpenReject}
+          setIsOpen={setIsOpenReject}
+        />
+      </div>
+
       {/*ADDITIONAL MESSAGE*/}
-      <div className="pl-[76px] my-16 grid grid-cols-6 gap-4">
+      <div className="pl-[76px] mt-4 mb-8 grid grid-cols-6 gap-4">
         <div className="col-span-5">
           <div className="bg-gray-150 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
             <div className="pl-4 py-3">

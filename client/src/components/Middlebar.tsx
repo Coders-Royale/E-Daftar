@@ -22,8 +22,10 @@ const findTime = (time: Date) => {
   const time1: number = new Date().getTime();
   const time2: number = new Date(time).getTime();
 
-  const diff: number = time1 - time2;
-  return diff;
+  // get total seconds between the times
+  var delta = Math.abs(time1 - time2) / 1000;
+
+  return delta;
 };
 
 const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
@@ -56,7 +58,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
                   title={item.conversationName}
                   name={findName(item)}
                   time={findTime(item.updatedAt)}
-                  content={`Document: ${item.documentId}`}
+                  content={item.content}
                   attachment={true}
                   selected={selectedMid === index ? true : false}
                 />
@@ -69,7 +71,7 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
                 title={item.conversationName}
                 name={findName(item)}
                 time={findTime(item.updatedAt)}
-                content={`Document: ${item.documentId}`}
+                content={item.content}
                 attachment={true}
                 selected={selectedMid === index ? true : false}
               />
