@@ -7,6 +7,8 @@ import {
 	listDocument,
 	getRooms,
 	loadMessages,
+	getYourApprovedDocuments,
+	getYourRejectedDocuments
 } from "../services";
 
 export const useEmployeeInfo = (params) => {
@@ -63,6 +65,26 @@ export const useLoadMessages = (params) => {
 	return useQuery(
 		[QUERY_KEYS.LOAD_MESSAGES, params.employeeId, params.pageNo, params.filter],
 		() => loadMessages(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useYourApprovedDocuments = (params) => {
+	return useQuery(
+		[QUERY_KEYS.YOUR_APPROVED_DOCUMENTS, params.employeeId],
+		() => getYourApprovedDocuments(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useYourRejectedDocuments = (params) => {
+	return useQuery(
+		[QUERY_KEYS.YOUR_REJECTED_DOCUMENTS, params.employeeId],
+		() => getYourRejectedDocuments(params),
 		{
 			retry: false,
 		}

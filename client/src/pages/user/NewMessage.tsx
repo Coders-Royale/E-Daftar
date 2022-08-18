@@ -161,7 +161,7 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
           "private-message",
           JSON.stringify({
             senderId: localStorage.getItem("empId"),
-            content: emailContent,
+            content: emailContent + `\n documentId: ${data.data.documentId}`,
             createdAt: new Date(),
             senderName: name,
             subject: subject,
@@ -542,7 +542,7 @@ Kind regards,
                     employee_name: name,
                     subject: subject,
                     description: emailContent,
-                    main_file: JSON.parse(localStorage.getItem("files")!),
+                    main_file: JSON.parse(localStorage.getItem("files") || "[]"),
                     reference_file: [], // currently no feature of reference files.
                     forwarding_dept: department.toLowerCase(),
                     category: templateName,
@@ -561,7 +561,7 @@ Kind regards,
 
 export default NewMessage;
 
-/* 
+/* Sample Response:
 {
   "message": "Document created successfully",
   "data": {

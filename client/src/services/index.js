@@ -11,6 +11,8 @@ const apiEndPoints = {
   messages: `/messages`,
   conversation: `/conversation`,
   loadMessages: `/loadMessages`,
+  getYourApprovedDocuments: `/getYourApprovedDocuments`,
+  getYourRejectedDocuments: `/getYourRejectedDocuments`,
 
   // POST REQUESTS
   login: `/login`,
@@ -127,6 +129,46 @@ export async function loadMessages(params) {
     const res = (
       await fetch(
         baseUrlChat + apiEndPoints.loadMessages + `?employeeId=${params.employeeId}` + `&pageNo=${params.pageNo}` + `&filter=${params.filter}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getYourApprovedDocuments(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.getYourApprovedDocuments + `?employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getYourRejectedDocuments(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.getYourRejectedDocuments + `?employeeId=${params.employeeId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

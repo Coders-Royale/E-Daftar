@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useLoadMessages } from "../../queries/hooks";
+import { useYourRejectedDocuments } from "../../queries/hooks";
 import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import Sidebar from "../../components/Sidebar";
@@ -87,10 +87,8 @@ const Rejected = ({ selected, setSelected }: Props) => {
     return false;
   };
 
-  const receivedMessages = useLoadMessages({
+  const receivedMessages = useYourRejectedDocuments({
     employeeId: localStorage.getItem("empId"),
-    pageNo: 1,
-    filter: "rejected",
   });
 
   useEffect(() => {
