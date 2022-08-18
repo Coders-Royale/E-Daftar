@@ -28,7 +28,7 @@ export const getApprovedDocuments = async (employeeId: string) => {
         for (let document of documents) {
             const index = document.permissions.indexOf(employeeId);
             const yourStatus = document.status[index];
-            if (yourStatus == "approved") {
+            if (yourStatus == "Approved") {
                 yourApprovedDocuments.push(document);
             }
         }
