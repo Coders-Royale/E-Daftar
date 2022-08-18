@@ -55,8 +55,8 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
               <div key={index} onClick={() => setSelectedMid(index)}>
                 <MiddleBarComponent
                   image={Man}
-                  title={item.conversationName}
-                  name={findName(item)}
+                  title={item.subject}
+                  name={item.senderName}
                   time={findTime(item.updatedAt)}
                   content={item.content}
                   attachment={true}
@@ -68,8 +68,8 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
             <div key={index} onClick={() => setSelectedMid(index)}>
               <MiddleBarComponent
                 image={Man}
-                title={item.conversationName}
-                name={findName(item)}
+                title={item.subject}
+                name={item.senderName}
                 time={findTime(item.updatedAt)}
                 content={item.content}
                 attachment={true}
