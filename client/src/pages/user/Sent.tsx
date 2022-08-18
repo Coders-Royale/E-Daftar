@@ -117,7 +117,7 @@ const Sent = ({ selected, setSelected }: Props) => {
           selectedMid={selectedMid}
           setSelectedMid={setSelectedMid}
           type="sent"
-          emailContent={emailContent}
+          emailContent={messages[selectedMid]}
         />
       </div>
     </div>

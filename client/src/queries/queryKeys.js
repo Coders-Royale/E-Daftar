@@ -11,6 +11,8 @@ const QUERY_KEYS = {
   LIST_DOCUMENT: generateKeyName("list-document"),
   GET_ROOMS: generateKeyName("get-rooms"),
   LOAD_MESSAGES: generateKeyName("load-messages"),
+  YOUR_APPROVED_DOCUMENTS: generateKeyName("your-approved-documents"),
+  YOUR_REJECTED_DOCUMENTS: generateKeyName("your-rejected-documents"),
 };
 
 export default QUERY_KEYS;
