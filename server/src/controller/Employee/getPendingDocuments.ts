@@ -1,16 +1,29 @@
 import * as Sentry from "@sentry/node";
+import { Admin, AdminDocument } from "../../models/admin.model";
 import { Document } from "../../models/document.model";
-import { Employee } from "../../models/employee.model";
+import { Employee, EmployeeDocument } from "../../models/employee.model";
 
-export const getApprovedDocuments = async (employeeId: string) => {
+export const getPendingDocuments = async (employeeId: string, role: string) => {
     try {
-        if (!employeeId) {
+        if (!employeeId || !role) {
             return {
                 error: true,
-                message: "Employee Id is required!"
+                message: "Employee Id and Role are required!"
             };
         }
-        const employee = await Employee.findOne({ employeeId });
+        let employee: EmployeeDocument | AdminDocument;
+        if (role === "admin") {
+            employee = await Admin.findOne({ employeeId });
+        }
+        else if (role === "employee" || role === "hod") {
+            employee = await Employee.findOne({ employeeId });
+        }
+        else {
+            return {
+                error: true,
+                message: "Invalid role!"
+            };
+        }
         if (!employee) {
             return {
                 error: true,
@@ -24,18 +37,19 @@ export const getApprovedDocuments = async (employeeId: string) => {
                 message: "No documents found!"
             };
         }
-        let yourApprovedDocuments: Document[] = [];
+        console.log(documents);
+        let yourPendingDocuments: Document[] = [];
         for (let document of documents) {
             const index = document.permissions.indexOf(employeeId);
             const yourStatus = document.status[index];
-            if (yourStatus == "Approved") {
-                yourApprovedDocuments.push(document);
+            if (yourStatus == "Pending") {
+                yourPendingDocuments.push(document);
             }
         }
         return {
             error: false,
             message: "Documents found!",
-            data: yourApprovedDocuments
+            data: yourPendingDocuments
         };
     }
     catch (err) {

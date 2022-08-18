@@ -653,6 +653,40 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Document'
+  /getYourPendingDocuments:
+    get:
+      tags:
+        - employee
+        - hod
+        - admin
+      security: 
+        - bearerAuth: []
+      summary: Get all the documents rejected by you
+      operationId: getYourRejectedDocuments
+      parameters: 
+        - in: query
+          name: employeeId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: role
+          schema:
+            type: string
+          required: true
+      responses:
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal Server Error
+        '200':
+          description: Documents fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
 components:
   schemas:
     Employee:
