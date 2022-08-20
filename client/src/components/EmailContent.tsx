@@ -76,7 +76,7 @@ export default function EmailContent({
   const documentInfo = useDocument({
     documentId: emailContent?.content.documentId,
     employeeId: localStorage.getItem("empId"),
-    role: localStorage.getItem("empId")![0] == 'A' ? "admin" : "employee",
+    role: localStorage.getItem("empId")![0] == "A" ? "admin" : "employee",
   });
 
   useEffect(() => {
@@ -209,7 +209,7 @@ export default function EmailContent({
           </h1>
         ) : null}
         <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750">
-          {emailContent?.content.body}
+          {emailContent?.content}
         </div>
         <div className="pt-4 flex flex-row gap-8">
           <img src={Email1} alt="" className="w-1/3" />

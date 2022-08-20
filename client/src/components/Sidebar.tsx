@@ -129,7 +129,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
   return (
     <div className="px-10 py-12 bg-white h-screen overflow-scroll flex flex-col justify-between">
       <div>
-        <Link to={`/user/new-message`}>
+        <Link to={`/` + params.user + `/new-message`}>
           <div className="flex gap-4 items-center py-3 px-5 bg-gradient-to-r from-blue-350 to-blue-150 rounded-lg">
             <img src={newMessage} alt="" className="w-5 h-5" />
             <p className="text-sm font-semibold text-white">New Message</p>

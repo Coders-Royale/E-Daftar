@@ -51,7 +51,6 @@ interface Props {
 }
 
 const Sent = ({ selected, setSelected }: Props) => {
-
   useEffect(() => {
     setSelected(1);
   }, [setSelected]);
@@ -104,7 +103,7 @@ const Sent = ({ selected, setSelected }: Props) => {
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
-      {messages !== undefined &&
+      {messages !== undefined && (
         <div className="flex flex-row w-full overflow-scroll">
           <div className="w-1/3">
             <Middlebar
@@ -121,7 +120,7 @@ const Sent = ({ selected, setSelected }: Props) => {
             emailContent={messages[selectedMid]}
           />
         </div>
-      }
+      )}
     </div>
   );
 };
