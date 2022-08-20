@@ -161,7 +161,7 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
           "private-message",
           JSON.stringify({
             senderId: localStorage.getItem("empId"),
-            content: { body: emailContent, documentId: data.data.documentid },
+            content: emailContent,
             createdAt: new Date(),
             senderName: name,
             subject: subject,

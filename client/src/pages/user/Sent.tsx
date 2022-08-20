@@ -104,22 +104,24 @@ const Sent = ({ selected, setSelected }: Props) => {
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
-      <div className="flex flex-row w-full overflow-scroll">
-        <div className="w-1/3">
-          <Middlebar
+      {messages !== undefined &&
+        <div className="flex flex-row w-full overflow-scroll">
+          <div className="w-1/3">
+            <Middlebar
+              selectedMid={selectedMid}
+              setSelectedMid={setSelectedMid}
+              displayRooms={messages}
+            />
+          </div>
+
+          <EmailContent
             selectedMid={selectedMid}
             setSelectedMid={setSelectedMid}
-            displayRooms={messages}
+            type="sent"
+            emailContent={messages[selectedMid]}
           />
         </div>
-
-        <EmailContent
-          selectedMid={selectedMid}
-          setSelectedMid={setSelectedMid}
-          type="sent"
-          emailContent={messages[selectedMid]}
-        />
-      </div>
+      }
     </div>
   );
 };

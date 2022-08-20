@@ -16,6 +16,7 @@ import Email2 from "../images/tracking_page_email_2.png";
 import Email3 from "../images/tracking_page_email_3.png";
 import Dp from "../images/profile_page_dp.png";
 import PDFIcon from "./PDFIcon";
+import ActionsButton from "./buttons/ActionsButton";
 
 enum Status {
   Pending = "Pending",
@@ -23,23 +24,6 @@ enum Status {
   Rejected = "Rejected",
   Approved = "Approved",
 }
-
-// const emailContent = `
-//   To
-//   The Manager
-//   Hero Moto Corp.
-
-//   Subject: One day leave application
-
-//   Respected Sir/Ma'am,
-
-//   I am writing this to inform you that I will be taking leave on ____ (date) as I have to _____ (mention reasons like attending a wedding, visit a friend, attending a seminar or event, etc.). I have completed all my tasks for the day and would be in touch with my team members if my assistance is required anytime.
-
-//   Thank you.
-
-//   Yours Sincerely,
-//   John Doe
-//   `;
 
 interface Props {
   selectedMid: number;
@@ -58,13 +42,17 @@ export default function EmailContent({
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
   const [mainFiles, setMainFiles] = useState<any[]>([]);
 
-  console.table(emailContent);
+  console.log(emailContent);
 
   interface Error {
     type: string;
     message: string;
   }
   const [errors, setErrors] = useState<Error[]>([]);
+
+  let [isOpenApprove, setIsOpenApprove] = useState(false);
+  let [isOpenForward, setIsOpenForward] = useState(false);
+  let [isOpenReject, setIsOpenReject] = useState(false);
 
   var errLength = 0;
 
@@ -98,7 +86,7 @@ export default function EmailContent({
   }, [documentInfo.isSuccess === true]);
 
   return (
-    <div className="w-2/3 overflow-scroll px-10">
+    <div className="w-full overflow-scroll px-10">
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
@@ -239,8 +227,36 @@ export default function EmailContent({
         </div>
       </div>
 
+      {/* ACTIONS */}
+      <div className="pl-[76px] flex item-center justify-between mt-8 gap-4">
+        <ActionsButton
+          bgColor="bg-green-150"
+          textColor="text-green-550"
+          borderColor="border-green-550"
+          text="Approve"
+          isOpen={isOpenApprove}
+          setIsOpen={setIsOpenApprove}
+        />
+        <ActionsButton
+          bgColor="bg-blue-25"
+          textColor="text-blue-350"
+          borderColor="border-blue-350"
+          text="Forward"
+          isOpen={isOpenForward}
+          setIsOpen={setIsOpenForward}
+        />
+        <ActionsButton
+          bgColor="bg-red-150"
+          textColor="text-red-550"
+          borderColor="border-red-550"
+          text="Reject"
+          isOpen={isOpenReject}
+          setIsOpen={setIsOpenReject}
+        />
+      </div>
+
       {/*ADDITIONAL MESSAGE*/}
-      <div className="pl-[76px] my-16 grid grid-cols-6 gap-4">
+      <div className="pl-[76px] mt-4 mb-8 grid grid-cols-6 gap-4">
         <div className="col-span-5">
           <div className="bg-gray-150 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
             <div className="pl-4 py-3">
