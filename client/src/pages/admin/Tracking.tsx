@@ -58,7 +58,7 @@ const Tracking = ({ selected, setSelected }: Props) => {
               <SearchIcon fontSize="medium" className="text-gray-750" />
             </div>
             <input
-              className="bg-gray-150 h-8 my-auto mx-4 px-2 text-sm"
+              className="bg-gray-150 mx-4 px-2 text-sm w-full"
               placeholder="Enter Tracking ID"
             ></input>
           </div>
