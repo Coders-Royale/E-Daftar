@@ -161,7 +161,7 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
           "private-message",
           JSON.stringify({
             senderId: localStorage.getItem("empId"),
-            content: emailContent + `\n documentId: ${data.data.documentId}`,
+            content: emailContent,
             createdAt: new Date(),
             senderName: name,
             subject: subject,
@@ -379,7 +379,14 @@ Kind regards,
             <Autocomplete
               disablePortal
               id="department-select"
-              options={["Sales", "HR", "IT", "Marketing"]}
+              options={[
+                "Sales",
+                "HR",
+                "IT",
+                "Marketing",
+                "Executive",
+                "Finance",
+              ]}
               size="small"
               value={department}
               onChange={(event: any, newValue: string | null) => {
@@ -542,7 +549,9 @@ Kind regards,
                     employee_name: name,
                     subject: subject,
                     description: emailContent,
-                    main_file: JSON.parse(localStorage.getItem("files") || "[]"),
+                    main_file: JSON.parse(
+                      localStorage.getItem("files") || "[]"
+                    ),
                     reference_file: [], // currently no feature of reference files.
                     forwarding_dept: department.toLowerCase(),
                     category: templateName,
