@@ -13,6 +13,7 @@ const apiEndPoints = {
   loadMessages: `/loadMessages`,
   getYourApprovedDocuments: `/getYourApprovedDocuments`,
   getYourRejectedDocuments: `/getYourRejectedDocuments`,
+  getDocument: `/getDocument`,
 
   // POST REQUESTS
   login: `/login`,
@@ -169,6 +170,26 @@ export async function getYourRejectedDocuments(params) {
     const res = (
       await fetch(
         baseUrl + apiEndPoints.getYourRejectedDocuments + `?employeeId=${params.employeeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getDocument(params) {
+  try {
+    const res = (
+      await fetch(
+        baseUrl + apiEndPoints.getDocument + `?documentId=${params.documentId}` + `&employeeId=${params.employeeId}` + `&role=${params.role}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

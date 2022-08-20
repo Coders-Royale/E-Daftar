@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
 
+import { useDocument } from "../queries/hooks";
+
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -13,6 +15,7 @@ import Email1 from "../images/tracking_page_email_1.png";
 import Email2 from "../images/tracking_page_email_2.png";
 import Email3 from "../images/tracking_page_email_3.png";
 import Dp from "../images/profile_page_dp.png";
+import PDFIcon from "./PDFIcon";
 import ActionsButton from "./buttons/ActionsButton";
 
 enum Status {
@@ -54,6 +57,9 @@ export default function EmailContent({
 }: Props) {
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
+  const [mainFiles, setMainFiles] = useState<any[]>([]);
+
+  console.table(emailContent);
 
   interface Error {
     type: string;
@@ -83,6 +89,18 @@ export default function EmailContent({
 
     return false;
   };
+
+  const documentInfo = useDocument({
+    documentId: emailContent?.content.documentId,
+    employeeId: localStorage.getItem("empId"),
+    role: localStorage.getItem("empId")![0] == 'A' ? "admin" : "employee",
+  });
+
+  useEffect(() => {
+    if (documentInfo.data) {
+      setMainFiles(documentInfo?.data?.data?.main_file);
+    }
+  }, [documentInfo.isSuccess === true]);
 
   return (
     <div className="w-full overflow-scroll px-10">
@@ -201,16 +219,14 @@ export default function EmailContent({
       ) : null}
 
       {/*EMAIL CONTENT*/}
-      <div
-        className={`pl-[76px] ${type === "sent" ? "mt-16" : "min-h-[60vh]"}`}
-      >
+      <div>
         {type === "sent" ? (
           <h1 className="text-sm font-bold text-gray-750 tracking-widest">
             EMAIL CONTENT
           </h1>
         ) : null}
         <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750">
-          {emailContent?.content}
+          {emailContent?.content.body}
         </div>
         <div className="pt-4 flex flex-row gap-8">
           <img src={Email1} alt="" className="w-1/3" />
@@ -219,6 +235,13 @@ export default function EmailContent({
         </div>
       </div>
 
+      {/*PDF FILES DISPLAY*/}
+      <div className="mt-12">
+        <div className="grid grid-cols-6">
+          {mainFiles?.map((item, index) => (
+            <PDFIcon key={index} file={item} />
+          ))}
+        </div>
       {/* ACTIONS */}
       <div className="pl-[76px] flex item-center justify-between mt-8 gap-4">
         <ActionsButton
@@ -285,6 +308,7 @@ export default function EmailContent({
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
