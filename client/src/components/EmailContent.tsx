@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
 
+import { useDocument } from "../queries/hooks";
+
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -13,7 +15,7 @@ import Email1 from "../images/tracking_page_email_1.png";
 import Email2 from "../images/tracking_page_email_2.png";
 import Email3 from "../images/tracking_page_email_3.png";
 import Dp from "../images/profile_page_dp.png";
-import ActionsButton from "./buttons/ActionsButton";
+import PDFIcon from "./PDFIcon";
 
 enum Status {
   Pending = "Pending",
@@ -54,16 +56,15 @@ export default function EmailContent({
 }: Props) {
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
+  const [mainFiles, setMainFiles] = useState<any[]>([]);
+
+  console.table(emailContent);
 
   interface Error {
     type: string;
     message: string;
   }
   const [errors, setErrors] = useState<Error[]>([]);
-
-  let [isOpenApprove, setIsOpenApprove] = useState(false);
-  let [isOpenForward, setIsOpenForward] = useState(false);
-  let [isOpenReject, setIsOpenReject] = useState(false);
 
   var errLength = 0;
 
@@ -84,8 +85,20 @@ export default function EmailContent({
     return false;
   };
 
+  const documentInfo = useDocument({
+    documentId: emailContent?.content.documentId,
+    employeeId: localStorage.getItem("empId"),
+    role: localStorage.getItem("empId")![0] == 'A' ? "admin" : "employee",
+  });
+
+  useEffect(() => {
+    if (documentInfo.data) {
+      setMainFiles(documentInfo?.data?.data?.main_file);
+    }
+  }, [documentInfo.isSuccess === true]);
+
   return (
-    <div className="w-full overflow-scroll px-10">
+    <div className="w-2/3 overflow-scroll px-10">
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
@@ -201,16 +214,14 @@ export default function EmailContent({
       ) : null}
 
       {/*EMAIL CONTENT*/}
-      <div
-        className={`pl-[76px] ${type === "sent" ? "mt-16" : "min-h-[60vh]"}`}
-      >
+      <div className={`pl-[76px] ${type === "sent" ? "mt-16" : ""}`}>
         {type === "sent" ? (
           <h1 className="text-sm font-bold text-gray-750 tracking-widest">
             EMAIL CONTENT
           </h1>
         ) : null}
         <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750">
-          {emailContent?.content}
+          {emailContent?.content.body}
         </div>
         <div className="pt-4 flex flex-row gap-8">
           <img src={Email1} alt="" className="w-1/3" />
@@ -219,36 +230,17 @@ export default function EmailContent({
         </div>
       </div>
 
-      {/* ACTIONS */}
-      <div className="pl-[76px] flex item-center justify-between mt-8 gap-4">
-        <ActionsButton
-          bgColor="bg-green-150"
-          textColor="text-green-550"
-          borderColor="border-green-550"
-          text="Approve"
-          isOpen={isOpenApprove}
-          setIsOpen={setIsOpenApprove}
-        />
-        <ActionsButton
-          bgColor="bg-blue-25"
-          textColor="text-blue-350"
-          borderColor="border-blue-350"
-          text="Forward"
-          isOpen={isOpenForward}
-          setIsOpen={setIsOpenForward}
-        />
-        <ActionsButton
-          bgColor="bg-red-150"
-          textColor="text-red-550"
-          borderColor="border-red-550"
-          text="Reject"
-          isOpen={isOpenReject}
-          setIsOpen={setIsOpenReject}
-        />
+      {/*PDF FILES DISPLAY*/}
+      <div className="mt-12">
+        <div className="grid grid-cols-6">
+          {mainFiles?.map((item, index) => (
+            <PDFIcon key={index} file={item} />
+          ))}
+        </div>
       </div>
 
       {/*ADDITIONAL MESSAGE*/}
-      <div className="pl-[76px] mt-4 mb-8 grid grid-cols-6 gap-4">
+      <div className="pl-[76px] my-16 grid grid-cols-6 gap-4">
         <div className="col-span-5">
           <div className="bg-gray-150 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
             <div className="pl-4 py-3">

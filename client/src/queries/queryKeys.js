@@ -13,6 +13,7 @@ const QUERY_KEYS = {
   LOAD_MESSAGES: generateKeyName("load-messages"),
   YOUR_APPROVED_DOCUMENTS: generateKeyName("your-approved-documents"),
   YOUR_REJECTED_DOCUMENTS: generateKeyName("your-rejected-documents"),
+  GET_DOCUMENT: generateKeyName("get-document"),
 };
 
 export default QUERY_KEYS;
