@@ -25,23 +25,6 @@ enum Status {
   Approved = "Approved",
 }
 
-// const emailContent = `
-//   To
-//   The Manager
-//   Hero Moto Corp.
-
-//   Subject: One day leave application
-
-//   Respected Sir/Ma'am,
-
-//   I am writing this to inform you that I will be taking leave on ____ (date) as I have to _____ (mention reasons like attending a wedding, visit a friend, attending a seminar or event, etc.). I have completed all my tasks for the day and would be in touch with my team members if my assistance is required anytime.
-
-//   Thank you.
-
-//   Yours Sincerely,
-//   John Doe
-//   `;
-
 interface Props {
   selectedMid: number;
   setSelectedMid: (selected: number) => void;
@@ -242,6 +225,7 @@ export default function EmailContent({
             <PDFIcon key={index} file={item} />
           ))}
         </div>
+      </div>
       {/* ACTIONS */}
       <div className="pl-[76px] flex item-center justify-between mt-8 gap-4">
         <ActionsButton
@@ -308,7 +292,6 @@ export default function EmailContent({
           </button>
         </div>
       </div>
-    </div>
     </div>
   );
 }
