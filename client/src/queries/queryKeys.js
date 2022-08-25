@@ -6,6 +6,7 @@ function generateKeyName(value) {
 
 const QUERY_KEYS = {
   GET_EMPLOYEE: generateKeyName("get-employee"),
+  GET_ALL_EMPLOYEES: generateKeyName("get-all-employees"),
   GET_ADMIN: generateKeyName("get-admin"),
   TRACK_STATUS: generateKeyName("track-status"),
   LIST_DOCUMENT: generateKeyName("list-document"),

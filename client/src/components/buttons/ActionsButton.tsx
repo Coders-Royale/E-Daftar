@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import {
+  useEmployeeInfo,
+  useAllEmployees,
+  useAdminInfo,
+} from "../../queries/hooks";
 
 export interface ActionsButtonProps {
   bgColor: string;
@@ -23,6 +28,26 @@ export default function ActionsButton({
 }: ActionsButtonProps) {
   const [toPerson, setToPerson] = useState("");
   const [remarks, setRemarks] = useState("");
+
+  const employeeInfo = useEmployeeInfo({
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  const adminInfo = useAdminInfo({
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  const allEmployees = useAllEmployees({
+    department:
+      employeeInfo?.data?.employee?.department ||
+      adminInfo?.data?.employee?.department,
+  });
+
+  let allEmployeesResult = allEmployees?.data?.employees?.map(
+    (e: { employeeId: string; firstName: string; lastName: string }) =>
+      e.employeeId + " (" + e.firstName + " " + e.lastName + ")"
+  );
+
   return (
     <>
       <div className="w-full">
@@ -77,18 +102,7 @@ export default function ActionsButton({
                         <Autocomplete
                           disablePortal
                           id="department-select"
-                          options={[
-                            "Employee 1",
-                            "Employee 2",
-                            "Employee 3",
-                            "Employee 4",
-                            "Employee 5",
-                            "Employee 6",
-                            "Employee 7",
-                            "Employee 8",
-                            "Employee 9",
-                            "Employee 10",
-                          ]}
+                          options={allEmployeesResult || []}
                           size="small"
                           value={toPerson}
                           onChange={(event: any, newValue: string | null) => {

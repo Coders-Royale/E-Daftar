@@ -5,6 +5,7 @@ const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
 const apiEndPoints = {
   // GET REQUESTS
   getEmployee: `/getEmployee`,
+  getAllEmployees: `/getEmployee`,
   getAdmin: `/getAdmin`,
   trackStatus: `/trackStatus`,
   listDocument: `/listDocument`,
@@ -42,6 +43,23 @@ export async function getEmployee(params) {
     );
     return res;
   } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getAllEmployees(params) {
+  try {
+    const res = (
+      await fetch(baseUrl + apiEndPoints.getAllEmployees + `?department=${params.department}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          "Content-type": "application/json",
+        },
+      }).then((res) => res.json())
+    );
+    return res;
+  }
+  catch (error) {
     console.log(error);
   }
 }
