@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import Sidebar from "../../components/Sidebar";
 
 import SearchIcon from "@mui/icons-material/Search";
 import Man from "../../images/man.svg";
+import { AppContext, COLORS } from "../../App";
 
 interface NotificationContent {
   sender: string;
@@ -42,26 +43,41 @@ interface Props {
 }
 
 const Notifications = ({ selected, setSelected, color }: Props) => {
+  const { theme, setTheme } = useContext(AppContext);
   return (
-    <div className="h-screen flex bg-gray-350 dark:bg-gray-850 overflow-hidden">
+    <div
+      className={`h-screen flex ${
+        theme === "Dark" ? "bg-gray-850" : "bg-gray-350"
+      } overflow-hidden`}
+    >
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full px-10 overflow-scroll">
-        <h1 className="mt-12 mb-8 text-lg font-medium tracking-widest dark:text-white">
+        <h1
+          className={`mt-12 mb-8 text-lg font-medium tracking-widest ${
+            theme === "Dark" ? "text-white" : ""
+          }`}
+        >
           NOTIFICATIONS
         </h1>
 
         {notificationContent1.map((item, index) => (
           <div
-            className="bg-white dark:bg-gray-825 h-18 rounded-2xl mb-4 shadow-xl px-8 py-4"
+            className={`${
+              theme === "Dark" ? "bg-gray-825" : "bg-white"
+            } h-18 rounded-2xl mb-4 shadow-xl px-8 py-4`}
             key={index}
           >
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-4 items-center">
                 <img src={Man} alt="" className="w-10 h-10 rounded-full" />
                 <div>
-                  <h1 className="text-sm font-light text-gray-750 dark:text-gray-150">
+                  <h1
+                    className={`text-sm font-light  ${
+                      theme === "Dark" ? "text-gray-150" : "text-gray-750"
+                    }`}
+                  >
                     <span className="font-medium">
                       {notificationContent1[0].sender}
                     </span>{" "}

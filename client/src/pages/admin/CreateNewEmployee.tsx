@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../../components/Sidebar";
 import TextField from "@mui/material/TextField";
 import RegistrationButton from "../../components/buttons/RegistrationButton";
@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import Select from "@mui/material/Select";
 import { useMutateCreateEmployee } from "../../queries/mutations";
+import { AppContext, COLORS } from "../../App";
 
 interface Props {
   selected: number;
@@ -42,6 +43,8 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [errors, setErrors] = useState<Error[]>([]);
+
+  const { theme, setTheme } = useContext(AppContext);
 
   const clearInputs = () => {
     setFirstName("");
@@ -231,19 +234,31 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
   };
 
   return (
-    <div className="h-screen flex bg-gray-350 transition-all dark:bg-gray-850 overflow-hidden">
+    <div
+      className={`h-screen flex transition-all ${
+        theme === "Dark" ? "bg-gray-825" : "bg-gray-350"
+      } overflow-hidden`}
+    >
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full px-10 overflow-scroll">
-        <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest transition-all dark:text-white">
+        <h1
+          className={`mt-12 mb-4 text-lg font-medium tracking-widest transition-all ${
+            theme === "Dark" ? "text-white" : ""
+          }`}
+        >
           CREATE NEW EMPLOYEE
         </h1>
 
         <div className="mt-6 grid grid-cols-2 gap-20">
           <div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 First Name
               </h1>
               <div className="bg-white w-full rounded drop-shadow">
@@ -275,7 +290,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Email ID
               </h1>
 
@@ -305,7 +324,7 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             {/* <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1 className={`font-normal text-base transition-all ${theme === "Dark" ? "text-gray-350" : "text-gray-650"} w-40`}>
                 Employee Code
               </h1>
 
@@ -335,7 +354,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div> */}
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Department
               </h1>
 
@@ -365,7 +388,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Date of Birth
               </h1>
 
@@ -399,7 +426,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
 
           <div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Last Name
               </h1>
 
@@ -429,7 +460,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Mobile Number
               </h1>
 
@@ -459,7 +494,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Gender
               </h1>
               <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -496,7 +535,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+              <h1
+                className={`font-normal text-base transition-all ${
+                  theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                } w-40`}
+              >
                 Office Branch
               </h1>
 
@@ -529,13 +572,21 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
         </div>
 
         <div className="mt-16">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 transition-all dark:text-gray-350">
+          <h1
+            className={`mt-12 mb-4 text-lg font-medium tracking-widest transition-all ${
+              theme === "Dark" ? "text-gray-350" : "text-gray-750"
+            }`}
+          >
             ADDRESS
           </h1>
           <div className="flex flex-row gap-20">
             <div className="w-full">
               <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+                <h1
+                  className={`font-normal text-base transition-all ${
+                    theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                  } w-40`}
+                >
                   Line 1
                 </h1>
                 <div className="bg-white w-full rounded drop-shadow">
@@ -566,7 +617,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
             </div>
             <div className="w-full">
               <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+                <h1
+                  className={`font-normal text-base transition-all ${
+                    theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                  } w-40`}
+                >
                   Line 2
                 </h1>
 
@@ -600,7 +655,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
           <div className="flex flex-row gap-20">
             <div className="w-full">
               <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+                <h1
+                  className={`font-normal text-base transition-all ${
+                    theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                  } w-40`}
+                >
                   City
                 </h1>
 
@@ -632,7 +691,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
             </div>
             <div className="w-full">
               <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
+                <h1
+                  className={`font-normal text-base transition-all ${
+                    theme === "Dark" ? "text-gray-350" : "text-gray-650"
+                  } w-40`}
+                >
                   State / UT
                 </h1>
                 <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -756,7 +819,11 @@ const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
           </div>
           <div className="flex-auto">
             <button
-              className="bg-white transition-all dark:bg-gray-850 text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+              className={`${theme === "Dark" ? "bg-black" : "bg-white"} ${
+                COLORS[theme].text_top
+              } text-sm py-2 w-full rounded-lg font-medium border-2 ${
+                COLORS[theme].border
+              }`}
               onClick={clearInputs}
             >
               Cancel

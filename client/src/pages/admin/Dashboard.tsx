@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import {
   Chart as ChartJS,
@@ -26,6 +26,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { AppContext, COLORS } from "../../App";
 
 ChartJS.register(
   CategoryScale,
@@ -243,14 +244,24 @@ export default function Dashboard({ selected, setSelected, color }: Props) {
     setSelected(8);
   }, [setSelected]);
 
+  const { theme, setTheme } = useContext(AppContext);
+
   return (
-    <div className="h-screen flex bg-gray-350 overflow-hidden">
+    <div
+      className={`h-screen flex ${
+        theme === "Dark" ? "bg-gray-825" : "bg-gray-350"
+      } overflow-hidden`}
+    >
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full py-12 px-10 overflow-scroll">
         <div>
-          <p className="text-2xl font-medium text-gray-750">
+          <p
+            className={`text-2xl font-medium ${
+              theme === "Dark" ? "text-gray-150" : "text-gray-750"
+            }`}
+          >
             <span className="italic font-light text-gray-550">Hello,</span>{" "}
             Human Resource Department Admin
           </p>

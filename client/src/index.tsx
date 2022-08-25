@@ -13,9 +13,9 @@ root.render(
   <BrowserRouter>
     <ThemeProvider initialTheme="light">
       <Background>
-        <div className="absolute right-0 top-0 mr-8 mt-2">
+        {/* <div className="absolute right-0 top-0 mr-8 mt-2">
           <Toggle />
-        </div>
+        </div> */}
         <App />
       </Background>
     </ThemeProvider>

@@ -64,33 +64,63 @@ export const AppContext = createContext<AppContextInterface>({
 export const COLORS = {
   Light: {
     name: "Light",
-    class: "bg-gradient-to-r  from-[#2D5063] to-[#202020]",
-    gr_top: "from-[#2D5063]",
-    gr_bot: "to-[#202020]",
+    class: "bg-gradient-to-r from-[#2268FE] to-[#12E2EF]",
+    classBottom: "bg-gradient-to-b from-[#2268FE] to-[#12E2EF]",
+    gr_top: "from-[#2268FE]",
+    gr_bot: "to-[#12E2EF]",
+    text_top: "text-[#13AAFF]",
+    text_bot: "text-[#2268FE]",
+    bg_top: "bg-[#13AAFF]",
+    bg_bot: "bg-[#2268FE]",
+    border: "border-[#13AAFF]",
   },
   Dark: {
-    class: "bg-gradient-to-r from-[#2D5063] to-[#202020]",
+    class: "bg-gradient-to-r from-[#2268FE] to-[#12E2EF]",
+    classBottom: "bg-gradient-to-b from-[#2268FE] to-[#12E2EF]",
     gr_top: "from-[#2D5063]",
     gr_bot: "to-[#202020]",
     name: "Dark",
+    text_top: "text-[#2D5063]",
+    text_bot: "text-[#202020]",
+    bg_top: "bg-[#2D5063]",
+    bg_bot: "bg-[#202020]",
+    border: "border-[#12E2EF]",
   },
   SweetMorning: {
     class: "bg-gradient-to-r from-[#FF5F6D] from-green-350 to-[#FFC371]",
+    classBottom: "bg-gradient-to-b from-[#FF5F6D] to-[#FFC371]",
     gr_top: "from-[#FF5F6D]",
     gr_bot: "to-[#FFC371]",
     name: "Sweet Morning",
+    text_top: "text-[#FF5F6D]",
+    text_bot: "text-[#FFC371]",
+    bg_top: "bg-[#FF5F6D]",
+    bg_bot: "bg-[#FFC371]",
+    border: "border-[#FF5F6D]",
   },
   BrightVault: {
     class: "bg-gradient-to-r from-[#00d2ff] to-[#928DAB]",
+    classBottom: "bg-gradient-to-b from-[#00d2ff] to-[#928DAB]",
     gr_top: "from-[#00d2ff]",
     gr_bot: "to-[#928DAB]",
     name: "Bright Vault",
+    text_top: "text-[#00d2ff]",
+    text_bot: "text-[#928DAB]",
+    bg_top: "bg-[#00d2ff]",
+    bg_bot: "bg-[#928DAB]",
+    border: "border-[#00d2ff]",
   },
   Superman: {
     class: "bg-gradient-to-r from-[#0099F7] to-[#F11712]",
+    classBottom: "bg-gradient-to-b from-[#0099F7] to-[#F11712]",
     gr_top: "from-[#0099F7]",
     gr_bot: "to-[#F11712]",
     name: "Superman",
+    text_top: "text-[#0099F7]",
+    text_bot: "text-[#F11712]",
+    bg_top: "bg-[#0099F7]",
+    bg_bot: "bg-[#F11712]",
+    border: "border-[#0099F7]",
   },
 };
 
@@ -117,7 +147,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // return;
-    speechHandler();
+    // speechHandler();
   }, [ourText]);
 
   // Auto Login

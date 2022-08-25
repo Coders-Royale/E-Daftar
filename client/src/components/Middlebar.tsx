@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import MiddleBarComponent from "../components/MiddleBarComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import Man from "../images/man.svg";
+import { AppContext, COLORS } from "../App";
 
 interface Props {
   displayRooms: any[];
@@ -30,20 +31,33 @@ const findTime = (time: Date) => {
 
 const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
   const [docId, setDocId] = useState<string>("");
+  const { theme, setTheme } = useContext(AppContext);
 
   return (
-    <div className="px-10 py-12 bg-gray-350 dark:bg-gray-825 min-h-screen flex flex-col justify-start">
+    <div
+      className={`px-10 py-12 ${
+        theme === "Dark" ? "bg-gray-825" : "bg-gray-350"
+      } min-h-screen flex flex-col justify-start`}
+    >
       <div>
         <div className="flex gap-4 items-center rounded-lg mb-6">
-          <div className="bg-gray-150 dark:bg-gray-850 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
+          <div
+            className={`${
+              theme === "Dark" ? "bg-gray-850" : "bg-gray-150"
+            } border border-gray-450 rounded-lg h-11 flex flex-row w-full`}
+          >
             <div className="pl-4 py-2">
               <SearchIcon
                 fontSize="medium"
-                className="text-gray-750 dark:text-gray-150"
+                className={`${
+                  theme === "Dark" ? "bg-gray-850 text-gray-150" : "bg-gray-150"
+                }`}
               />
             </div>
             <input
-              className="bg-gray-150 dark:bg-gray-850 dark:text-gray-150 h-8 my-auto mx-4 px-2 text-sm w-full"
+              className={`${
+                theme === "Dark" ? "bg-gray-850 text-gray-150" : "bg-gray-150"
+              } h-8 my-auto mx-4 px-2 text-sm w-full`}
               placeholder="Search Here"
               onChange={(e) => setDocId(e.target.value)}
             ></input>

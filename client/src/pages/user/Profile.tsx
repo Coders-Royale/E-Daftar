@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Sidebar from "../../components/Sidebar";
 import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
@@ -20,6 +20,7 @@ import Loader from "../../components/Loader";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Face, Upload } from "@mui/icons-material";
+import { AppContext, COLORS } from "../../App";
 
 interface Props {
   selected: number;
@@ -33,6 +34,7 @@ interface Error {
 }
 
 const Profile = ({ selected, setSelected, color }: Props) => {
+  const { theme, setTheme } = useContext(AppContext);
   useEffect(() => {
     setSelected(7);
   }, [setSelected]);
@@ -543,13 +545,21 @@ const Profile = ({ selected, setSelected, color }: Props) => {
   }, [passwordChangeSuccess === true]);
 
   return (
-    <div className="h-screen flex bg-gray-350 dark:bg-gray-850 transition-all overflow-hidden">
+    <div
+      className={`h-screen flex ${
+        theme === "Dark" ? "bg-gray-850" : "bg-gray-350"
+      } transition-all overflow-hidden`}
+    >
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       {employeeInfo?.data || adminInfo?.data ? (
         <div className="w-full px-10 overflow-scroll">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black dark:text-white">
+          <h1
+            className={`mt-12 mb-4 text-lg font-medium tracking-widest ${
+              theme === "Dark" ? "text-white" : "text-black"
+            }`}
+          >
             PROFILE
           </h1>
 
@@ -567,7 +577,7 @@ const Profile = ({ selected, setSelected, color }: Props) => {
             <div className="flex flex-col justify-end">
               {!updated ? (
                 <button
-                  className="bg-gradient-to-r from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+                  className={`${COLORS[theme].class} text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold`}
                   onClick={() => hiddenFileInput.current?.click()}
                 >
                   <input
@@ -587,7 +597,7 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                 </button>
               ) : (
                 <button
-                  className="bg-gradient-to-r flex gap-1 justify-center from-blue-450 to-blue-150 text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold"
+                  className={`${COLORS[theme].class} flex gap-1 justify-center text-white px-4 py-2 mb-3 w-full rounded-lg font-semibold`}
                   onClick={() => {
                     setImageLoading(true);
                     uploadProfilePicture();
@@ -597,24 +607,40 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                   {imageLoading ? "Setting Up..." : "Set Profile Picture"}
                 </button>
               )}
-              <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest dark:text-gray-250">
+              <h1
+                className={`mb-1 text-xs font-medium tracking-widest ${
+                  theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                }`}
+              >
                 Acceptable format .jpg, .png only
               </h1>
-              <h1 className="text-xs font-medium text-gray-650 tracking-widest dark:text-gray-250">
+              <h1
+                className={`text-xs font-medium tracking-widest ${
+                  theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                }`}
+              >
                 Max. file size is 500Kb and min. file size is 70Kb.
               </h1>
             </div>
           </div>
 
           <div className="mt-16">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
+            <h1
+              className={`mt-12 mb-4 text-lg font-medium tracking-widest ${
+                theme === "Dark" ? "text-gray-150" : "text-gray-750"
+              }`}
+            >
               ACCOUNT INFORMATION
             </h1>
 
             <div className="mt-6 grid grid-cols-2 gap-20">
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     First Name
                   </h1>
                   <div className="bg-white w-full rounded drop-shadow">
@@ -646,7 +672,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Email ID
                   </h1>
 
@@ -676,7 +706,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Employee Code
                   </h1>
 
@@ -707,7 +741,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Department
                   </h1>
 
@@ -738,7 +776,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Date of Birth
                   </h1>
 
@@ -776,7 +818,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
 
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Last Name
                   </h1>
 
@@ -806,7 +852,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Mobile Number
                   </h1>
 
@@ -836,7 +886,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Gender
                   </h1>
                   <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -877,7 +931,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Office Branch
                   </h1>
 
@@ -912,13 +970,21 @@ const Profile = ({ selected, setSelected, color }: Props) => {
           </div>
 
           <div className="mt-16">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
+            <h1
+              className={`mt-12 mb-4 text-lg font-medium tracking-widest ${
+                theme === "Dark" ? "text-gray-150" : "text-gray-750"
+              }`}
+            >
               ADDRESS
             </h1>
             <div className="flex flex-row gap-20">
               <div className="w-full">
                 <div className="flex flex-row gap-4 w-full items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Line 1
                   </h1>
                   <div className="bg-white w-full rounded drop-shadow">
@@ -949,7 +1015,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
               </div>
               <div className="w-full">
                 <div className="flex flex-row gap-4 w-full items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     Line 2
                   </h1>
 
@@ -983,7 +1053,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
             <div className="flex flex-row gap-20">
               <div className="w-full">
                 <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     City
                   </h1>
 
@@ -1015,7 +1089,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
               </div>
               <div className="w-full">
                 <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
+                  <h1
+                    className={`font-normal text-base text-gray-650 w-40 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    }`}
+                  >
                     State / UT
                   </h1>
                   <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -1106,7 +1184,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
             </div>
             <div className="flex-auto">
               <button
-                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250 dark:bg-gray-850"
+                className={`${
+                  COLORS[theme].text_top
+                } text-sm py-2 w-full rounded-lg font-medium border-2 ${
+                  COLORS[theme].border
+                } ${theme === "Dark" ? "bg-gray-850" : "bg-white"}`}
                 onClick={clearInputs}
               >
                 Cancel
@@ -1115,14 +1197,22 @@ const Profile = ({ selected, setSelected, color }: Props) => {
           </div>
 
           <div className="mt-12">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
+            <h1
+              className={`mt-12 mb-4 text-lg font-medium tracking-widest ${
+                theme === "Dark" ? "text-gray-150" : "text-gray-750"
+              }`}
+            >
               UPDATE PASSWORD
             </h1>
 
             <div className="mt-6 grid grid-cols-2 gap-20">
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
+                  <h1
+                    className={`font-normal text-base ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    } w-36`}
+                  >
                     Old Password
                   </h1>
 
@@ -1171,7 +1261,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
+                  <h1
+                    className={`font-normal text-base text-gray-650 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    } w-36`}
+                  >
                     Confirm Password
                   </h1>
 
@@ -1223,7 +1317,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
 
               <div>
                 <div className="flex flex-row gap-6 items-center">
-                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
+                  <h1
+                    className={`font-normal text-base text-gray-650 ${
+                      theme === "Dark" ? "text-gray-250" : "text-gray-650"
+                    } w-36`}
+                  >
                     New Password
                   </h1>
 
@@ -1344,7 +1442,11 @@ const Profile = ({ selected, setSelected, color }: Props) => {
             </div>
             <div className="flex-auto">
               <button
-                className="bg-white dark:bg-gray-850 text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+                className={`${theme === "Dark" ? "bg-black" : "bg-white"} ${
+                  COLORS[theme].text_top
+                } text-sm py-2 w-full rounded-lg font-medium border-2 ${
+                  COLORS[theme].border
+                }`}
                 onClick={clearInputs}
               >
                 Cancel
