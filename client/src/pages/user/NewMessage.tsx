@@ -518,7 +518,7 @@ Kind regards,
           </div>
 
           <div className="mt-12">
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-6 gap-32">
               {files.map((item, index) => (
                 <PDFIcon key={index} file={item} />
               ))}

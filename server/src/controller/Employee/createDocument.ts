@@ -72,13 +72,10 @@ export const createDocument = async (body: CreateDocumentInput) => {
             conversationName: document.documentId,
             documentId: document.documentId,
         };
-        // here is the error
-        console.log("1");
-        console.log(process.env.CHAT_SERVER_URL);
+
         const createRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/createRoom", createRoomReuqest, {
             headers: headers
         });
-        console.log("2");
         if (createRoomResponse.status !== 200) {
             return {
                 error: true,
