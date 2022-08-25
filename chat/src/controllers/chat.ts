@@ -29,6 +29,7 @@ export const createRoom = async (req: Request, res: Response) => {
         const newConversation = new Conversation({
             conversationName: body.conversationName,
             documentId: body.documentId,
+            participants: [],
         });
         await newConversation.save();
         return res.status(200).json({
