@@ -115,10 +115,10 @@ const App: React.FC = () => {
       setOurText(event?.srcElement?.innerText);
   });
 
-  useEffect(() => {
-    // return;
-    speechHandler();
-  }, [ourText]);
+  // useEffect(() => {
+  //   // return;
+  //   speechHandler();
+  // }, [ourText]);
 
   // Auto Login
   useEffect(() => {
