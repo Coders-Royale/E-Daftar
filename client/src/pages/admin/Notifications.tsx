@@ -38,13 +38,14 @@ const notificationContent1: NotificationContent[] = [
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
-const Notifications = ({ selected, setSelected }: Props) => {
+const Notifications = ({ selected, setSelected, color }: Props) => {
   return (
     <div className="h-screen flex bg-gray-350 dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full px-10 overflow-scroll">
         <h1 className="mt-12 mb-8 text-lg font-medium tracking-widest dark:text-white">

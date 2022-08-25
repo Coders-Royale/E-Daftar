@@ -34,6 +34,7 @@ interface Props {
   selected: number;
   setSelected: (selected: number) => void;
   socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
+  color: string;
 }
 
 interface Error {
@@ -41,7 +42,7 @@ interface Error {
   message: string;
 }
 
-const Primary = ({ selected, setSelected, socketConnection }: Props) => {
+const Primary = ({ selected, setSelected, socketConnection, color }: Props) => {
   useEffect(() => {
     setSelected(0);
   }, [setSelected]);
@@ -118,7 +119,7 @@ const Primary = ({ selected, setSelected, socketConnection }: Props) => {
   return (
     <div className="h-screen w-full flex bg-white overflow-hidden">
       <div className="w-1/5">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="flex w-4/5">
         <div className="w-1/3 overflow-scroll">

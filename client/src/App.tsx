@@ -18,6 +18,7 @@ import Primary from "./pages/user/Primary";
 import Pending from "./pages/user/Pending";
 import Approved from "./pages/user/Approved";
 import Rejected from "./pages/user/Rejected";
+import Toggle from "./components/ThemeToggle";
 
 import { FilesProvider } from "./contexts/files.context";
 
@@ -45,6 +46,7 @@ export const queryClient = new QueryClient({
 
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
+  const [color, setColor] = useState<string>("white");
   const [socketConnection, setSocketConnection] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
@@ -67,6 +69,9 @@ const App: React.FC = () => {
 
   return (
     <div className="font-roboto">
+      <div className="absolute right-0 top-0 mr-8 mt-2">
+        <Toggle />
+      </div>
       <QueryClientProvider client={queryClient}>
         <Routes>
           <Route path="/" element={<Homepage />} />
@@ -79,44 +84,89 @@ const App: React.FC = () => {
               <CreateNewEmployee
                 selected={selected}
                 setSelected={setSelected}
+                color={color}
               />
             }
           />
           <Route
             path="/:user/dashboard"
             element={
-              <Dashboard selected={selected} setSelected={setSelected} />
+              <Dashboard
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
             }
           />
           <Route
             path="/:user/tracking"
-            element={<Tracking selected={selected} setSelected={setSelected} />}
+            element={
+              <Tracking
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/notifications"
             element={
-              <Notifications selected={selected} setSelected={setSelected} />
+              <Notifications
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
             }
           />
           <Route
             path="/:user/profile"
-            element={<Profile selected={selected} setSelected={setSelected} />}
+            element={
+              <Profile
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/sent"
-            element={<Sent selected={selected} setSelected={setSelected} />}
+            element={
+              <Sent
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/pending"
-            element={<Pending selected={selected} setSelected={setSelected} />}
+            element={
+              <Pending
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/approved"
-            element={<Approved selected={selected} setSelected={setSelected} />}
+            element={
+              <Approved
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/rejected"
-            element={<Rejected selected={selected} setSelected={setSelected} />}
+            element={
+              <Rejected
+                selected={selected}
+                setSelected={setSelected}
+                color={color}
+              />
+            }
           />
           <Route
             path="/:user/new-message"
@@ -126,6 +176,7 @@ const App: React.FC = () => {
                   selected={selected}
                   setSelected={setSelected}
                   socketConnection={socketConnection}
+                  color={color}
                 />
               </FilesProvider>
             }
@@ -137,6 +188,7 @@ const App: React.FC = () => {
                 selected={selected}
                 setSelected={setSelected}
                 socketConnection={socketConnection}
+                color={color}
               />
             }
           />

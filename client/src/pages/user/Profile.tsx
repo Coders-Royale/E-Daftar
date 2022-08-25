@@ -24,6 +24,7 @@ import { Face, Upload } from "@mui/icons-material";
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
 interface Error {
@@ -31,7 +32,7 @@ interface Error {
   message: string;
 }
 
-const Profile = ({ selected, setSelected }: Props) => {
+const Profile = ({ selected, setSelected, color }: Props) => {
   useEffect(() => {
     setSelected(7);
   }, [setSelected]);
@@ -544,7 +545,7 @@ const Profile = ({ selected, setSelected }: Props) => {
   return (
     <div className="h-screen flex bg-gray-350 dark:bg-gray-850 transition-all overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       {employeeInfo?.data || adminInfo?.data ? (
         <div className="w-full px-10 overflow-scroll">

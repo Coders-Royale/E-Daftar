@@ -1,5 +1,5 @@
-// const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
-const baseUrl = "http://localhost:7071/api";
+const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+// const baseUrl = "http://localhost:7071/api";
 const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
 
 const apiEndPoints = {
@@ -31,7 +31,7 @@ export async function getEmployee(params) {
   try {
     const res = (
       await fetch(
-        baseUrl + apiEndPoints.getEmployee + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}` ,
+        baseUrl + apiEndPoints.getEmployee + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

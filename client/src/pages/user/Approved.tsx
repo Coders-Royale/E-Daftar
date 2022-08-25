@@ -48,10 +48,10 @@ John Doe
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
-const Approved = ({ selected, setSelected }: Props) => {
-
+const Approved = ({ selected, setSelected, color }: Props) => {
   useEffect(() => {
     setSelected(2);
   }, [setSelected]);
@@ -100,7 +100,7 @@ const Approved = ({ selected, setSelected }: Props) => {
   return (
     <div className="h-screen flex bg-white overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
