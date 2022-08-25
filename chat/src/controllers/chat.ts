@@ -14,7 +14,7 @@ export const createRoom = async (req: Request, res: Response) => {
         }
         const body = req.body as CreateRoomInput;
         if (!body.conversationName || !body.documentId) {
-            return res.status(400).json({
+            return res.status(500).json({
                 error: true,
                 mesaage: "Invalid request to create chat room",
             });
