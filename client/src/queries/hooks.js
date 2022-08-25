@@ -2,6 +2,7 @@ import QUERY_KEYS from "./queryKeys";
 import { useQuery } from '@tanstack/react-query';
 import {
 	getEmployee,
+	getAllEmployees,
 	getAdmin,
 	trackStatus,
 	listDocument,
@@ -16,6 +17,16 @@ export const useEmployeeInfo = (params) => {
 	return useQuery(
 		[QUERY_KEYS.GET_EMPLOYEE, params.departmentId, params.employeeId],
 		() => getEmployee(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useAllEmployees = (params) => {
+	return useQuery(
+		[QUERY_KEYS.GET_ALL_EMPLOYEES, params.department],
+		() => getAllEmployees(params),
 		{
 			retry: false,
 		}

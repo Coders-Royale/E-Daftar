@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
 
 import { useDocument } from "../queries/hooks";
+import { useMutateAssignDocument } from "../queries/mutations";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -40,7 +41,9 @@ export default function EmailContent({
 }: Props) {
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const [mainFiles, setMainFiles] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   interface Error {
     type: string;
@@ -71,6 +74,34 @@ export default function EmailContent({
     return false;
   };
 
+  const { mutateAsync: useAssignDocument } = useMutateAssignDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Document assigned successfully") {
+        setMessage(data.message);
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
+
+  const dummy = () => {
+    console.log("dummy");
+  }
+
   const documentInfo = useDocument({
     documentId: emailContent?.content.documentId,
     employeeId: localStorage.getItem("empId"),
@@ -84,7 +115,7 @@ export default function EmailContent({
   }, [documentInfo.isSuccess === true]);
 
   return (
-    <div className="w-full overflow-scroll px-10 dark:bg-gray-850 transition-all">
+    <div className="w-full overflow-scroll px-10 dark:bg-gray-850 dark:min-h-screen transition-all">
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
@@ -236,6 +267,7 @@ export default function EmailContent({
           text="Approve"
           isOpen={isOpenApprove}
           setIsOpen={setIsOpenApprove}
+          // clickFunction={dummy}
         />
         <ActionsButton
           bgColor="bg-blue-25"
@@ -244,6 +276,7 @@ export default function EmailContent({
           text="Forward"
           isOpen={isOpenForward}
           setIsOpen={setIsOpenForward}
+          // clickFunction={dummy}
         />
         <ActionsButton
           bgColor="bg-red-150"
@@ -252,6 +285,7 @@ export default function EmailContent({
           text="Reject"
           isOpen={isOpenReject}
           setIsOpen={setIsOpenReject}
+          // clickFunction={dummy}
         />
       </div>
 
