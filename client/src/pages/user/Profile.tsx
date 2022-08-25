@@ -542,13 +542,13 @@ const Profile = ({ selected, setSelected }: Props) => {
   }, [passwordChangeSuccess === true]);
 
   return (
-    <div className="h-screen flex bg-gray-350 overflow-hidden">
+    <div className="h-screen flex bg-gray-350 dark:bg-gray-850 transition-all overflow-hidden">
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       {employeeInfo?.data || adminInfo?.data ? (
         <div className="w-full px-10 overflow-scroll">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black">
+          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-black dark:text-white">
             PROFILE
           </h1>
 
@@ -596,24 +596,24 @@ const Profile = ({ selected, setSelected }: Props) => {
                   {imageLoading ? "Setting Up..." : "Set Profile Picture"}
                 </button>
               )}
-              <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest">
+              <h1 className="mb-1 text-xs font-medium text-gray-650 tracking-widest dark:text-gray-250">
                 Acceptable format .jpg, .png only
               </h1>
-              <h1 className="text-xs font-medium text-gray-650 tracking-widest">
+              <h1 className="text-xs font-medium text-gray-650 tracking-widest dark:text-gray-250">
                 Max. file size is 500Kb and min. file size is 70Kb.
               </h1>
             </div>
           </div>
 
           <div className="mt-16">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
               ACCOUNT INFORMATION
             </h1>
 
             <div className="mt-6 grid grid-cols-2 gap-20">
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     First Name
                   </h1>
                   <div className="bg-white w-full rounded drop-shadow">
@@ -645,7 +645,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Email ID
                   </h1>
 
@@ -675,7 +675,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Employee Code
                   </h1>
 
@@ -706,7 +706,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Department
                   </h1>
 
@@ -737,7 +737,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Date of Birth
                   </h1>
 
@@ -775,7 +775,7 @@ const Profile = ({ selected, setSelected }: Props) => {
 
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Last Name
                   </h1>
 
@@ -805,7 +805,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Mobile Number
                   </h1>
 
@@ -835,7 +835,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Gender
                   </h1>
                   <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -876,7 +876,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Office Branch
                   </h1>
 
@@ -911,13 +911,13 @@ const Profile = ({ selected, setSelected }: Props) => {
           </div>
 
           <div className="mt-16">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
               ADDRESS
             </h1>
             <div className="flex flex-row gap-20">
               <div className="w-full">
                 <div className="flex flex-row gap-4 w-full items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Line 1
                   </h1>
                   <div className="bg-white w-full rounded drop-shadow">
@@ -948,7 +948,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               </div>
               <div className="w-full">
                 <div className="flex flex-row gap-4 w-full items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     Line 2
                   </h1>
 
@@ -982,7 +982,7 @@ const Profile = ({ selected, setSelected }: Props) => {
             <div className="flex flex-row gap-20">
               <div className="w-full">
                 <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     City
                   </h1>
 
@@ -1014,7 +1014,7 @@ const Profile = ({ selected, setSelected }: Props) => {
               </div>
               <div className="w-full">
                 <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                  <h1 className="font-normal text-base text-gray-650 w-40">
+                  <h1 className="font-normal text-base text-gray-650 w-40 dark:text-gray-250">
                     State / UT
                   </h1>
                   <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -1105,7 +1105,7 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
             <div className="flex-auto">
               <button
-                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250 dark:bg-gray-850"
                 onClick={clearInputs}
               >
                 Cancel
@@ -1114,14 +1114,14 @@ const Profile = ({ selected, setSelected }: Props) => {
           </div>
 
           <div className="mt-12">
-            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+            <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 dark:text-gray-150">
               UPDATE PASSWORD
             </h1>
 
             <div className="mt-6 grid grid-cols-2 gap-20">
               <div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-36">
+                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
                     Old Password
                   </h1>
 
@@ -1170,7 +1170,7 @@ const Profile = ({ selected, setSelected }: Props) => {
                     : null}
                 </div>
                 <div className="flex flex-row gap-4 items-center mb-2">
-                  <h1 className="font-normal text-base text-gray-650 w-36">
+                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
                     Confirm Password
                   </h1>
 
@@ -1222,7 +1222,7 @@ const Profile = ({ selected, setSelected }: Props) => {
 
               <div>
                 <div className="flex flex-row gap-6 items-center">
-                  <h1 className="font-normal text-base text-gray-650 w-36">
+                  <h1 className="font-normal text-base text-gray-650 dark:text-gray-250 w-36">
                     New Password
                   </h1>
 
@@ -1343,7 +1343,7 @@ const Profile = ({ selected, setSelected }: Props) => {
             </div>
             <div className="flex-auto">
               <button
-                className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+                className="bg-white dark:bg-gray-850 text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
                 onClick={clearInputs}
               >
                 Cancel

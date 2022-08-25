@@ -230,19 +230,19 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
   };
 
   return (
-    <div className="h-screen flex bg-gray-350 overflow-hidden">
+    <div className="h-screen flex bg-gray-350 transition-all dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       <div className="w-full px-10 overflow-scroll">
-        <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest">
+        <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest transition-all dark:text-white">
           CREATE NEW EMPLOYEE
         </h1>
 
         <div className="mt-6 grid grid-cols-2 gap-20">
           <div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 First Name
               </h1>
               <div className="bg-white w-full rounded drop-shadow">
@@ -274,7 +274,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Email ID
               </h1>
 
@@ -304,7 +304,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             {/* <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Employee Code
               </h1>
 
@@ -334,7 +334,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div> */}
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Department
               </h1>
 
@@ -364,7 +364,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Date of Birth
               </h1>
 
@@ -398,7 +398,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
 
           <div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Last Name
               </h1>
 
@@ -428,7 +428,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Mobile Number
               </h1>
 
@@ -458,7 +458,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Gender
               </h1>
               <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -495,7 +495,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
                 : null}
             </div>
             <div className="flex flex-row gap-4 items-center mb-2">
-              <h1 className="font-normal text-base text-gray-650 w-40">
+              <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                 Office Branch
               </h1>
 
@@ -528,13 +528,13 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
         </div>
 
         <div className="mt-16">
-          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750">
+          <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest text-gray-750 transition-all dark:text-gray-350">
             ADDRESS
           </h1>
           <div className="flex flex-row gap-20">
             <div className="w-full">
               <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
+                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                   Line 1
                 </h1>
                 <div className="bg-white w-full rounded drop-shadow">
@@ -565,7 +565,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
             </div>
             <div className="w-full">
               <div className="flex flex-row gap-4 w-full items-center mb-2">
-                <h1 className="font-normal text-base text-gray-650 w-40">
+                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                   Line 2
                 </h1>
 
@@ -599,7 +599,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
           <div className="flex flex-row gap-20">
             <div className="w-full">
               <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 w-40">
+                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                   City
                 </h1>
 
@@ -631,7 +631,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
             </div>
             <div className="w-full">
               <div className="flex flex-row gap-4 items-center mb-2 w-full">
-                <h1 className="font-normal text-base text-gray-650 w-40">
+                <h1 className="font-normal text-base text-gray-650 transition-all dark:text-gray-350 w-40">
                   State / UT
                 </h1>
                 <div className="bg-white w-full shadow-md rounded flex-auto">
@@ -755,7 +755,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
           </div>
           <div className="flex-auto">
             <button
-              className="bg-white text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
+              className="bg-white transition-all dark:bg-gray-850 text-blue-250 text-sm py-2 w-full rounded-lg font-medium border-2 border-blue-250"
               onClick={clearInputs}
             >
               Cancel

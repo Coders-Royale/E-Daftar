@@ -29,7 +29,7 @@ export default function ActionsButton({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className={`rounded-md ${bgColor} ${textColor} ${borderColor} border-1 w-full text-center py-1.5 text-sm font-medium  hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+          className={`rounded-md ${bgColor} ${textColor} ${borderColor} border-1 w-full text-center py-1.5 text-sm font-medium  hover:bg-opacity-30 dark:hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
         >
           {text}
         </button>

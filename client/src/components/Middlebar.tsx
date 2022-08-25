@@ -32,15 +32,18 @@ const MiddleBar = ({ selectedMid, setSelectedMid, displayRooms }: Props) => {
   const [docId, setDocId] = useState<string>("");
 
   return (
-    <div className="px-10 py-12 bg-gray-350 min-h-screen flex flex-col justify-start">
+    <div className="px-10 py-12 bg-gray-350 dark:bg-gray-825 min-h-screen flex flex-col justify-start">
       <div>
         <div className="flex gap-4 items-center rounded-lg mb-6">
-          <div className="bg-white-gray-150 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
+          <div className="bg-gray-150 dark:bg-gray-850 border border-gray-450 rounded-lg h-11 flex flex-row w-full">
             <div className="pl-4 py-2">
-              <SearchIcon fontSize="medium" className="text-gray-750" />
+              <SearchIcon
+                fontSize="medium"
+                className="text-gray-750 dark:text-gray-150"
+              />
             </div>
             <input
-              className="bg-gray-100 h-8 my-auto mx-4 px-2 text-sm w-full"
+              className="bg-gray-150 dark:bg-gray-850 dark:text-gray-150 h-8 my-auto mx-4 px-2 text-sm w-full"
               placeholder="Search Here"
               onChange={(e) => setDocId(e.target.value)}
             ></input>

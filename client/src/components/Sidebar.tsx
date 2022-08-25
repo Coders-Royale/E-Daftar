@@ -3,27 +3,41 @@ import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import newMessage from "../images/icons/new-message-white.svg";
 import primaryLight from "../images/icons/primary-light.svg";
 import primaryDark from "../images/icons/primary-dark.svg";
+import primaryWhite from "../images/icons/primary-white.svg";
 import sendLight from "../images/icons/send-light.svg";
 import sendDark from "../images/icons/send-dark.svg";
+import sendWhite from "../images/icons/send-white.svg";
 import approveLight from "../images/icons/approve-light.svg";
 import approveDark from "../images/icons/approve-dark.svg";
+import approveWhite from "../images/icons/approve-white.svg";
 import rejectLight from "../images/icons/reject-light.svg";
 import rejectDark from "../images/icons/reject-dark.svg";
+import rejectWhite from "../images/icons/reject-white.svg";
 import pendingLight from "../images/icons/pending-light.svg";
 import pendingDark from "../images/icons/pending-dark.svg";
+import pendingWhite from "../images/icons/pending-white.svg";
 import notificationLight from "../images/icons/notification-light.svg";
 import notificationDark from "../images/icons/notification-dark.svg";
+import notificationWhite from "../images/icons/notification-white.svg";
 import draftLight from "../images/icons/draft-light.svg";
 import draftDark from "../images/icons/draft-dark.svg";
+import draftWhite from "../images/icons/draft-white.svg";
 import profileLight from "../images/icons/profile-light.svg";
 import profileDark from "../images/icons/profile-dark.svg";
+import profileWhite from "../images/icons/profile-white.svg";
 import dashboardLight from "../images/icons/dashboard-light.svg";
 import dashboardDark from "../images/icons/dashboard-dark.svg";
+import dashboardWhite from "../images/icons/dashboard-white.svg";
 import trackingLight from "../images/icons/tracking-light.svg";
 import trackingDark from "../images/icons/tracking-dark.svg";
+import trackingWhite from "../images/icons/tracking-white.svg";
 import createEmployeeLight from "../images/icons/create-employee-light.svg";
 import createEmployeeDark from "../images/icons/create-employee-dark.svg";
+import createEmployeeWhite from "../images/icons/create-employee-white.svg";
 import logoutDark from "../images/icons/logout-dark.svg";
+import logoutWhite from "../images/icons/logout-white.svg";
+
+import { ThemeContext } from "../themes/ThemeContext";
 
 interface Props {
   selected: number;
@@ -35,12 +49,15 @@ export default function Sidebar({ selected, setSelected }: Props) {
   const path = location.pathname;
   const pathArray = path.split("/");
 
+  const { theme, setTheme } = React.useContext(ThemeContext);
+
   const navigate = useNavigate();
   const params = useParams();
 
   interface SidebarContent1 {
     iconLight: string;
     iconDark: string;
+    iconWhite: string;
     title: string;
     number: string;
     to: string;
@@ -50,6 +67,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: primaryLight,
       iconDark: primaryDark,
+      iconWhite: primaryWhite,
       title: "Primary",
       number: "",
       to: "/" + params.user + "/primary",
@@ -57,6 +75,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: sendLight,
       iconDark: sendDark,
+      iconWhite: sendWhite,
       title: "Sent",
       number: "",
       to: "/" + params.user + "/sent",
@@ -64,6 +83,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: approveLight,
       iconDark: approveDark,
+      iconWhite: approveWhite,
       title: "Approved",
       number: "3",
       to: "/" + params.user + "/approved",
@@ -71,6 +91,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: rejectLight,
       iconDark: rejectDark,
+      iconWhite: rejectWhite,
       title: "Rejected",
       number: "",
       to: "/" + params.user + "/rejected",
@@ -78,6 +99,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: pendingLight,
       iconDark: pendingDark,
+      iconWhite: pendingWhite,
       title: "Pending",
       number: "2",
       to: "/" + params.user + "/pending",
@@ -85,6 +107,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: notificationLight,
       iconDark: notificationDark,
+      iconWhite: notificationWhite,
       title: "Notification",
       number: "",
       to: "/" + params.user + "/notifications",
@@ -92,6 +115,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: draftLight,
       iconDark: draftDark,
+      iconWhite: draftWhite,
       title: "Draft",
       number: "",
       to: "/" + params.user + "/draft",
@@ -99,6 +123,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: profileLight,
       iconDark: profileDark,
+      iconWhite: profileWhite,
       title: "Profile",
       number: "",
       to: "/" + params.user + "/profile",
@@ -106,6 +131,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: dashboardLight,
       iconDark: dashboardDark,
+      iconWhite: dashboardWhite,
       title: "Dashboard",
       number: "",
       to: "/admin/dashboard",
@@ -113,6 +139,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: trackingLight,
       iconDark: trackingDark,
+      iconWhite: trackingWhite,
       title: "Tracking",
       number: "",
       to: "/admin/tracking",
@@ -120,6 +147,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
     {
       iconLight: createEmployeeLight,
       iconDark: createEmployeeDark,
+      iconWhite: createEmployeeWhite,
       title: "New Employee",
       number: "",
       to: "/admin/new-employee",
@@ -127,7 +155,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
   ];
 
   return (
-    <div className="px-10 py-12 bg-white h-screen overflow-scroll flex flex-col justify-between">
+    <div className="px-10 py-12 bg-white transition-all dark:bg-gray-850 h-screen overflow-scroll flex flex-col justify-between">
       <div>
         <Link to={`/` + params.user + `/new-message`}>
           <div className="flex gap-4 items-center py-3 px-5 bg-gradient-to-r from-blue-350 to-blue-150 rounded-lg">
@@ -142,7 +170,9 @@ export default function Sidebar({ selected, setSelected }: Props) {
               <div key={index}>
                 <div
                   className={`flex justify-between items-center py-3 px-5 rounded-lg cursor-pointer ${
-                    selected === index ? "bg-blue-50" : "bg-white"
+                    selected === index
+                      ? "bg-blue-50 transition-all dark:bg-gray-150"
+                      : "bg-white transition-all dark:bg-gray-850"
                   }`}
                   onClick={() => {
                     setSelected(index);
@@ -151,13 +181,21 @@ export default function Sidebar({ selected, setSelected }: Props) {
                 >
                   <div className="flex gap-4 items-center">
                     <img
-                      src={selected === index ? item.iconLight : item.iconDark}
+                      src={
+                        selected === index
+                          ? item.iconLight
+                          : theme === "dark"
+                          ? item.iconWhite
+                          : item.iconDark
+                      }
                       alt=""
                       className="w-5 h-5"
                     />
                     <p
                       className={`text-sm font-semibold ${
-                        selected === index ? "text-blue-250" : "text-gray-750"
+                        selected === index
+                          ? "text-blue-250"
+                          : "text-gray-750 transition-all dark:text-gray-150"
                       }`}
                     >
                       {item.title}
@@ -190,8 +228,14 @@ export default function Sidebar({ selected, setSelected }: Props) {
             navigate("/sign-in");
           }}
         >
-          <img src={logoutDark} alt="" className="w-5 h-5" />
-          <p className="text-sm font-semibold text-gray-750">Logout</p>
+          <img
+            src={theme === "dark" ? logoutWhite : logoutDark}
+            alt=""
+            className="w-5 h-5"
+          />
+          <p className="text-sm font-semibold text-gray-750 transition-all dark:text-gray-150">
+            Logout
+          </p>
         </div>
       </div>
     </div>

@@ -86,12 +86,14 @@ export default function EmailContent({
   }, [documentInfo.isSuccess === true]);
 
   return (
-    <div className="w-full overflow-scroll px-10">
+    <div className="w-full overflow-scroll px-10 dark:bg-gray-850 transition-all">
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
           <div className="flex flex-row gap-4 items-center">
-            <h1 className="text-sm font-normal text-gray-750">1 of 50</h1>
+            <h1 className="text-sm font-normal text-gray-750 dark:text-gray-150 transition-all">
+              1 of 50
+            </h1>
             <div className="px-4 py-3 rounded-lg border border-gray-450 flex flex-row">
               <button className="pr-4">
                 <ChevronLeftIcon />
@@ -113,21 +115,21 @@ export default function EmailContent({
           <img src={Man} alt="man" className="rounded-full w-[60px] h-[60px]" />
           <div className="">
             {type === "sent" ? (
-              <h1 className="text-sm font-semibold text-gray-750">
+              <h1 className="text-sm font-semibold text-gray-750 dark:text-gray-150 transition-all">
                 To: Himanshu Chittora{" "}
                 <span>
                   <KeyboardArrowDownIcon fontSize="small" />
                 </span>
               </h1>
             ) : (
-              <h1 className="text-sm font-semibold text-gray-750">
+              <h1 className="text-sm font-semibold text-gray-750 dark:text-gray-150 transition-all">
                 From: {emailContent?.senderName}
                 <span>
                   <KeyboardArrowDownIcon fontSize="small" />
                 </span>
               </h1>
             )}
-            <h1 className="text-3xl font-normal text-gray-750">
+            <h1 className="text-3xl font-normal text-gray-750 dark:text-gray-150 transition-all">
               {emailContent?.subject}
             </h1>
           </div>
@@ -139,7 +141,7 @@ export default function EmailContent({
       {/*CURRENT STATUS*/}
       {type === "sent" ? (
         <div className="pl-[76px] mt-8">
-          <h1 className="text-sm font-bold text-gray-750 tracking-widest">
+          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
             CURRENT STATUS
           </h1>
           <div className="flex flex-row mt-4 items-center gap-2">
@@ -162,7 +164,7 @@ export default function EmailContent({
       {/*TRACKING*/}
       {type === "sent" ? (
         <div className="pl-[76px] mt-8">
-          <h1 className="text-sm font-bold text-gray-750 tracking-widest">
+          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
             TRACKING
           </h1>
           <div className="mt-4">
@@ -204,11 +206,11 @@ export default function EmailContent({
       {/*EMAIL CONTENT*/}
       <div className={`pl-[76px] ${type === "sent" ? "mt-16" : ""}`}>
         {type === "sent" ? (
-          <h1 className="text-sm font-bold text-gray-750 tracking-widest">
+          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
             EMAIL CONTENT
           </h1>
         ) : null}
-        <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750">
+        <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750 dark:text-gray-150 transition-all">
           {emailContent?.content}
         </div>
         <div className="pt-4 flex flex-row gap-8">

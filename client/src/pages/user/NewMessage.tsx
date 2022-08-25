@@ -24,6 +24,7 @@ import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { ThemeContext } from "../../themes/ThemeContext";
 
 interface ServerToClientEvents {
   noArg: () => void;
@@ -58,8 +59,8 @@ const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
   }, [setSelected]);
 
   const [selectedMid, setSelectedMid] = useState<number>(0);
-
   const { files, setFiles } = useContext(FilesContext);
+  const { theme, setTheme } = useContext(ThemeContext);
 
   const [percentage, setPercentage] = useState(0);
   const [uploadLoader, setUploadLoader] = useState(false);
@@ -352,7 +353,7 @@ Kind regards,
   const rooms: any[] = [];
 
   return (
-    <div className="h-screen flex bg-white overflow-hidden">
+    <div className="h-screen flex bg-white transition-all dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
@@ -365,12 +366,12 @@ Kind regards,
           />
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
-          <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750">
+          <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750 transition-all dark:text-gray-250">
             New Message
           </h1>
           <div className="flex flex-row items-center gap-2">
             <img src={EditPen} alt="edit" className="w-4 h-4" />
-            <p className="font-normal italic font-sm text-gray-550">
+            <p className="font-normal italic font-sm text-gray-550 transition-all dark:text-gray-450">
               You can use template and update where ever necessary.
             </p>
           </div>
@@ -393,9 +394,23 @@ Kind regards,
                 setDepartment(newValue as string);
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Department" />
+                <TextField
+                  {...params}
+                  label="Department"
+                  InputLabelProps={{
+                    style: {
+                      color: theme === "dark" ? "white" : "",
+                      borderInlineColor: theme === "dark" ? "white" : "",
+                    },
+                  }}
+                  InputProps={{
+                    style: {
+                      color: theme === "dark" ? "white" : "",
+                    },
+                  }}
+                />
               )}
-              className="w-full"
+              className="w-full "
             />
           </div>
           <div className="mt-3">
@@ -405,6 +420,16 @@ Kind regards,
               variant="outlined"
               size="small"
               value={subject}
+              InputLabelProps={{
+                style: {
+                  color: theme === "dark" ? "white" : "",
+                },
+              }}
+              InputProps={{
+                style: {
+                  color: theme === "dark" ? "white" : "",
+                },
+              }}
               onChange={(event: any) => {
                 setSubject(event.target.value);
               }}
@@ -435,14 +460,27 @@ Kind regards,
               }}
               size="small"
               renderInput={(params) => (
-                <TextField {...params} label="Select Template (Optional)" />
+                <TextField
+                  {...params}
+                  label="Select Template (Optional)"
+                  InputLabelProps={{
+                    style: {
+                      color: theme === "dark" ? "white" : "",
+                    },
+                  }}
+                  InputProps={{
+                    style: {
+                      color: theme === "dark" ? "white" : "",
+                    },
+                  }}
+                />
               )}
               className="w-full"
             />
           </div>
 
           <div className="mt-6">
-            <div className="whitespace-pre-line font-normal text-base text-gray-750">
+            <div className="whitespace-pre-line font-normal text-base text-gray-750 transition-all dark:text-gray-250">
               <TextField
                 id="outlined-multiline-flexible"
                 label="Message"
@@ -450,6 +488,14 @@ Kind regards,
                 rows={16}
                 InputLabelProps={{
                   shrink: true,
+                  style: {
+                    color: theme === "dark" ? "white" : "",
+                  },
+                }}
+                InputProps={{
+                  style: {
+                    color: theme === "dark" ? "white" : "",
+                  },
                 }}
                 className="w-full"
                 value={emailContent}

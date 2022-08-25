@@ -56,12 +56,12 @@ export default function MiddleBarComponent({
         selected ? "pl-1 filter drop-shadow-blue" : "pl-0"
       }`}
     >
-      <div className="bg-white px-4 py-4 mb-4 rounded-lg">
+      <div className="bg-white transition-all dark:bg-gray-850 px-4 py-4 mb-4 rounded-lg">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-2">
             <img src={image} alt="man" className="w-10 h-10 rounded-full" />
             <div className="w-full">
-              <h1 className="text-sm font-bold text-gray-750">
+              <h1 className="text-sm font-bold text-gray-750 transition-all dark:text-gray-150">
                 {title}
                 <span
                   className={`${attachment ? "visible" : "hidden"} float-right`}
@@ -73,16 +73,18 @@ export default function MiddleBarComponent({
                   />
                 </span>
               </h1>
-              <h1 className="text-sm font-normal text-gray-750">{name}</h1>
+              <h1 className="text-sm font-normal text-gray-750 transition-all dark:text-gray-150">
+                {name}
+              </h1>
             </div>
           </div>
 
-          <h1 className="text-sm font-normal text-gray-550">
+          <h1 className="text-sm font-normal text-gray-550 transition-all dark:text-gray-450">
             {getTimeInYearMonthDayMinutes(time)}
           </h1>
         </div>
 
-        <h1 className="my-1 px-7 pl-12 text-sm font-normal text-gray-550 truncate">
+        <h1 className="my-1 px-7 pl-12 text-sm font-normal text-gray-550 transition-all dark:text-gray-450 truncate">
           {content}
         </h1>
       </div>

@@ -3,12 +3,14 @@ import Sidebar from "../../components/Sidebar";
 
 import SearchIcon from "@mui/icons-material/Search";
 import Target from "../../images/icons/tracking_page_target.svg";
+import trackingWhite from "../../images/icons/tracking-white.svg";
 import GreenTick from "../../images/icons/tracking_page_green_tick.svg";
 import Clock from "../../images/icons/tracking_page_clock.svg";
 import TimelineComponent from "../../components/TimelineComponent";
 import Email1 from "../../images/tracking_page_email_1.png";
 import Email2 from "../../images/tracking_page_email_2.png";
 import Email3 from "../../images/tracking_page_email_3.png";
+import { ThemeContext } from "../../themes/ThemeContext";
 
 enum Status {
   Pending = "Pending",
@@ -44,21 +46,28 @@ const Tracking = ({ selected, setSelected }: Props) => {
     setSelected(9);
   }, [setSelected]);
 
+  const { theme, setTheme } = React.useContext(ThemeContext);
+
   return (
-    <div className="h-screen flex bg-gray-350 overflow-hidden">
+    <div className="h-screen flex bg-gray-350 dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} />
       </div>
       <div className="w-full px-10 overflow-scroll">
-        <h1 className="mt-12 text-lg font-medium tracking-widest">TRACKING</h1>
+        <h1 className="mt-12 text-lg font-medium tracking-widest dark:text-gray-250">
+          TRACKING
+        </h1>
 
-        <div className="bg-white h-screen rounded-2xl mt-8 shadow-xl px-12 py-8 mb-12">
-          <div className="bg-gray-150 border border-gray-450 rounded-lg h-11 flex flex-row">
+        <div className="bg-white dark:bg-gray-825 h-screen rounded-2xl mt-8 shadow-xl px-12 py-8 mb-12">
+          <div className="bg-gray-150 dark:bg-gray-850 border border-gray-450 rounded-lg h-11 flex flex-row">
             <div className="pl-4 py-2">
-              <SearchIcon fontSize="medium" className="text-gray-750" />
+              <SearchIcon
+                fontSize="medium"
+                className="text-gray-750 dark:text-gray-250"
+              />
             </div>
             <input
-              className="bg-gray-150 mx-4 px-2 text-sm w-full"
+              className="bg-gray-150 dark:bg-gray-850 mx-4 px-2 text-sm w-full dark:text-white"
               placeholder="Enter Tracking ID"
             ></input>
           </div>
@@ -66,12 +75,16 @@ const Tracking = ({ selected, setSelected }: Props) => {
           <div className="pt-12 flex flex-row">
             {/*Timeline Content*/}
             <div className="w-2/5">
-              <h1 className="text-gray-750 text-sm font-bold tracking-widest">
+              <h1 className="text-gray-750 dark:text-gray-250 text-sm font-bold tracking-widest">
                 TRACKING ID
               </h1>
               <div className="flex flex-row pt-4 items-center gap-2">
-                <img src={Target} alt="" className="w-4 h-4" />
-                <h1 className="text-base font-medium text-gray-650">
+                <img
+                  src={theme === "dark" ? trackingWhite : Target}
+                  alt=""
+                  className="w-4 h-4"
+                />
+                <h1 className="text-base font-medium text-gray-650 dark:text-gray-350">
                   #43210, <span className="text-sm">John Doe</span>
                 </h1>
               </div>
@@ -82,14 +95,14 @@ const Tracking = ({ selected, setSelected }: Props) => {
                 </h1>
               </div>
 
-              <h1 className="text-gray-750 text-sm font-bold tracking-widest pt-8">
+              <h1 className="text-gray-750 dark:text-gray-250 text-sm font-bold tracking-widest pt-8">
                 CURRENT STATUS
               </h1>
               <div className="flex flex-row pt-4 items-center gap-2">
                 <img src={GreenTick} alt="" className="w-4 h-4" />
                 <h1 className="text-base font-medium text-green-550">
                   Approved{" "}
-                  <span className="text-sm text-gray-650">
+                  <span className="text-sm text-gray-650 dark:text-gray-350">
                     by Mr. Venkatesh Iyer
                   </span>
                 </h1>
@@ -101,7 +114,7 @@ const Tracking = ({ selected, setSelected }: Props) => {
                 </h1>
               </div>
 
-              <h1 className="text-gray-750 text-sm font-bold tracking-widest pt-8 pb-4">
+              <h1 className="text-gray-750 dark:text-gray-250 text-sm font-bold tracking-widest pt-8 pb-4">
                 TRACKING
               </h1>
 
@@ -132,10 +145,10 @@ const Tracking = ({ selected, setSelected }: Props) => {
 
             {/*Email Content*/}
             <div className="w-3/5 border-l-2 border-gray-350 px-12">
-              <h1 className="text-gray-750 text-sm font-bold tracking-widest">
+              <h1 className="text-gray-750 dark:text-gray-250 text-sm font-bold tracking-widest">
                 EMAIL CONTENT
               </h1>
-              <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750">
+              <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750 dark:text-gray-250">
                 {emailContent}
               </div>
               <div className="pt-4 flex flex-row gap-8">
