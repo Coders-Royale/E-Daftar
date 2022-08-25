@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -46,9 +46,58 @@ export const queryClient = new QueryClient({
 
 const msg = new SpeechSynthesisUtterance();
 
+interface AppContextInterface {
+  theme: "Light" | "Dark" | "SweetMorning" | "BrightVault" | "Superman";
+  setTheme: any;
+}
+// color === "Light" || color === "Dark"
+// ? ""
+// : color === "Sweet Morning"
+// ? "from-[#FF5F6D] to-[#FFC371]"
+// : null
+
+export const AppContext = createContext<AppContextInterface>({
+  theme: "Light",
+  setTheme: null,
+});
+
+export const COLORS = {
+  Light: {
+    name: "Light",
+    class: "bg-gradient-to-r  from-[#2D5063] to-[#202020]",
+    gr_top: "from-[#2D5063]",
+    gr_bot: "to-[#202020]",
+  },
+  Dark: {
+    class: "bg-gradient-to-r from-[#2D5063] to-[#202020]",
+    gr_top: "from-[#2D5063]",
+    gr_bot: "to-[#202020]",
+    name: "Dark",
+  },
+  SweetMorning: {
+    class: "bg-gradient-to-r from-[#FF5F6D] from-green-350 to-[#FFC371]",
+    gr_top: "from-[#FF5F6D]",
+    gr_bot: "to-[#FFC371]",
+    name: "Sweet Morning",
+  },
+  BrightVault: {
+    class: "bg-gradient-to-r from-[#00d2ff] to-[#928DAB]",
+    gr_top: "from-[#00d2ff]",
+    gr_bot: "to-[#928DAB]",
+    name: "Bright Vault",
+  },
+  Superman: {
+    class: "bg-gradient-to-r from-[#0099F7] to-[#F11712]",
+    gr_top: "from-[#0099F7]",
+    gr_bot: "to-[#F11712]",
+    name: "Superman",
+  },
+};
+
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
-  const [color, setColor] = useState<string>("white");
+  const [color, setColor] = useState<string>("");
+  const [theme, setTheme] = useState<any>("Light");
   const [socketConnection, setSocketConnection] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
@@ -67,7 +116,7 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    return;
+    // return;
     speechHandler();
   }, [ourText]);
 
@@ -88,134 +137,136 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="font-roboto">
-      <div className="absolute right-0 top-0 mr-8 mt-2">
-        <Toggle />
-      </div>
-      <QueryClientProvider client={queryClient}>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/:user/new-employee"
-            element={
-              <CreateNewEmployee
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/dashboard"
-            element={
-              <Dashboard
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/tracking"
-            element={
-              <Tracking
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/notifications"
-            element={
-              <Notifications
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/profile"
-            element={
-              <Profile
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/sent"
-            element={
-              <Sent
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/pending"
-            element={
-              <Pending
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/approved"
-            element={
-              <Approved
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/rejected"
-            element={
-              <Rejected
-                selected={selected}
-                setSelected={setSelected}
-                color={color}
-              />
-            }
-          />
-          <Route
-            path="/:user/new-message"
-            element={
-              <FilesProvider>
-                <NewMessage
+    <AppContext.Provider value={{ theme: theme, setTheme: setTheme }}>
+      <div className="font-roboto">
+        <div className="absolute right-0 top-0 mr-8 mt-2">
+          <Toggle color={color} setColor={setColor} />
+        </div>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/new-password" element={<NewPassword />} />
+            <Route
+              path="/:user/new-employee"
+              element={
+                <CreateNewEmployee
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/dashboard"
+              element={
+                <Dashboard
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/tracking"
+              element={
+                <Tracking
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/notifications"
+              element={
+                <Notifications
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/profile"
+              element={
+                <Profile
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/sent"
+              element={
+                <Sent
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/pending"
+              element={
+                <Pending
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/approved"
+              element={
+                <Approved
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/rejected"
+              element={
+                <Rejected
+                  selected={selected}
+                  setSelected={setSelected}
+                  color={color}
+                />
+              }
+            />
+            <Route
+              path="/:user/new-message"
+              element={
+                <FilesProvider>
+                  <NewMessage
+                    selected={selected}
+                    setSelected={setSelected}
+                    socketConnection={socketConnection}
+                    color={color}
+                  />
+                </FilesProvider>
+              }
+            />
+            <Route
+              path="/:user/primary"
+              element={
+                <Primary
                   selected={selected}
                   setSelected={setSelected}
                   socketConnection={socketConnection}
                   color={color}
                 />
-              </FilesProvider>
-            }
-          />
-          <Route
-            path="/:user/primary"
-            element={
-              <Primary
-                selected={selected}
-                setSelected={setSelected}
-                socketConnection={socketConnection}
-                color={color}
-              />
-            }
-          />
-        </Routes>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </div>
+              }
+            />
+          </Routes>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </div>
+    </AppContext.Provider>
   );
 };
 

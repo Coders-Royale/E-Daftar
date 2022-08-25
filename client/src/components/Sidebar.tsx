@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 import newMessage from "../images/icons/new-message-white.svg";
 import primaryLight from "../images/icons/primary-light.svg";
@@ -59,6 +59,7 @@ import {
   faFile,
   faPaperPlane,
 } from "@fortawesome/free-regular-svg-icons";
+import { AppContext, COLORS } from "../App";
 
 interface Props {
   selected: number;
@@ -67,13 +68,14 @@ interface Props {
 }
 
 export default function Sidebar({ selected, setSelected, color }: Props) {
+  const { theme, setTheme } = useContext(AppContext);
   const location = useLocation();
   const path = location.pathname;
   const pathArray = path.split("/");
 
   console.log(color);
 
-  const { theme, setTheme } = React.useContext(ThemeContext);
+  // const { theme, setTheme } = React.useContext(ThemeContext);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -254,11 +256,15 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
     },
   ];
 
+  console.log(COLORS[theme].class);
+
   return (
     <div className="px-10 py-12 bg-white transition-all dark:bg-gray-850 h-screen overflow-scroll flex flex-col justify-between">
       <div>
         <Link to={`/` + params.user + `/new-message`}>
-          <div className="flex gap-4 items-center py-3 px-5 bg-gradient-to-r from-blue-350 to-blue-150 rounded-lg">
+          <div
+            className={`flex gap-4 items-center py-3 px-5 rounded-lg  ${COLORS[theme].class}`}
+          >
             <img src={newMessage} alt="" className="w-5 h-5" />
             <p className="text-sm font-semibold text-white">New Message</p>
           </div>
@@ -334,11 +340,11 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
             navigate("/sign-in");
           }}
         >
-          <img
+          {/* <img
             src={theme === "dark" ? logoutWhite : logoutDark}
             alt=""
             className="w-5 h-5"
-          />
+          /> */}
           <p className="text-sm font-semibold text-gray-750 transition-all dark:text-gray-150">
             Logout
           </p>
