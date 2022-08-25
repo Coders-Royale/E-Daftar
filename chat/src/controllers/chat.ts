@@ -7,14 +7,14 @@ import { CreateRoomInput, JoinRoomInput, LoadMessageInput } from "../types/types
 export const createRoom = async (req: Request, res: Response) => {
     try {
         if (!req.body) {
-            return res.status(400).json({
+            return res.status(500).json({
                 error: true,
                 mesaage: "Invalid request to create chat room",
             });
         }
         const body = req.body as CreateRoomInput;
         if (!body.conversationName || !body.documentId) {
-            return res.status(500).json({
+            return res.status(400).json({
                 error: true,
                 mesaage: "Invalid request to create chat room",
             });
