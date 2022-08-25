@@ -42,8 +42,6 @@ export default function EmailContent({
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
   const [mainFiles, setMainFiles] = useState<any[]>([]);
 
-  console.log(emailContent);
-
   interface Error {
     type: string;
     message: string;
