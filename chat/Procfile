@@ -1,0 +1,1 @@
+web: ./chat npm run watch-debug
