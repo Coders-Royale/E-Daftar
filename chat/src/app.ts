@@ -33,7 +33,7 @@ connect();
 // connectRedis();
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 3001);
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

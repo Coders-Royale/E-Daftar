@@ -9,21 +9,22 @@ export const createRoom = async (req: Request, res: Response) => {
         if (!req.body) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to create chat room",
+                message: "Invalid request to create chat room",
             });
         }
         const body = req.body as CreateRoomInput;
         if (!body.conversationName || !body.documentId) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to create chat room",
+                message: "Invalid request to create chat room",
             });
         }
         const conversation = await Conversation.findOne({ conversationName: body.conversationName });
         if (conversation) {
             return res.status(200).json({
                 error: false,
-                mesaage: "Chat room already exists",
+                message: "Chat room already exists",
+                data: conversation,
             });
         }
         const newConversation = new Conversation({
@@ -52,28 +53,28 @@ export const joinRoom = async (req: Request, res: Response) => {
         if (!req.body) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to join chat room",
+                message: "Invalid request to join chat room",
             });
         }
         const body = req.body as JoinRoomInput;
         if (!body.roomId || !body.employeeId || !body.name) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to join chat room",
+                message: "Invalid request to join chat room",
             });
         }
         const conversation = await Conversation.findOne({ _id: body.roomId });
         if (!conversation) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Chat room does not exist",
+                message: "Chat room does not exist",
             });
         }
         const userExists = conversation.participants.find(participant => participant.id === body.employeeId);
         if (userExists) {
-            return res.status(400).json({
-                error: true,
-                mesaage: "User already exists in chat room",
+            return res.status(200).json({
+                error: false,
+                message: "User already exists in chat room",
             });
         }
         else {
@@ -106,7 +107,7 @@ export const getRoom = async (req: Request, res: Response) => {
         if (!req.query["employeeId"]) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to get chat room",
+                message: "Invalid request to get chat room",
             });
         }
         const employeeId = req.query["employeeId"];
@@ -116,7 +117,7 @@ export const getRoom = async (req: Request, res: Response) => {
         if (!conversations) {
             return res.status(400).json({
                 error: true,
-                mesaage: "No chat room found",
+                message: "No chat room found",
             });
         }
         return res.status(200).json({
@@ -140,7 +141,7 @@ export const getMessages = async (req: Request, res: Response) => {
         if (!req.query["roomId"]) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to get chat room",
+                message: "Invalid request to get chat room",
             });
         }
         const roomId = req.query["roomId"];
@@ -150,7 +151,7 @@ export const getMessages = async (req: Request, res: Response) => {
         if (!messages) {
             return res.status(400).json({
                 error: true,
-                mesaage: "No chat room found",
+                message: "No chat room found",
             });
         }
         return res.status(200).json({
@@ -175,7 +176,7 @@ export const getConversation = async (req: Request, res: Response) => {
         if (!req.query["documentId"]) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to get conversation",
+                message: "Invalid request to get conversation",
             });
         }
         const documentId = req.query["documentId"];
@@ -185,7 +186,7 @@ export const getConversation = async (req: Request, res: Response) => {
         if (!conversation) {
             return res.status(400).json({
                 error: true,
-                mesaage: "No conversation found",
+                message: "No conversation found",
             });
         }
         return res.status(200).json({
@@ -209,7 +210,7 @@ export const loadMessage = async (req: Request, res: Response) => {
         if (!req.query) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to load message",
+                message: "Invalid request to load message",
             });
         }
         const employeeId = req.query["employeeId"];
@@ -218,13 +219,13 @@ export const loadMessage = async (req: Request, res: Response) => {
         if (!employeeId || !pageNo || !filter) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to load message",
+                message: "Invalid request to load message",
             });
         }
         if (filter !== "primary" && filter !== "sent") {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid filter",
+                message: "Invalid filter",
             });
         }
         const conversations = await Conversation.find({
@@ -233,7 +234,7 @@ export const loadMessage = async (req: Request, res: Response) => {
         if (!conversations) {
             return res.status(400).json({
                 error: true,
-                mesaage: "No conversation found",
+                message: "No conversation found",
             });
         }
         const allMessages = [];
@@ -254,7 +255,7 @@ export const loadMessage = async (req: Request, res: Response) => {
         if (allMessages.length === 0) {
             return res.status(200).json({
                 error: true,
-                mesaage: "No message found",
+                message: "No message found",
             });
         }
         // sort the messages in decreasing order of createdAt
