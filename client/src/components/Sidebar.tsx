@@ -74,7 +74,6 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
   const path = location.pathname;
   const pathArray = path.split("/");
 
-  console.log(color);
 
   // const { theme, setTheme } = React.useContext(ThemeContext);
 
