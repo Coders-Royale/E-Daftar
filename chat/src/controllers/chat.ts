@@ -7,7 +7,7 @@ import { CreateRoomInput, JoinRoomInput, LoadMessageInput } from "../types/types
 export const createRoom = async (req: Request, res: Response) => {
     try {
         if (!req.body) {
-            return res.status(500).json({
+            return res.status(400).json({
                 error: true,
                 mesaage: "Invalid request to create chat room",
             });
@@ -42,7 +42,7 @@ export const createRoom = async (req: Request, res: Response) => {
         await Sentry.flush(2000);
         res.status(500).json({
             error: true,
-            message: err.message
+            message: "yo what the fuck"
         });
     }
 };
