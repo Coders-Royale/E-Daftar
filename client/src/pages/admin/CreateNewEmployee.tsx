@@ -13,6 +13,7 @@ import { useMutateCreateEmployee } from "../../queries/mutations";
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
 interface Error {
@@ -20,7 +21,7 @@ interface Error {
   message: string;
 }
 
-const CreateNewEmployee = ({ selected, setSelected }: Props) => {
+const CreateNewEmployee = ({ selected, setSelected, color }: Props) => {
   useEffect(() => {
     setSelected(10);
   }, [setSelected]);
@@ -232,7 +233,7 @@ const CreateNewEmployee = ({ selected, setSelected }: Props) => {
   return (
     <div className="h-screen flex bg-gray-350 transition-all dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full px-10 overflow-scroll">
         <h1 className="mt-12 mb-4 text-lg font-medium tracking-widest transition-all dark:text-white">

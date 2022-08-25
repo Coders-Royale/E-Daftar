@@ -39,9 +39,10 @@ John Doe
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
-const Tracking = ({ selected, setSelected }: Props) => {
+const Tracking = ({ selected, setSelected, color }: Props) => {
   useEffect(() => {
     setSelected(9);
   }, [setSelected]);
@@ -51,7 +52,7 @@ const Tracking = ({ selected, setSelected }: Props) => {
   return (
     <div className="h-screen flex bg-gray-350 dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full px-10 overflow-scroll">
         <h1 className="mt-12 text-lg font-medium tracking-widest dark:text-gray-250">

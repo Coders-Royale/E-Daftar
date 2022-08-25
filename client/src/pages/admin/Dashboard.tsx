@@ -235,9 +235,10 @@ const TableData: TableInterface[] = [
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
-export default function Dashboard({ selected, setSelected }: Props) {
+export default function Dashboard({ selected, setSelected, color }: Props) {
   useEffect(() => {
     setSelected(8);
   }, [setSelected]);
@@ -245,7 +246,7 @@ export default function Dashboard({ selected, setSelected }: Props) {
   return (
     <div className="h-screen flex bg-gray-350 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="w-full py-12 px-10 overflow-scroll">
         <div>
