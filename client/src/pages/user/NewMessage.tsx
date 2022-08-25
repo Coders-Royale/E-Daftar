@@ -40,6 +40,7 @@ interface Props {
   selected: number;
   setSelected: (selected: number) => void;
   socketConnection: Socket<ServerToClientEvents, ClientToServerEvents>;
+  color: string;
 }
 
 interface Error {
@@ -53,7 +54,12 @@ const Input = styled("input")({
   display: "none",
 });
 
-const NewMessage = ({ selected, setSelected, socketConnection }: Props) => {
+const NewMessage = ({
+  selected,
+  setSelected,
+  socketConnection,
+  color,
+}: Props) => {
   useEffect(() => {
     setSelected(-1);
   }, [setSelected]);
@@ -355,7 +361,7 @@ Kind regards,
   return (
     <div className="h-screen flex bg-white transition-all dark:bg-gray-850 overflow-hidden">
       <div className="w-1/4">
-        <Sidebar selected={selected} setSelected={setSelected} />
+        <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
       <div className="flex flex-row w-full overflow-scroll">
         <div className="w-1/3">
@@ -403,11 +409,11 @@ Kind regards,
                       borderInlineColor: theme === "dark" ? "white" : "",
                     },
                   }}
-                  InputProps={{
-                    style: {
-                      color: theme === "dark" ? "white" : "",
-                    },
-                  }}
+                  // InputProps={{
+                  //   style: {
+                  //     color: theme === "dark" ? "white" : "",
+                  //   },
+                  // }}
                 />
               )}
               className="w-full "
@@ -425,11 +431,11 @@ Kind regards,
                   color: theme === "dark" ? "white" : "",
                 },
               }}
-              InputProps={{
-                style: {
-                  color: theme === "dark" ? "white" : "",
-                },
-              }}
+              // InputProps={{
+              //   style: {
+              //     color: theme === "dark" ? "white" : "",
+              //   },
+              // }}
               onChange={(event: any) => {
                 setSubject(event.target.value);
               }}
@@ -468,11 +474,11 @@ Kind regards,
                       color: theme === "dark" ? "white" : "",
                     },
                   }}
-                  InputProps={{
-                    style: {
-                      color: theme === "dark" ? "white" : "",
-                    },
-                  }}
+                  // InputProps={{
+                  //   style: {
+                  //     color: theme === "dark" ? "white" : "",
+                  //   },
+                  // }}
                 />
               )}
               className="w-full"

@@ -38,16 +38,40 @@ import logoutDark from "../images/icons/logout-dark.svg";
 import logoutWhite from "../images/icons/logout-white.svg";
 
 import { ThemeContext } from "../themes/ThemeContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  solid,
+  regular,
+  brands,
+} from "@fortawesome/fontawesome-svg-core/import.macro";
+import {
+  faChartLine,
+  faHouse,
+  faMagnifyingGlassLocation,
+  faSpinner,
+  faThumbsUp,
+  faTrash,
+  faUser,
+  faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faBell,
+  faFile,
+  faPaperPlane,
+} from "@fortawesome/free-regular-svg-icons";
 
 interface Props {
   selected: number;
   setSelected: (selected: number) => void;
+  color: string;
 }
 
-export default function Sidebar({ selected, setSelected }: Props) {
+export default function Sidebar({ selected, setSelected, color }: Props) {
   const location = useLocation();
   const path = location.pathname;
   const pathArray = path.split("/");
+
+  console.log(color);
 
   const { theme, setTheme } = React.useContext(ThemeContext);
 
@@ -63,9 +87,85 @@ export default function Sidebar({ selected, setSelected }: Props) {
     to: string;
   }
 
+  interface SidebarContent2 {
+    icon: any;
+    title: string;
+    number: string;
+    to: string;
+  }
+
+  const sidebarContent2: SidebarContent2[] = [
+    {
+      icon: faHouse,
+      title: "Primary",
+      number: "",
+      to: "/" + params.user + "/primary",
+    },
+    {
+      icon: faPaperPlane,
+      title: "Send",
+      number: "",
+      to: "/" + params.user + "/send",
+    },
+    {
+      icon: faThumbsUp,
+      title: "Approved",
+      number: "3",
+      to: "/" + params.user + "/approved",
+    },
+    {
+      icon: faTrash,
+      title: "Rejected",
+      number: "",
+      to: "/" + params.user + "/rejected",
+    },
+    {
+      icon: faSpinner,
+      title: "Pending",
+      number: "2",
+      to: "/" + params.user + "/pending",
+    },
+    {
+      icon: faBell,
+      title: "Notification",
+      number: "",
+      to: "/" + params.user + "/notifications",
+    },
+    {
+      icon: faFile,
+      title: "Draft",
+      number: "",
+      to: "/" + params.user + "/draft",
+    },
+    {
+      icon: faUser,
+      title: "Profile",
+      number: "",
+      to: "/" + params.user + "/profile",
+    },
+    {
+      icon: faChartLine,
+      title: "Dashboard",
+      number: "",
+      to: "/admin/dashboard",
+    },
+    {
+      icon: faMagnifyingGlassLocation,
+      title: "Tracking",
+      number: "",
+      to: "/admin/tracking",
+    },
+    {
+      icon: faUserPlus,
+      title: "New Employee",
+      number: "",
+      to: "/admin/new-employee",
+    },
+  ];
+
   const sidebarContent1: SidebarContent1[] = [
     {
-      iconLight: primaryLight,
+      iconLight: "house",
       iconDark: primaryDark,
       iconWhite: primaryWhite,
       title: "Primary",
@@ -164,7 +264,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
           </div>
         </Link>
         <div className="mt-6">
-          {sidebarContent1
+          {sidebarContent2
             .slice(0, params.user?.toLocaleLowerCase() === "admin" ? 11 : 8)
             .map((item, index) => (
               <div key={index}>
@@ -180,7 +280,7 @@ export default function Sidebar({ selected, setSelected }: Props) {
                   }}
                 >
                   <div className="flex gap-4 items-center">
-                    <img
+                    {/* <img
                       src={
                         selected === index
                           ? item.iconLight
@@ -190,6 +290,12 @@ export default function Sidebar({ selected, setSelected }: Props) {
                       }
                       alt=""
                       className="w-5 h-5"
+                    /> */}
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className={`${
+                        selected === index ? "text-blue-250" : "text-gray-500"
+                      } w-5 h-5`}
                     />
                     <p
                       className={`text-sm font-semibold ${

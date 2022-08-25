@@ -32,7 +32,7 @@ export async function getEmployee(params) {
   try {
     const res = (
       await fetch(
-        baseUrl + apiEndPoints.getEmployee + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}` ,
+        baseUrl + apiEndPoints.getEmployee + `?employeeId=${params.employeeId}` + `&departmentId=${params.departmentId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
