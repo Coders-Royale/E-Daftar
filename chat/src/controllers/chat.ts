@@ -24,6 +24,7 @@ export const createRoom = async (req: Request, res: Response) => {
             return res.status(200).json({
                 error: false,
                 message: "Chat room already exists",
+                data: conversation,
             });
         }
         const newConversation = new Conversation({
@@ -71,8 +72,8 @@ export const joinRoom = async (req: Request, res: Response) => {
         }
         const userExists = conversation.participants.find(participant => participant.id === body.employeeId);
         if (userExists) {
-            return res.status(400).json({
-                error: true,
+            return res.status(200).json({
+                error: false,
                 message: "User already exists in chat room",
             });
         }
