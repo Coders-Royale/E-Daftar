@@ -4,7 +4,7 @@ import { isAzureServer } from "../middleware/auth";
 export const router = express.Router();
 
 router.post("/createRoom", createRoom);
-router.post("/joinRoom", isAzureServer, joinRoom);
+router.post("/joinRoom", joinRoom);
 router.get("/rooms", getRoom);
 router.get("/messages", getMessages);
 router.get("/conversation", getConversation);
