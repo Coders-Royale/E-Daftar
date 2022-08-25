@@ -103,9 +103,9 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
     },
     {
       icon: faPaperPlane,
-      title: "Send",
+      title: "Sent",
       number: "",
-      to: "/" + params.user + "/send",
+      to: "/" + params.user + "/sent",
     },
     {
       icon: faThumbsUp,
