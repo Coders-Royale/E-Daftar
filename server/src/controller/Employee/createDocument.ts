@@ -72,6 +72,7 @@ export const createDocument = async (body: CreateDocumentInput) => {
             conversationName: document.documentId,
             documentId: document.documentId,
         };
+        // here is the error
         const createRoomResponse = await axios.post(process.env.CHAT_SERVER_URL + "/createRoom", createRoomReuqest, {
             headers: headers
         });

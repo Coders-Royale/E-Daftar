@@ -21,8 +21,8 @@ export const createRoom = async (req: Request, res: Response) => {
         }
         const conversation = await Conversation.findOne({ conversationName: body.conversationName });
         if (conversation) {
-            return res.status(400).json({
-                error: true,
+            return res.status(200).json({
+                error: false,
                 mesaage: "Chat room already exists",
             });
         }
