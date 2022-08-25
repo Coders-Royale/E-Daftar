@@ -14,7 +14,7 @@ const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 
 export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
 
-export const SENTYRY_DSN = process.env["SENTYRY_DSN"];
+export const SENTYRY_DSN = process.env["SENTRY_DSN"];
 
 export const SECRET_TOKEN = process.env["SECRET_TOKEN"];
 
@@ -27,7 +27,7 @@ export const AZURE_CACHE_PORT = process.env["AZURE_CACHE_PORT"];
 export const AZURE_CACHE_KEY = process.env["AZURE_CACHE_KEY"];
 
 if (!SENTYRY_DSN) {
-    logger.error("No SENTYRY_DSN environment variable. Set and restart server.");
+    logger.error("No SENTRY_DSN environment variable. Set and restart server.");
     process.exit(1);
 }
 

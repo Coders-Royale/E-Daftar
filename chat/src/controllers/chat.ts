@@ -23,7 +23,8 @@ export const createRoom = async (req: Request, res: Response) => {
         if (conversation) {
             return res.status(200).json({
                 error: false,
-                mesaage: "Chat room already exists",
+                message: "Chat room already exists",
+                data: conversation,
             });
         }
         const newConversation = new Conversation({
@@ -52,28 +53,28 @@ export const joinRoom = async (req: Request, res: Response) => {
         if (!req.body) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to join chat room",
+                message: "Invalid request to join chat room",
             });
         }
         const body = req.body as JoinRoomInput;
         if (!body.roomId || !body.employeeId || !body.name) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Invalid request to join chat room",
+                message: "Invalid request to join chat room",
             });
         }
         const conversation = await Conversation.findOne({ _id: body.roomId });
         if (!conversation) {
             return res.status(400).json({
                 error: true,
-                mesaage: "Chat room does not exist",
+                message: "Chat room does not exist",
             });
         }
         const userExists = conversation.participants.find(participant => participant.id === body.employeeId);
         if (userExists) {
-            return res.status(400).json({
-                error: true,
-                mesaage: "User already exists in chat room",
+            return res.status(200).json({
+                error: false,
+                message: "User already exists in chat room",
             });
         }
         else {
