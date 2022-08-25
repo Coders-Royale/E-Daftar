@@ -44,12 +44,32 @@ export const queryClient = new QueryClient({
   },
 });
 
+const msg = new SpeechSynthesisUtterance();
+
 const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
   const [color, setColor] = useState<string>("white");
   const [socketConnection, setSocketConnection] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
+
+  const [ourText, setOurText] = useState("");
+
+  const speechHandler = () => {
+    window.speechSynthesis.cancel();
+    msg.text = ourText;
+    window.speechSynthesis.speak(msg);
+  };
+
+  window.addEventListener("mouseover", (event) => {
+    if (event?.srcElement instanceof HTMLElement)
+      setOurText(event?.srcElement?.innerText);
+  });
+
+  useEffect(() => {
+    return;
+    speechHandler();
+  }, [ourText]);
 
   // Auto Login
   useEffect(() => {

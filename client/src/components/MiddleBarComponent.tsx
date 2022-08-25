@@ -30,7 +30,7 @@ const getTimeInYearMonthDayMinutes = (num: number) => {
   num -= minutes * 60;
 
   // Return the result as a string
-  return `${
+  const secMsg = `${
     year > 0
       ? year + "y "
       : month > 0
@@ -38,7 +38,9 @@ const getTimeInYearMonthDayMinutes = (num: number) => {
       : days > 0
       ? days + "d "
       : (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "")
-  }ago`;
+  }`;
+
+  return secMsg.length > 0 ? secMsg + "ago" : "";
 };
 
 export default function MiddleBarComponent({
