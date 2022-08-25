@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
 
 import { useDocument } from "../queries/hooks";
-import { useMutateAssignDocument } from "../queries/mutations";
+import { useMutateAssignDocument, useMutateRejectDocument, useMutateApproveDocument } from "../queries/mutations";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -98,12 +98,56 @@ export default function EmailContent({
     },
   }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
-  const dummy = () => {
-    console.log("dummy");
-  }
+  const { mutateAsync: useRejectDocument } = useMutateRejectDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Document rejected successfully") {
+        setMessage(data.message);
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
+
+  const { mutateAsync: useApproveDocument } = useMutateApproveDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Document approved successfully") {
+        setMessage(data.message);
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   const documentInfo = useDocument({
-    documentId: emailContent?.content.documentId,
+    documentId: emailContent?.content.split("documentId=")[1],
     employeeId: localStorage.getItem("empId"),
     role: localStorage.getItem("empId")![0] == "A" ? "admin" : "employee",
   });
@@ -240,7 +284,7 @@ export default function EmailContent({
           </h1>
         ) : null}
         <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750 dark:text-gray-150 transition-all">
-          {emailContent?.content}
+          {emailContent?.content.split("documentId=")[0]}
         </div>
         <div className="pt-4 flex flex-row gap-8">
           <img src={Email1} alt="" className="w-1/3" />
@@ -267,7 +311,8 @@ export default function EmailContent({
           text="Approve"
           isOpen={isOpenApprove}
           setIsOpen={setIsOpenApprove}
-          // clickFunction={dummy}
+          clickFunction={useApproveDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
         <ActionsButton
           bgColor="bg-blue-25"
@@ -276,7 +321,8 @@ export default function EmailContent({
           text="Forward"
           isOpen={isOpenForward}
           setIsOpen={setIsOpenForward}
-          // clickFunction={dummy}
+          clickFunction={useAssignDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
         <ActionsButton
           bgColor="bg-red-150"
@@ -285,7 +331,8 @@ export default function EmailContent({
           text="Reject"
           isOpen={isOpenReject}
           setIsOpen={setIsOpenReject}
-          // clickFunction={dummy}
+          clickFunction={useRejectDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
       </div>
 

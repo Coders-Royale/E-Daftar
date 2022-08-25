@@ -1,7 +1,7 @@
-const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
-// const baseUrl = "http://localhost:7071/api";
-const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
-// const baseUrlChat = "http://localhost:3001/api/chat";
+// const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+const baseUrl = "http://localhost:7071/api";
+// const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
+const baseUrlChat = "http://localhost:3001/api/chat";
 
 const apiEndPoints = {
   // GET REQUESTS
@@ -26,6 +26,7 @@ const apiEndPoints = {
   assignDocument: `/assignDocument`,
   forwardToAdmin: `/forwardToAdmin`,
   rejectDocument: `/rejectDocument`,
+  approveDocument: `/approveDocument`,
 };
 
 // GET REQUESTS
@@ -319,6 +320,22 @@ export async function forwardToAdmin(data) {
 export async function rejectDocument(data) {
   try {
     const res = await fetch(baseUrl + apiEndPoints.rejectDocument, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function approveDocument(data) {
+  try {
+    const res = await fetch(baseUrl + apiEndPoints.approveDocument, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

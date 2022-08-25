@@ -73,7 +73,6 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
   const path = location.pathname;
   const pathArray = path.split("/");
 
-  console.log(color);
 
   // const { theme, setTheme } = React.useContext(ThemeContext);
 
@@ -255,8 +254,6 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
   //     to: "/admin/new-employee",
   //   },
   // ];
-
-  console.log(COLORS[theme].class);
 
   return (
     <div className="px-10 py-12 bg-white transition-all dark:bg-gray-850 h-screen overflow-scroll flex flex-col justify-between">

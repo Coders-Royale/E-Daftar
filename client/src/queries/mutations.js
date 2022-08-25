@@ -6,6 +6,7 @@ import {
   assignDocument,
   forwardToAdmin,
   rejectDocument,
+  approveDocument
 } from '../services';
 
 export const useMutateLogin = ({ onSuccess, onError, onMutate }) => {
@@ -80,6 +81,20 @@ export const useMutateForwardToAdmin = ({ onSuccess, onError, onMutate }) => {
 
 export const useMutateRejectDocument = ({ onSuccess, onError, onMutate }) => {
   return useMutation((data) => rejectDocument(data), {
+    onSuccess: (result) => {
+      typeof onSuccess && onSuccess(result);
+    },
+    onError: async (err) => {
+      typeof onError && onError(err);
+    },
+    onMutate: async (data) => {
+      typeof onMutate && onMutate(data);
+    }
+  });
+}
+
+export const useMutateApproveDocument = ({ onSuccess, onError, onMutate }) => {
+  return useMutation((data) => approveDocument(data), {
     onSuccess: (result) => {
       typeof onSuccess && onSuccess(result);
     },
