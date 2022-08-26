@@ -36,9 +36,9 @@ export const assignDocument = async (body: AssignDocumentInput) => {
                 message: "Employee is already assigned to the document"
             };
         }
-        // Mark the status as Approved for admin
+        // Mark the status as Forwarded for admin
         document.status.pop();
-        document.status.push("Approved");
+        document.status.push("Forwarded");
 
         //  Update the time retuned
         document.time_returned.push(new Date());

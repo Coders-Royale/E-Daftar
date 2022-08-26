@@ -38,7 +38,7 @@ export const forwardToAdmin = async (body: ForwardToAdminInput) => {
         }
         // Mark the status as Approved from the employee
         document.status.pop();
-        document.status.push("Approved");
+        document.status.push("Forwarded");
         // Update the time retuned
         document.time_returned.push(new Date());
 
