@@ -24,7 +24,7 @@ import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { ThemeContext } from "../../themes/ThemeContext";
+import { AppContext, COLORS } from "../../App";
 
 interface ServerToClientEvents {
   noArg: () => void;
@@ -64,9 +64,10 @@ const NewMessage = ({
     setSelected(-1);
   }, [setSelected]);
 
+  const { theme, setTheme } = useContext(AppContext);
+
   const [selectedMid, setSelectedMid] = useState<number>(0);
   const { files, setFiles } = useContext(FilesContext);
-  const { theme, setTheme } = useContext(ThemeContext);
 
   const [percentage, setPercentage] = useState(0);
   const [uploadLoader, setUploadLoader] = useState(false);
@@ -359,7 +360,11 @@ Kind regards,
   const rooms: any[] = [];
 
   return (
-    <div className="h-screen flex bg-white transition-all dark:bg-gray-850 overflow-hidden">
+    <div
+      className={`h-screen flex transition-all ${
+        theme === "Dark" ? "bg-gray-850" : "bg-white"
+      } overflow-hidden`}
+    >
       <div className="w-1/4">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
@@ -372,12 +377,20 @@ Kind regards,
           />
         </div>
         <div className="w-2/3 px-10 overflow-scroll">
-          <h1 className="mt-12 text-base font-semibold tracking-normal text-gray-750 transition-all dark:text-gray-250">
+          <h1
+            className={`mt-12 text-base font-semibold tracking-normal  transition-all ${
+              theme === "Dark" ? "text-gray-250" : "text-gray-750"
+            }`}
+          >
             New Message
           </h1>
           <div className="flex flex-row items-center gap-2">
             <img src={EditPen} alt="edit" className="w-4 h-4" />
-            <p className="font-normal italic font-sm text-gray-550 transition-all dark:text-gray-450">
+            <p
+              className={`font-normal italic font-sm transition-all ${
+                theme === "Dark" ? "text-gray-450" : "text-gray-550"
+              }`}
+            >
               You can use template and update where ever necessary.
             </p>
           </div>
@@ -405,13 +418,13 @@ Kind regards,
                   label="Department"
                   InputLabelProps={{
                     style: {
-                      color: theme === "dark" ? "white" : "",
-                      borderInlineColor: theme === "dark" ? "white" : "",
+                      color: theme === "Dark" ? "white" : "",
+                      borderInlineColor: theme === "Dark" ? "white" : "",
                     },
                   }}
                   // InputProps={{
                   //   style: {
-                  //     color: theme === "dark" ? "white" : "",
+                  //     color: theme === "Dark" ? "white" : "",
                   //   },
                   // }}
                 />
@@ -428,12 +441,12 @@ Kind regards,
               value={subject}
               InputLabelProps={{
                 style: {
-                  color: theme === "dark" ? "white" : "",
+                  color: theme === "Dark" ? "white" : "",
                 },
               }}
               // InputProps={{
               //   style: {
-              //     color: theme === "dark" ? "white" : "",
+              //     color: theme === "Dark" ? "white" : "",
               //   },
               // }}
               onChange={(event: any) => {
@@ -471,12 +484,12 @@ Kind regards,
                   label="Select Template (Optional)"
                   InputLabelProps={{
                     style: {
-                      color: theme === "dark" ? "white" : "",
+                      color: theme === "Dark" ? "white" : "",
                     },
                   }}
                   // InputProps={{
                   //   style: {
-                  //     color: theme === "dark" ? "white" : "",
+                  //     color: theme === "Dark" ? "white" : "",
                   //   },
                   // }}
                 />
@@ -486,7 +499,11 @@ Kind regards,
           </div>
 
           <div className="mt-6">
-            <div className="whitespace-pre-line font-normal text-base text-gray-750 transition-all dark:text-gray-250">
+            <div
+              className={`whitespace-pre-line font-normal text-base transition-all ${
+                theme === "Dark" ? "text-gray-250" : "text-gray-750"
+              }`}
+            >
               <TextField
                 id="outlined-multiline-flexible"
                 label="Message"
@@ -495,12 +512,12 @@ Kind regards,
                 InputLabelProps={{
                   shrink: true,
                   style: {
-                    color: theme === "dark" ? "white" : "",
+                    color: theme === "Dark" ? "white" : "",
                   },
                 }}
                 InputProps={{
                   style: {
-                    color: theme === "dark" ? "white" : "",
+                    color: theme === "Dark" ? "white" : "",
                   },
                 }}
                 className="w-full"

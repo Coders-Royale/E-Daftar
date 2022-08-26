@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
-import {getTimeInYearMonthDayMinutes} from "./MiddleBarComponent";
+import { getTimeInYearMonthDayMinutes } from "./MiddleBarComponent";
 
 import { useDocument } from "../queries/hooks";
 import {
@@ -28,12 +28,12 @@ import PDFIcon from "./PDFIcon";
 import ActionsButton from "./buttons/ActionsButton";
 import { AppContext, COLORS } from "../App";
 
-const statusImages:any = {
-  "Approved": GreenTick,
-  "Forwarded": ForwardArrow,
-  "Rejected": Rejected,
-  "Pending": Pending
-}
+const statusImages: any = {
+  Approved: GreenTick,
+  Forwarded: ForwardArrow,
+  Rejected: Rejected,
+  Pending: Pending,
+};
 
 enum Status {
   Pending = "Pending",
@@ -263,8 +263,15 @@ export default function EmailContent({
             CURRENT STATUS
           </h1>
           <div className="flex flex-row mt-4 items-center gap-2">
-            <img src={statuses && statusImages[statuses[statuses?.length-1]?.status.toString()]} alt="" className="w-4 h-4" />
-            {!statuses &&
+            <img
+              src={
+                statuses &&
+                statusImages[statuses[statuses?.length - 1]?.status.toString()]
+              }
+              alt=""
+              className="w-4 h-4"
+            />
+            {!statuses && (
               <div role="status">
                 <svg
                   className="inline mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -283,14 +290,18 @@ export default function EmailContent({
                 </svg>
                 <span className="sr-only">Loading...</span>
               </div>
-            }
+            )}
             <h1 className="text-sm font-medium text-gray-650">
-            {statuses &&
-              <div>
-                <span className="text-green-550 text-base">{statuses[statuses?.length-1]?.status}</span>
-                <span className="">{` by ${statuses[statuses?.length-1]?.employeeName}`}</span>
-              </div>
-            }
+              {statuses && (
+                <div>
+                  <span className="text-green-550 text-base">
+                    {statuses[statuses?.length - 1]?.status}
+                  </span>
+                  <span className="">{` by ${
+                    statuses[statuses?.length - 1]?.employeeName
+                  }`}</span>
+                </div>
+              )}
             </h1>
           </div>
 
@@ -314,18 +325,20 @@ export default function EmailContent({
             TRACKING
           </h1>
           <div className="mt-4">
-            {statuses ?
+            {statuses ? (
               statuses.map((item: any, index: number) => (
                 <TimelineComponent
                   index={index}
                   name={item.employeeName}
-                  time={getTimeInYearMonthDayMinutes(item.time_elapsed).toString()}
+                  time={getTimeInYearMonthDayMinutes(
+                    item.time_elapsed
+                  ).toString()}
                   date={new Date(item?.time_returned).toLocaleDateString()}
                   status={item.status}
                   remarks={item.rejection_reason}
                 />
               ))
-             : (
+            ) : (
               <div role="status">
                 <svg
                   className="inline mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"

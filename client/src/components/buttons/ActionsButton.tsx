@@ -28,7 +28,7 @@ export default function ActionsButton({
   isOpen,
   setIsOpen,
   documentId,
-  clickFunction
+  clickFunction,
 }: ActionsButtonProps) {
   const [toPerson, setToPerson] = useState("");
   const [remarks, setRemarks] = useState("");
@@ -143,26 +143,32 @@ export default function ActionsButton({
                       onChange={(e) => setRemarks(e.target.value)}
                     />
                   </div>
+                  {text === "Forward" ? (
+                    <p className="text-center text-xs italic text-gray-600 mt-4">
+                      Note: Forwarding a document will mean that it is approved
+                      from your end.
+                    </p>
+                  ) : null}
 
                   <div className="mt-4 flex justify-center">
                     <button
                       type="button"
                       onClick={() => {
-                        setIsOpen(false)
-                        if(text == "Forward") {
+                        setIsOpen(false);
+                        if (text == "Forward") {
                           clickFunction({
                             adminId: localStorage.getItem("empId"),
                             department: adminInfo?.data?.employee?.department,
                             documentId: documentId,
                             employeeToAssign: toPerson,
-                          })
+                          });
                         } else {
                           clickFunction({
                             employeeId: localStorage.getItem("empId"),
                             documentId: documentId,
                             reason: remarks,
-                          })
-                        } 
+                          });
+                        }
                       }}
                       className={`rounded-md ${bgColor} ${textColor} ${borderColor} border-1 w-1/2 text-center py-1.5 text-sm font-medium  hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                     >
