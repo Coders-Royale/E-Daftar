@@ -317,7 +317,7 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
                       {item.title}
                     </p>
                   </div>
-                  <p
+                  {/* <p
                     className={`font-semibold text-xxs ${
                       selected === index
                         ? "text-white bg-blue-250"
@@ -325,7 +325,7 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
                     } ${item.number ? "py-0.5 px-1.5 rounded" : ""}`}
                   >
                     {item.number}
-                  </p>
+                  </p> */}
                 </div>
                 {index === 4 || (pathArray[1] === "admin" && index === 7) ? (
                   <hr className="text-gray-450 my-5" />
@@ -356,7 +356,7 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
             } w-5 h-5`}
           />
           <p
-            className={`text-sm font-semibold text-gray-750 transition-all ${
+            className={`text-sm font-semibold transition-all ${
               theme === "Dark" ? "text-gray-150" : "text-gray-500"
             }`}
           >

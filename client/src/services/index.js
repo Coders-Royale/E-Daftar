@@ -92,7 +92,7 @@ export async function trackStatus(params) {
     const res = await fetch(
       baseUrl +
       apiEndPoints.trackStatus +
-      `?documentId=${params.documentId} ` +
+      `?documentId=${params.documentId.split("%")[0]}` +
       `&employeeId=${params.employeeId}`,
       {
         headers: {

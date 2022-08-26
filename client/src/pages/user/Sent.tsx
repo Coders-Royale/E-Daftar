@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLoadMessages } from "../../queries/hooks";
-import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
+import {
+  useEmployeeInfo,
+  useAdminInfo,
+  useTrackStatus,
+} from "../../queries/hooks";
 
 import Sidebar from "../../components/Sidebar";
 import Middlebar from "../../components/Middlebar";
@@ -60,6 +64,7 @@ const Sent = ({ selected, setSelected, color }: Props) => {
   const [selectedMid, setSelectedMid] = useState<number>(0);
   const [messages, setMessages] = useState<any[]>([]);
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
+  const [statuses, setStatuses] = useState<any[]>([]);
 
   const navigate = useNavigate();
 
@@ -87,6 +92,18 @@ const Sent = ({ selected, setSelected, color }: Props) => {
 
     return false;
   };
+
+  const receivedStatus = useTrackStatus({
+    documentId: messages[selectedMid]?.content.split("documentId=")[1],
+    employeeId: localStorage.getItem("empId"),
+  });
+
+  useEffect(() => {
+    if (receivedStatus.data) {
+      setStatuses(receivedStatus.data?.data);
+    }
+    console.log(receivedStatus.data);
+  }, [receivedStatus.isSuccess === true]);
 
   const receivedMessages = useLoadMessages({
     employeeId: localStorage.getItem("empId"),
@@ -120,6 +137,7 @@ const Sent = ({ selected, setSelected, color }: Props) => {
               setSelectedMid={setSelectedMid}
               type="sent"
               emailContent={messages[selectedMid]}
+              statuses={statuses}
             />
           </div>
         </div>
