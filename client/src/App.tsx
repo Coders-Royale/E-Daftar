@@ -49,6 +49,8 @@ const msg = new SpeechSynthesisUtterance();
 interface AppContextInterface {
   theme: "Light" | "Dark" | "SweetMorning" | "BrightVault" | "Superman";
   setTheme: any;
+  notification: any[];
+  setNotification:any
 }
 // color === "Light" || color === "Dark"
 // ? ""
@@ -59,6 +61,8 @@ interface AppContextInterface {
 export const AppContext = createContext<AppContextInterface>({
   theme: "Light",
   setTheme: null,
+  notification:[],
+  setNotification:null
 });
 
 export const COLORS = {
@@ -128,6 +132,7 @@ const App: React.FC = () => {
   const [selected, setSelected] = useState<number>(0);
   const [color, setColor] = useState<string>("");
   const [theme, setTheme] = useState<any>("Light");
+  const [notification, setNotification] = useState<any[]>([]);
   const [socketConnection, setSocketConnection] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
@@ -174,7 +179,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ theme: theme, setTheme: setTheme }}>
+    <AppContext.Provider value={{ theme: theme, setTheme: setTheme, notification: notification, setNotification: setNotification }}>
       <div className="font-roboto">
         {window.location.pathname === "/" ? null : (
           <div className="absolute right-0 top-0 mr-8 mt-2">
