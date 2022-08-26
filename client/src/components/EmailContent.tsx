@@ -38,6 +38,7 @@ interface Props {
   type: string;
   emailContent: any;
   statuses?: any[];
+  documentId?: string;
 }
 
 export default function EmailContent({
@@ -46,6 +47,7 @@ export default function EmailContent({
   type,
   emailContent,
   statuses,
+  documentId,
 }: Props) {
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
@@ -156,8 +158,7 @@ export default function EmailContent({
   }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   const documentInfo = useDocument({
-    documentId:
-      emailContent?.content && emailContent?.content?.split("documentId=")[1],
+    documentId: documentId ?? emailContent?.content.split("documentId=")[1],
     employeeId: localStorage.getItem("empId"),
     role: localStorage.getItem("empId")![0] == "A" ? "admin" : "employee",
   });
@@ -279,7 +280,7 @@ export default function EmailContent({
             TRACKING
           </h1>
           <div className="mt-4">
-            {statuses !== undefined &&
+            {statuses &&
               statuses.map((item, index) => (
                 <TimelineComponent
                   index={index}
@@ -312,7 +313,7 @@ export default function EmailContent({
             theme === "Dark" ? "text-gray-150" : "text-gray-750"
           } transition-all`}
         >
-          {emailContent?.content &&
+          {emailContent?.description ??
             emailContent?.content.split("documentId=")[0]}
         </div>
         {/* <div className="pt-4 flex flex-row gap-8">
@@ -341,7 +342,9 @@ export default function EmailContent({
           isOpen={isOpenApprove}
           setIsOpen={setIsOpenApprove}
           clickFunction={useApproveDocument}
-          documentId={emailContent?.content?.split("documentId=")[1] || ""}
+          documentId={
+            documentId ?? emailContent?.content.split("documentId=")[1]
+          }
         />
         <ActionsButton
           bgColor="bg-blue-25"
@@ -351,7 +354,9 @@ export default function EmailContent({
           isOpen={isOpenForward}
           setIsOpen={setIsOpenForward}
           clickFunction={useAssignDocument}
-          documentId={emailContent?.content?.split("documentId=")[1]}
+          documentId={
+            documentId ?? emailContent?.content.split("documentId=")[1]
+          }
         />
         <ActionsButton
           bgColor="bg-red-150"
@@ -361,7 +366,9 @@ export default function EmailContent({
           isOpen={isOpenReject}
           setIsOpen={setIsOpenReject}
           clickFunction={useRejectDocument}
-          documentId={emailContent?.content?.split("documentId=")[1]}
+          documentId={
+            documentId ?? emailContent?.content.split("documentId=")[1]
+          }
         />
       </div>
 

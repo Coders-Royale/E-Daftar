@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useLoadMessages } from "../../queries/hooks";
+import { useYourPendingDocuments } from "../../queries/hooks";
 import { useEmployeeInfo, useAdminInfo } from "../../queries/hooks";
 
 import Sidebar from "../../components/Sidebar";
@@ -28,23 +28,6 @@ enum Status {
   Rejected = "Rejected",
   Approved = "Approved",
 }
-
-const emailContent = `
-To
-The Manager
-Hero Moto Corp.
-
-Subject: One day leave application
-
-Respected Sir/Ma'am,
-
-I am writing this to inform you that I will be taking leave on ____ (date) as I have to _____ (mention reasons like attending a wedding, visit a friend, attending a seminar or event, etc.). I have completed all my tasks for the day and would be in touch with my team members if my assistance is required anytime.
-
-Thank you.
-
-Yours Sincerely,
-John Doe
-`;
 
 interface Props {
   selected: number;
@@ -88,16 +71,16 @@ const Pending = ({ selected, setSelected, color }: Props) => {
     return false;
   };
 
-  const receivedMessages = useLoadMessages({
+  const receivedMessages = useYourPendingDocuments({
     employeeId: localStorage.getItem("empId"),
-    pageNo: 1,
-    filter: "pending",
+    role: localStorage.getItem("empId")![0] === "E" ? "employee" : "admin",
   });
 
   useEffect(() => {
     if (receivedMessages.data) {
       setMessages(receivedMessages.data.data);
     }
+    console.log(receivedMessages.data);
   }, [receivedMessages.isSuccess === true]);
 
   return (
@@ -119,7 +102,8 @@ const Pending = ({ selected, setSelected, color }: Props) => {
               selectedMid={selectedMid}
               setSelectedMid={setSelectedMid}
               type="approved"
-              emailContent={emailContent}
+              emailContent={messages[selectedMid]}
+              documentId={messages[selectedMid].documentId}
             />
           </div>
         </div>

@@ -102,7 +102,6 @@ const Sent = ({ selected, setSelected, color }: Props) => {
     if (receivedStatus.data) {
       setStatuses(receivedStatus.data?.data);
     }
-    console.log(receivedStatus.data);
   }, [receivedStatus.isSuccess === true]);
 
   const receivedMessages = useLoadMessages({
