@@ -141,14 +141,15 @@ const App: React.FC = () => {
   };
 
   window.addEventListener("mouseover", (event) => {
-    if (event?.srcElement instanceof HTMLElement)
-      setOurText(event?.srcElement?.innerText);
+    console.log(event);
+    if (event?.srcElement instanceof HTMLElement) {
+      if (!event?.srcElement?.innerHTML.includes("</")) {
+        window.speechSynthesis.cancel();
+        msg.text = event?.srcElement?.innerText;
+        window.speechSynthesis.speak(msg);
+      }
+    }
   });
-
-  // useEffect(() => {
-  //   // return;
-  //   speechHandler();
-  // }, [ourText]);
 
   // Auto Login
   useEffect(() => {
