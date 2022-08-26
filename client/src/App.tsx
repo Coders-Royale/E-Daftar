@@ -176,14 +176,16 @@ const App: React.FC = () => {
   return (
     <AppContext.Provider value={{ theme: theme, setTheme: setTheme }}>
       <div className="font-roboto">
-        <div className="absolute right-0 top-0 mr-8 mt-2">
-          <Toggle
-            isEnabled={isEnabled}
-            color={color}
-            setColor={setColor}
-            setIsEnabled={setIsEnabled}
-          />
-        </div>
+        {window.location.pathname === "/" ? null : (
+          <div className="absolute right-0 top-0 mr-8 mt-2">
+            <Toggle
+              isEnabled={isEnabled}
+              color={color}
+              setColor={setColor}
+              setIsEnabled={setIsEnabled}
+            />
+          </div>
+        )}
         <QueryClientProvider client={queryClient}>
           <Routes>
             <Route path="/" element={<Homepage />} />

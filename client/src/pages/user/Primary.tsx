@@ -121,27 +121,37 @@ const Primary = ({ selected, setSelected, socketConnection, color }: Props) => {
       <div className="w-1/5">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
-      <div className="flex w-4/5">
-        <div className="w-1/3 overflow-scroll">
-          <Middlebar
-            selectedMid={selectedMid}
-            setSelectedMid={setSelectedMid}
-            displayRooms={messages}
-          />
-        </div>
-        <div className="w-2/3 overflow-scroll">
-          {messages?.length > 0 ? (
+      {messages?.length > 0 ? (
+        <div className="flex w-4/5">
+          <div className="w-1/3 overflow-scroll">
+            <Middlebar
+              selectedMid={selectedMid}
+              setSelectedMid={setSelectedMid}
+              displayRooms={messages}
+            />
+          </div>
+          <div className="w-2/3 overflow-scroll">
             <EmailContent
               selectedMid={selectedMid}
               setSelectedMid={setSelectedMid}
               type="primary"
               emailContent={messages[selectedMid]}
             />
+          </div>
+        </div>
+      ) : (
+        <div className="w-4/5">
+          {receivedMessages.isSuccess === true ? (
+            <div className="flex justify-center items-center h-screen bg-gray-50">
+              <p>
+                You have no messages. <br />
+              </p>
+            </div>
           ) : (
             <Loader />
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 };

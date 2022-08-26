@@ -20,6 +20,7 @@ import Email1 from "../../images/tracking_page_email_1.png";
 import Email2 from "../../images/tracking_page_email_2.png";
 import Email3 from "../../images/tracking_page_email_3.png";
 import Dp from "../../images/profile_page_dp.png";
+import Loader from "../../components/Loader";
 
 enum Status {
   Pending = "Pending",
@@ -100,26 +101,39 @@ const Sent = ({ selected, setSelected, color }: Props) => {
   }, [receivedMessages.isSuccess === true]);
 
   return (
-    <div className="h-screen flex bg-white overflow-hidden">
-      <div className="w-1/4">
+    <div className="h-screen w-full flex bg-white overflow-hidden">
+      <div className="w-1/5">
         <Sidebar selected={selected} setSelected={setSelected} color={color} />
       </div>
-      {messages !== undefined && (
-        <div className="flex flex-row w-full overflow-scroll">
-          <div className="w-1/3">
+      {messages?.length > 0 ? (
+        <div className="flex w-4/5">
+          <div className="w-1/3 overflow-scroll">
             <Middlebar
               selectedMid={selectedMid}
               setSelectedMid={setSelectedMid}
               displayRooms={messages}
             />
           </div>
-
-          <EmailContent
-            selectedMid={selectedMid}
-            setSelectedMid={setSelectedMid}
-            type="sent"
-            emailContent={messages[selectedMid]}
-          />
+          <div className="w-2/3 overflow-scroll">
+            <EmailContent
+              selectedMid={selectedMid}
+              setSelectedMid={setSelectedMid}
+              type="sent"
+              emailContent={messages[selectedMid]}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="w-4/5">
+          {receivedMessages.isSuccess === true ? (
+            <div className="flex justify-center items-center h-screen bg-gray-50">
+              <p>
+                You haven't sent any message yet. Try creating a new message.
+              </p>
+            </div>
+          ) : (
+            <Loader />
+          )}
         </div>
       )}
     </div>
