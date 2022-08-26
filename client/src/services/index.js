@@ -1,7 +1,7 @@
-// const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
-const baseUrl = "http://localhost:7071/api";
-// const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
-const baseUrlChat = "http://localhost:3001/api/chat";
+const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+// const baseUrl = "http://localhost:7071/api";
+const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
+// const baseUrlChat = "http://localhost:3001/api/chat";
 
 const apiEndPoints = {
   // GET REQUESTS
@@ -34,9 +34,9 @@ export async function getEmployee(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.getEmployee +
-        `?employeeId=${params.employeeId}` +
-        `&departmentId=${params.departmentId}`,
+      apiEndPoints.getEmployee +
+      `?employeeId=${params.employeeId}` +
+      `&departmentId=${params.departmentId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -71,9 +71,9 @@ export async function getAdmin(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.getAdmin +
-        `?employeeId=${params.employeeId}` +
-        `&departmentId=${params.departmentId}`,
+      apiEndPoints.getAdmin +
+      `?employeeId=${params.employeeId}` +
+      `&departmentId=${params.departmentId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -91,9 +91,9 @@ export async function trackStatus(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.trackStatus +
-        `?documentId=${params.documentId} ` +
-        `&employeeId=${params.employeeId}`,
+      apiEndPoints.trackStatus +
+      `?documentId=${params.documentId} ` +
+      `&employeeId=${params.employeeId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -145,10 +145,10 @@ export async function loadMessages(params) {
   try {
     const res = await fetch(
       baseUrlChat +
-        apiEndPoints.loadMessages +
-        `?employeeId=${params.employeeId}` +
-        `&pageNo=${params.pageNo}` +
-        `&filter=${params.filter}`,
+      apiEndPoints.loadMessages +
+      `?employeeId=${params.employeeId}` +
+      `&pageNo=${params.pageNo}` +
+      `&filter=${params.filter}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -166,8 +166,8 @@ export async function getYourApprovedDocuments(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.getYourApprovedDocuments +
-        `?employeeId=${params.employeeId}`,
+      apiEndPoints.getYourApprovedDocuments +
+      `?employeeId=${params.employeeId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -185,8 +185,8 @@ export async function getYourRejectedDocuments(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.getYourRejectedDocuments +
-        `?employeeId=${params.employeeId}`,
+      apiEndPoints.getYourRejectedDocuments +
+      `?employeeId=${params.employeeId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -204,10 +204,10 @@ export async function getDocument(params) {
   try {
     const res = await fetch(
       baseUrl +
-        apiEndPoints.getDocument +
-        `?documentId=${params.documentId}` +
-        `&employeeId=${params.employeeId}` +
-        `&role=${params.role}`,
+      apiEndPoints.getDocument +
+      `?documentId=${params.documentId}` +
+      `&employeeId=${params.employeeId}` +
+      `&role=${params.role}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
