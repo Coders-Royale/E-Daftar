@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import ForwardArrow from "../images/icons/tracking_page_forward_arrow.svg";
 import GreenTick from "../images/icons/tracking_page_green_tick.svg";
 import Rejected from "../images/icons/tracking_page_rejected.svg";
 import Pending from "../images/icons/tracking_page_pending.svg";
+import { AppContext, COLORS } from "../App";
 
 export interface TimelineComponentProps {
   index: number;
@@ -28,13 +29,18 @@ export default function TimelineComponent({
   status,
   remarks,
 }: TimelineComponentProps) {
+  const { theme, setTheme } = useContext(AppContext);
   return (
     <div>
       <div className="flex flex-row items-center gap-2">
         <div className="w-5 h-5 rounded-full bg-blue-150">
           <h1 className="text-xs text-white text-center py-0.5">{index}</h1>
         </div>
-        <h1 className="text-xs text-gray-650 dark:text-gray-350 font-medium">
+        <h1
+          className={`text-xs ${
+            theme === "Dark" ? "text-gray-350" : "text-gray-650"
+          } font-medium`}
+        >
           {name}
         </h1>
       </div>
@@ -92,7 +98,11 @@ export default function TimelineComponent({
 
         {/*Remove remarks if status="Approved"*/}
         {status !== Status.Approved && status !== Status.Pending && (
-          <h1 className="text-xxs font-medium text-gray-650 dark:text-gray-350 pl-5">
+          <h1
+            className={`text-xxs font-medium ${
+              theme === "Dark" ? "text-gray-350" : "text-gray-650"
+            } pl-5`}
+          >
             Remarks: <span className="font-normal test-gray-550"></span>
             {remarks}
           </h1>

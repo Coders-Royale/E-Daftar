@@ -94,7 +94,10 @@ const Sent = ({ selected, setSelected, color }: Props) => {
   };
 
   const receivedStatus = useTrackStatus({
-    documentId: messages[selectedMid]?.content.split("documentId=")[1],
+    documentId:
+      messages?.length > 0
+        ? messages[selectedMid]?.content.split("documentId=")[1]
+        : "",
     employeeId: localStorage.getItem("empId"),
   });
 
@@ -109,6 +112,8 @@ const Sent = ({ selected, setSelected, color }: Props) => {
     pageNo: 1,
     filter: "sent",
   });
+
+  console.log(receivedMessages.data);
 
   useEffect(() => {
     if (receivedMessages.data) {
@@ -142,7 +147,8 @@ const Sent = ({ selected, setSelected, color }: Props) => {
         </div>
       ) : (
         <div className="w-4/5">
-          {receivedMessages.isSuccess === true ? (
+          {receivedMessages.isSuccess === true &&
+          receivedMessages?.data?.error === true ? (
             <div className="flex justify-center items-center h-screen bg-gray-50">
               <p>
                 You haven't sent any message yet. Try creating a new message.

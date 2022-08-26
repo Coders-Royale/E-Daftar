@@ -100,7 +100,7 @@ const Homepage: React.FC = () => {
   ];
 
   return (
-    <div className="font-gray-150">
+    <div className="bg-gray-150">
       <Navbar />
       <div className="grid grid-cols-5 gap-16 px-16 mt-16 items-center">
         <div className="col-span-2">
