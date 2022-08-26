@@ -132,22 +132,28 @@ const App: React.FC = () => {
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(socket);
   const navigate = useNavigate();
 
-  const [ourText, setOurText] = useState("");
-
-  const speechHandler = () => {
-    window.speechSynthesis.cancel();
-    msg.text = ourText;
-    window.speechSynthesis.speak(msg);
-  };
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [speakText, setSpeakText] = useState("");
 
   window.addEventListener("mouseover", (event) => {
-    console.log(event);
     if (event?.srcElement instanceof HTMLElement) {
       if (!event?.srcElement?.innerHTML.includes("</")) {
-        window.speechSynthesis.cancel();
-        msg.text = event?.srcElement?.innerText;
-        window.speechSynthesis.speak(msg);
+        setSpeakText(event?.srcElement?.innerText);
       }
+    }
+  });
+
+  useEffect(() => {
+    if (isEnabled) {
+      window.speechSynthesis.cancel();
+      msg.text = speakText;
+      window.speechSynthesis.speak(msg);
+    }
+  }, [speakText, isEnabled]);
+
+  window.addEventListener("keydown", (e) => {
+    if (e?.keyCode === 18) {
+      setIsEnabled(!isEnabled);
     }
   });
 
@@ -171,7 +177,12 @@ const App: React.FC = () => {
     <AppContext.Provider value={{ theme: theme, setTheme: setTheme }}>
       <div className="font-roboto">
         <div className="absolute right-0 top-0 mr-8 mt-2">
-          <Toggle color={color} setColor={setColor} />
+          <Toggle
+            isEnabled={isEnabled}
+            color={color}
+            setColor={setColor}
+            setIsEnabled={setIsEnabled}
+          />
         </div>
         <QueryClientProvider client={queryClient}>
           <Routes>
