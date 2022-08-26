@@ -16,6 +16,9 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SendIcon from "@mui/icons-material/Send";
 import Man from "../images/man.svg";
 import GreenTick from "../images/icons/tracking_page_green_tick.svg";
+import ForwardArrow from "../images/icons/tracking_page_forward_arrow.svg";
+import Rejected from "../images/icons/tracking_page_rejected.svg";
+import Pending from "../images/icons/tracking_page_pending.svg";
 import Clock from "../images/icons/tracking_page_clock.svg";
 import Email1 from "../images/tracking_page_email_1.png";
 import Email2 from "../images/tracking_page_email_2.png";
@@ -24,6 +27,13 @@ import Dp from "../images/profile_page_dp.png";
 import PDFIcon from "./PDFIcon";
 import ActionsButton from "./buttons/ActionsButton";
 import { AppContext, COLORS } from "../App";
+
+const statusImages:any = {
+  "Approved": GreenTick,
+  "Forwarded": ForwardArrow,
+  "Rejected": Rejected,
+  "Pending": Pending
+}
 
 enum Status {
   Pending = "Pending",
@@ -37,7 +47,7 @@ interface Props {
   setSelectedMid: (selected: number) => void;
   type: string;
   emailContent: any;
-  statuses?: any[];
+  statuses?: any;
   documentId?: string;
 }
 
@@ -253,10 +263,14 @@ export default function EmailContent({
             CURRENT STATUS
           </h1>
           <div className="flex flex-row mt-4 items-center gap-2">
-            <img src={GreenTick} alt="green-tick" className="w-4 h-4" />
+            <img src={statuses ? statusImages[statuses[statuses?.length-1]?.status.toString()] : GreenTick} alt="green-tick" className="w-4 h-4" />
             <h1 className="text-sm font-medium text-gray-650">
-              <span className="text-green-550 text-base">Approved</span> by Mr.
-              Venkatesh Iyer
+            {statuses &&
+              <div>
+                <span className="text-green-550 text-base">{statuses[statuses?.length-1]?.status}</span>
+                <span className="">{` by ${statuses[statuses?.length-1]?.employeeName}`}</span>
+              </div>
+            }
             </h1>
           </div>
 
@@ -281,7 +295,7 @@ export default function EmailContent({
           </h1>
           <div className="mt-4">
             {statuses &&
-              statuses.map((item, index) => (
+              statuses.map((item: any, index: number) => (
                 <TimelineComponent
                   index={index}
                   name={item.employeeName}
