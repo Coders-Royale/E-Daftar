@@ -6,32 +6,48 @@ import {
     regular,
     brands,
 } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { ThemeContext } from "../themes/ThemeContext";
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, Transition, Switch } from "@headlessui/react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { AppContext, COLORS } from "../App";
 
 const Toggle = ({ color, setColor }) => {
     const { theme, setTheme } = React.useContext(AppContext);
+    const [enabled, setEnabled] = useState(false)
+
+    const refClick = useRef(null);
+
+    const onTKeyPress = (e) => {
+        if (e.key === "Enter") {
+            console.log("toggle");
+            setEnabled(!enabled);
+        }
+    }
 
     return (
-        // <div className="transition duration-500 ease-in-out rounded-full p-2">
-        //     {theme === 'dark' ? (
-        //         <FontAwesomeIcon
-        //             icon={solid('Sun')}
-        //             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        //             className="text-gray-500 dark:text-gray-400 text-2xl cursor-pointer"
-        //         />
-        //     ) : (
-        //         <FontAwesomeIcon
-        //             icon={solid('Moon')}
-        //             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        //             className="text-gray-500 dark:text-gray-400 text-2xl cursor-pointer"
-        //         />
-        //     )}
-        // </div>
-        <div>
+        <div className="flex items-center gap-4" onKeyDown={(e) => onTKeyPress(e)}>
+            <div className="flex gap-2 items-center">
+                <p className="text-sm text-gray-600">
+                    Normal
+                </p>
+                <Switch
+                    checked={enabled}
+                    onChange={setEnabled}
+                    ref={refClick}
+                    className={`${enabled ? 'bg-blue-900' : 'bg-blue-700'}
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                >
+                    <span className="sr-only">Use setting</span>
+                    <span
+                        aria-hidden="true"
+                        className={`${enabled ? 'translate-x-9' : 'translate-x-0'}
+            pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                    />
+                </Switch>
+                <p className="text-sm text-gray-600">
+                    Blind
+                </p>
+            </div>
             <Menu as="div" className="relative inline-block text-left">
                 <div>
                     <Menu.Button className="inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
@@ -73,322 +89,12 @@ const Toggle = ({ color, setColor }) => {
                                     </Menu.Item>
                                 );
                             })}
-                            {/* <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <DuplicateActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <DuplicateInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Duplicate
-                                    </button>
-                                )}
-                            </Menu.Item>
-                        </div>
-                        <div className="px-1 py-1">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <ArchiveActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <ArchiveInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Archive
-                                    </button>
-                                )}
-                            </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <MoveActiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <MoveInactiveIcon
-                                                className="mr-2 h-5 w-5"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Move
-                                    </button>
-                                )}
-                            </Menu.Item>
-                        </div>
-                        <div className="px-1 py-1">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        {active ? (
-                                            <DeleteActiveIcon
-                                                className="mr-2 h-5 w-5 text-violet-400"
-                                                aria-hidden="true"
-                                            />
-                                        ) : (
-                                            <DeleteInactiveIcon
-                                                className="mr-2 h-5 w-5 text-violet-400"
-                                                aria-hidden="true"
-                                            />
-                                        )}
-                                        Delete
-                                    </button>
-                                )}
-                                        </Menu.Item> */}
                         </div>
                     </Menu.Items>
                 </Transition>
             </Menu>
-        </div>
+        </div >
     );
 };
-
-function EditInactiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="M4 13V16H7L16 7L13 4L4 13Z"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-        </svg>
-    );
-}
-
-function EditActiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="M4 13V16H7L16 7L13 4L4 13Z"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-        </svg>
-    );
-}
-
-function DuplicateInactiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="M4 4H12V12H4V4Z"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-            <path
-                d="M8 8H16V16H8V8Z"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-        </svg>
-    );
-}
-
-function DuplicateActiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path
-                d="M4 4H12V12H4V4Z"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-            <path
-                d="M8 8H16V16H8V8Z"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-        </svg>
-    );
-}
-
-function ArchiveInactiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect
-                x="5"
-                y="8"
-                width="10"
-                height="8"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-            <rect
-                x="4"
-                y="4"
-                width="12"
-                height="4"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-            <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
-        </svg>
-    );
-}
-
-function ArchiveActiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect
-                x="5"
-                y="8"
-                width="10"
-                height="8"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-            <rect
-                x="4"
-                y="4"
-                width="12"
-                height="4"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-            <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
-        </svg>
-    );
-}
-
-function MoveInactiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path d="M10 4H16V10" stroke="#A78BFA" strokeWidth="2" />
-            <path d="M16 4L8 12" stroke="#A78BFA" strokeWidth="2" />
-            <path d="M8 6H4V16H14V12" stroke="#A78BFA" strokeWidth="2" />
-        </svg>
-    );
-}
-
-function MoveActiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <path d="M10 4H16V10" stroke="#C4B5FD" strokeWidth="2" />
-            <path d="M16 4L8 12" stroke="#C4B5FD" strokeWidth="2" />
-            <path d="M8 6H4V16H14V12" stroke="#C4B5FD" strokeWidth="2" />
-        </svg>
-    );
-}
-
-function DeleteInactiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect
-                x="5"
-                y="6"
-                width="10"
-                height="10"
-                fill="#EDE9FE"
-                stroke="#A78BFA"
-                strokeWidth="2"
-            />
-            <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
-            <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
-        </svg>
-    );
-}
-
-function DeleteActiveIcon(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <rect
-                x="5"
-                y="6"
-                width="10"
-                height="10"
-                fill="#8B5CF6"
-                stroke="#C4B5FD"
-                strokeWidth="2"
-            />
-            <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
-            <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
-        </svg>
-    );
-}
 
 export default Toggle;
