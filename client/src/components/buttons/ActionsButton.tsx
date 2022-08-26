@@ -16,6 +16,8 @@ export interface ActionsButtonProps {
   text: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  documentId?: string | any;
+  clickFunction: Function;
 }
 
 export default function ActionsButton({
@@ -25,9 +27,20 @@ export default function ActionsButton({
   text,
   isOpen,
   setIsOpen,
+  documentId,
+  clickFunction
 }: ActionsButtonProps) {
   const [toPerson, setToPerson] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [department, setDepartment] = useState<string>("");
+
+  interface Error {
+    type: string;
+    message: string;
+  }
+  const [errors, setErrors] = useState<Error[]>([]);
 
   const employeeInfo = useEmployeeInfo({
     employeeId: localStorage.getItem("empId"),
@@ -37,6 +50,10 @@ export default function ActionsButton({
     employeeId: localStorage.getItem("empId"),
   });
 
+  useEffect(() => {
+    console.log(adminInfo);
+  }, [adminInfo.isSuccess === true]);
+
   const allEmployees = useAllEmployees({
     department:
       employeeInfo?.data?.employee?.department ||
@@ -45,7 +62,7 @@ export default function ActionsButton({
 
   let allEmployeesResult = allEmployees?.data?.employees?.map(
     (e: { employeeId: string; firstName: string; lastName: string }) =>
-      e.employeeId + " (" + e.firstName + " " + e.lastName + ")"
+      e.employeeId
   );
 
   return (
@@ -123,13 +140,30 @@ export default function ActionsButton({
                       rows={4}
                       className="w-full"
                       placeholder="Write something..."
+                      onChange={(e) => setRemarks(e.target.value)}
                     />
                   </div>
 
                   <div className="mt-4 flex justify-center">
                     <button
                       type="button"
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        setIsOpen(false)
+                        if(text == "Forward") {
+                          clickFunction({
+                            adminId: localStorage.getItem("empId"),
+                            department: adminInfo?.data?.employee?.department,
+                            documentId: documentId,
+                            employeeToAssign: toPerson,
+                          })
+                        } else {
+                          clickFunction({
+                            employeeId: localStorage.getItem("empId"),
+                            documentId: documentId,
+                            reason: remarks,
+                          })
+                        } 
+                      }}
                       className={`rounded-md ${bgColor} ${textColor} ${borderColor} border-1 w-1/2 text-center py-1.5 text-sm font-medium  hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                     >
                       {text}

@@ -168,7 +168,7 @@ const NewMessage = ({
           "private-message",
           JSON.stringify({
             senderId: localStorage.getItem("empId"),
-            content: emailContent,
+            content: emailContent + `documentId=${data.data.documentId}`,
             createdAt: new Date(),
             senderName: name,
             subject: subject,

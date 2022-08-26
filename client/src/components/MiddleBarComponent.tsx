@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import PaperClip from "../images/icons/middlebar_component_attach.svg";
+import { AppContext, COLORS } from "../App";
 
 export interface MiddleBarComponentProps {
   image: string;
@@ -52,18 +53,27 @@ export default function MiddleBarComponent({
   attachment,
   selected,
 }: MiddleBarComponentProps) {
+  const { theme, setTheme } = useContext(AppContext);
   return (
     <div
-      className={`bg-gradient-to-b from-blue-450 to-blue-150 rounded-lg cursor-pointer ${
+      className={`${COLORS[theme].classBottom} rounded-lg cursor-pointer ${
         selected ? "pl-1 filter drop-shadow-blue" : "pl-0"
       }`}
     >
-      <div className="bg-white transition-all dark:bg-gray-850 px-4 py-4 mb-4 rounded-lg">
+      <div
+        className={`${
+          theme === "Dark" ? "bg-gray-850" : "bg-white"
+        } transition-all px-4 py-4 mb-4 rounded-lg`}
+      >
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-2">
             <img src={image} alt="man" className="w-10 h-10 rounded-full" />
             <div className="w-full">
-              <h1 className="text-sm font-bold text-gray-750 transition-all dark:text-gray-150">
+              <h1
+                className={`text-sm font-bold ${
+                  theme === "Dark" ? "text-gray-150" : "text-gray-750"
+                } transition-all`}
+              >
                 {title}
                 <span
                   className={`${attachment ? "visible" : "hidden"} float-right`}
@@ -75,18 +85,30 @@ export default function MiddleBarComponent({
                   />
                 </span>
               </h1>
-              <h1 className="text-sm font-normal text-gray-750 transition-all dark:text-gray-150">
+              <h1
+                className={`text-sm font-normal ${
+                  theme === "Dark" ? "text-gray-150" : "text-gray-750"
+                } transition-all`}
+              >
                 {name}
               </h1>
             </div>
           </div>
 
-          <h1 className="text-sm font-normal text-gray-550 transition-all dark:text-gray-450">
+          <h1
+            className={`text-sm font-normal ${
+              theme === "Dark" ? "text-gray-450" : "text-gray-550"
+            } transition-all`}
+          >
             {getTimeInYearMonthDayMinutes(time)}
           </h1>
         </div>
 
-        <h1 className="my-1 px-7 pl-12 text-sm font-normal text-gray-550 transition-all dark:text-gray-450 truncate">
+        <h1
+          className={`my-1 px-7 pl-12 text-sm font-normal ${
+            theme === "Dark" ? "text-gray-450" : "text-gray-550"
+          } transition-all truncate`}
+        >
           {content}
         </h1>
       </div>

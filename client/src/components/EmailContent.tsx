@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
 
 import { useDocument } from "../queries/hooks";
-import { useMutateAssignDocument } from "../queries/mutations";
+import {
+  useMutateAssignDocument,
+  useMutateRejectDocument,
+  useMutateApproveDocument,
+} from "../queries/mutations";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -18,6 +22,7 @@ import Email3 from "../images/tracking_page_email_3.png";
 import Dp from "../images/profile_page_dp.png";
 import PDFIcon from "./PDFIcon";
 import ActionsButton from "./buttons/ActionsButton";
+import { AppContext, COLORS } from "../App";
 
 enum Status {
   Pending = "Pending",
@@ -44,6 +49,7 @@ export default function EmailContent({
   const [message, setMessage] = useState<string>("");
   const [mainFiles, setMainFiles] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { theme, setTheme } = useContext(AppContext);
 
   interface Error {
     type: string;
@@ -98,12 +104,56 @@ export default function EmailContent({
     },
   }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
-  const dummy = () => {
-    console.log("dummy");
-  }
+  const { mutateAsync: useRejectDocument } = useMutateRejectDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Document rejected successfully") {
+        setMessage(data.message);
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
+
+  const { mutateAsync: useApproveDocument } = useMutateApproveDocument({
+    onSuccess: (data: any) => {
+      if (data.message === "Document approved successfully") {
+        setMessage(data.message);
+        setLoading(false);
+      } else {
+        setErrors((errors: Error[]) => [
+          ...errors,
+          { type: "unknown", message: data.message },
+        ]);
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setErrors((errors: Error[]) => [
+        ...errors,
+        { type: "unknown", message: "Unknown error" },
+      ]);
+    },
+    onMutate: () => {
+      setLoading(true);
+    },
+  }) as unknown as { mutateAsync: (data: any) => Promise<any> };
 
   const documentInfo = useDocument({
-    documentId: emailContent?.content.documentId,
+    documentId: emailContent?.content.split("documentId=")[1],
     employeeId: localStorage.getItem("empId"),
     role: localStorage.getItem("empId")![0] == "A" ? "admin" : "employee",
   });
@@ -115,12 +165,20 @@ export default function EmailContent({
   }, [documentInfo.isSuccess === true]);
 
   return (
-    <div className="w-full overflow-scroll px-10 dark:bg-gray-850 dark:min-h-screen transition-all">
+    <div
+      className={`w-full overflow-scroll px-10 ${
+        theme === "Dark" ? "bg-gray-850" : "bg-white"
+      } min-h-screen transition-all`}
+    >
       {/*NAVIGATOR*/}
       {type === "sent" ? (
         <div className="mt-16 flex flex-row justify-end">
           <div className="flex flex-row gap-4 items-center">
-            <h1 className="text-sm font-normal text-gray-750 dark:text-gray-150 transition-all">
+            <h1
+              className={`text-sm font-normal ${
+                theme === "Dark" ? "text-gray-150" : "text-gray-750"
+              } transition-all`}
+            >
               1 of 50
             </h1>
             <div className="px-4 py-3 rounded-lg border border-gray-450 flex flex-row">
@@ -144,21 +202,33 @@ export default function EmailContent({
           <img src={Man} alt="man" className="rounded-full w-[60px] h-[60px]" />
           <div className="">
             {type === "sent" ? (
-              <h1 className="text-sm font-semibold text-gray-750 dark:text-gray-150 transition-all">
+              <h1
+                className={`text-sm font-semibold ${
+                  theme === "Dark" ? "text-gray-150" : "text-gray-750"
+                } transition-all`}
+              >
                 To: Himanshu Chittora{" "}
                 <span>
                   <KeyboardArrowDownIcon fontSize="small" />
                 </span>
               </h1>
             ) : (
-              <h1 className="text-sm font-semibold text-gray-750 dark:text-gray-150 transition-all">
+              <h1
+                className={`text-sm font-semibold ${
+                  theme === "Dark" ? "text-gray-150" : "text-gray-750"
+                } transition-all`}
+              >
                 From: {emailContent?.senderName}
                 <span>
                   <KeyboardArrowDownIcon fontSize="small" />
                 </span>
               </h1>
             )}
-            <h1 className="text-3xl font-normal text-gray-750 dark:text-gray-150 transition-all">
+            <h1
+              className={`text-3xl font-normal ${
+                theme === "Dark" ? "text-gray-150" : "text-gray-750"
+              } transition-all`}
+            >
               {emailContent?.subject}
             </h1>
           </div>
@@ -170,7 +240,11 @@ export default function EmailContent({
       {/*CURRENT STATUS*/}
       {type === "sent" ? (
         <div className="pl-[76px] mt-8">
-          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
+          <h1
+            className={`text-sm font-semibold ${
+              theme === "Dark" ? "text-gray-150" : "text-gray-750"
+            } transition-all tracking-widest`}
+          >
             CURRENT STATUS
           </h1>
           <div className="flex flex-row mt-4 items-center gap-2">
@@ -193,7 +267,11 @@ export default function EmailContent({
       {/*TRACKING*/}
       {type === "sent" ? (
         <div className="pl-[76px] mt-8">
-          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
+          <h1
+            className={`text-sm font-semibold ${
+              theme === "Dark" ? "text-gray-150" : "text-gray-750"
+            } transition-all tracking-widest`}
+          >
             TRACKING
           </h1>
           <div className="mt-4">
@@ -235,12 +313,20 @@ export default function EmailContent({
       {/*EMAIL CONTENT*/}
       <div className={`pl-[76px] ${type === "sent" ? "mt-16" : ""}`}>
         {type === "sent" ? (
-          <h1 className="text-sm font-bold text-gray-750 dark:text-gray-150 transition-all tracking-widest">
+          <h1
+            className={`text-sm font-semibold ${
+              theme === "Dark" ? "text-gray-150" : "text-gray-750"
+            } transition-all tracking-widest`}
+          >
             EMAIL CONTENT
           </h1>
         ) : null}
-        <div className="pt-4 items-center whitespace-pre-line font-normal text-sm text-gray-750 dark:text-gray-150 transition-all">
-          {emailContent?.content}
+        <div
+          className={`text-sm pt-4 items-center whitespace-pre-line font-normal ${
+            theme === "Dark" ? "text-gray-150" : "text-gray-750"
+          } transition-all`}
+        >
+          {emailContent?.content.split("documentId=")[0]}
         </div>
         <div className="pt-4 flex flex-row gap-8">
           <img src={Email1} alt="" className="w-1/3" />
@@ -267,7 +353,8 @@ export default function EmailContent({
           text="Approve"
           isOpen={isOpenApprove}
           setIsOpen={setIsOpenApprove}
-          // clickFunction={dummy}
+          clickFunction={useApproveDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
         <ActionsButton
           bgColor="bg-blue-25"
@@ -276,7 +363,8 @@ export default function EmailContent({
           text="Forward"
           isOpen={isOpenForward}
           setIsOpen={setIsOpenForward}
-          // clickFunction={dummy}
+          clickFunction={useAssignDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
         <ActionsButton
           bgColor="bg-red-150"
@@ -285,7 +373,8 @@ export default function EmailContent({
           text="Reject"
           isOpen={isOpenReject}
           setIsOpen={setIsOpenReject}
-          // clickFunction={dummy}
+          clickFunction={useRejectDocument}
+          documentId={emailContent?.content.split("documentId=")[1]}
         />
       </div>
 

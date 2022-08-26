@@ -1,5 +1,6 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppContext, COLORS } from "../../App";
 
 export interface SignInButtonProps {
   text: string;
@@ -7,9 +8,12 @@ export interface SignInButtonProps {
 }
 
 export default function RegistrationButton({ toUrl, text }: SignInButtonProps) {
+  const { theme, setTheme } = useContext(AppContext);
   return (
     <div>
-      <button className="bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 w-full rounded-lg font-semibold">
+      <button
+        className={`${COLORS[theme].class} text-white py-2 w-full rounded-lg font-semibold`}
+      >
         {text}
       </button>
     </div>

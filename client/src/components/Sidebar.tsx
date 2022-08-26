@@ -45,6 +45,7 @@ import {
   brands,
 } from "@fortawesome/fontawesome-svg-core/import.macro";
 import {
+  faArrowLeft,
   faChartLine,
   faHouse,
   faMagnifyingGlassLocation,
@@ -255,11 +256,15 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
   // ];
 
   return (
-    <div className="px-10 py-12 bg-white transition-all dark:bg-gray-850 h-screen overflow-scroll flex flex-col justify-between">
+    <div
+      className={`px-10 py-12 ${
+        theme === "Dark" ? "bg-gray-850" : "bg-white"
+      } transition-all h-screen overflow-scroll flex flex-col justify-between`}
+    >
       <div>
         <Link to={`/` + params.user + `/new-message`}>
           <div
-            className={`flex gap-4 items-center py-3 px-5 rounded-lg  ${COLORS[theme].class}`}
+            className={`flex gap-4 items-center py-3 px-5 rounded-lg ${COLORS[theme].class}`}
           >
             <img src={newMessage} alt="" className="w-5 h-5" />
             <p className="text-sm font-semibold text-white">New Message</p>
@@ -273,8 +278,12 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
                 <div
                   className={`flex justify-between items-center py-3 px-5 rounded-lg cursor-pointer ${
                     selected === index
-                      ? "bg-blue-50 transition-all dark:bg-gray-150"
-                      : "bg-white transition-all dark:bg-gray-850"
+                      ? "bg-gray-50 transition-all"
+                      : `${
+                          theme === "Dark"
+                            ? "bg-gray-850 transition-all"
+                            : "bg-white transition-all"
+                        }`
                   }`}
                   onClick={() => {
                     setSelected(index);
@@ -282,28 +291,27 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
                   }}
                 >
                   <div className="flex gap-4 items-center">
-                    {/* <img
-                      src={
-                        selected === index
-                          ? item.iconLight
-                          : theme === "dark"
-                          ? item.iconWhite
-                          : item.iconDark
-                      }
-                      alt=""
-                      className="w-5 h-5"
-                    /> */}
                     <FontAwesomeIcon
                       icon={item.icon}
                       className={`${
-                        selected === index ? "text-blue-250" : "text-gray-500"
+                        selected === index
+                          ? `${COLORS[theme].text_top}`
+                          : `${
+                              theme === "Dark"
+                                ? "text-gray-150"
+                                : "text-gray-500"
+                            }`
                       } w-5 h-5`}
                     />
                     <p
                       className={`text-sm font-semibold ${
                         selected === index
-                          ? "text-blue-250"
-                          : "text-gray-750 transition-all dark:text-gray-150"
+                          ? `${COLORS[theme].text_top}`
+                          : `${
+                              theme === "Dark"
+                                ? "text-gray-150"
+                                : "text-gray-500"
+                            }`
                       }`}
                     >
                       {item.title}
@@ -341,7 +349,17 @@ export default function Sidebar({ selected, setSelected, color }: Props) {
             alt=""
             className="w-5 h-5"
           /> */}
-          <p className="text-sm font-semibold text-gray-750 transition-all dark:text-gray-150">
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            className={`${
+              theme === "Dark" ? "text-gray-150" : "text-gray-500"
+            } w-5 h-5`}
+          />
+          <p
+            className={`text-sm font-semibold text-gray-750 transition-all ${
+              theme === "Dark" ? "text-gray-150" : "text-gray-500"
+            }`}
+          >
             Logout
           </p>
         </div>
