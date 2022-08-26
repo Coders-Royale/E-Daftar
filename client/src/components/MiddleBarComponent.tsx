@@ -13,7 +13,7 @@ export interface MiddleBarComponentProps {
   selected: boolean;
 }
 
-const getTimeInYearMonthDayMinutes = (num: number) => {
+export const getTimeInYearMonthDayMinutes = (num: number) => {
   const year = Math.floor(num / 31536000);
   num -= year * 31536000;
   const month = Math.floor((num % 31536000) / 2592000);

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimelineComponent from "./TimelineComponent";
+import {getTimeInYearMonthDayMinutes} from "./MiddleBarComponent";
 
 import { useDocument } from "../queries/hooks";
 import {
@@ -36,6 +37,7 @@ interface Props {
   setSelectedMid: (selected: number) => void;
   type: string;
   emailContent: any;
+  statuses?: any[];
 }
 
 export default function EmailContent({
@@ -43,6 +45,7 @@ export default function EmailContent({
   setSelectedMid,
   type,
   emailContent,
+  statuses
 }: Props) {
   const navigate = useNavigate();
   const [additionalMessage, setAdditionalMessage] = useState<string>("");
@@ -275,37 +278,16 @@ export default function EmailContent({
             TRACKING
           </h1>
           <div className="mt-4">
-            <TimelineComponent
-              index={1}
-              name="Mr. Parmish Verma"
-              time="12:30 PM"
-              date="11 July, 2022 (Monday)"
-              status={Status.Forwarded}
-              remarks="Bla Bla Bla"
-            />
-            <TimelineComponent
-              index={2}
-              name="Mr. Raghuram Rajan"
-              time="1:30 PM"
-              date="11 July, 2022 (Monday)"
-              status={Status.Rejected}
-              remarks="Bla Bla Bla"
-            />
-            <TimelineComponent
-              index={2}
-              name="Mr. Raghuram Rajan"
-              time="1:30 PM"
-              date="11 July, 2022 (Monday)"
-              status={Status.Pending}
-              remarks="Bla Bla Bla"
-            />
-            <TimelineComponent
-              index={3}
-              name="Mr. Venkatesh Iyer"
-              time="2:30 PM"
-              date="11 July, 2022 (Monday)"
-              status={Status.Approved}
-            />
+          {statuses !== undefined && statuses.map((item, index) => 
+          <TimelineComponent
+                index={index}
+                name={item.employeeName}
+                time={getTimeInYearMonthDayMinutes(item.time_elapsed).toString().slice(0, -4)}
+                date={new Date(item?.time_returned).toLocaleDateString()}
+                status={item.status}
+                remarks={item.rejection_reason}
+              />
+            )}
           </div>
         </div>
       ) : null}
