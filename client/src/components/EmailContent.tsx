@@ -278,15 +278,15 @@ export default function EmailContent({
             TRACKING
           </h1>
           <div className="mt-4">
-          {statuses !== undefined && statuses.map((item, index) => 
-          <TimelineComponent
-                index={index}
-                name={item.employeeName}
-                time={getTimeInYearMonthDayMinutes(item.time_elapsed).toString().slice(0, -4)}
-                date={new Date(item?.time_returned).toLocaleDateString()}
-                status={item.status}
-                remarks={item.rejection_reason}
-              />
+          {statuses && statuses.map((item, index) => 
+            <TimelineComponent
+              index={index}
+              name={item.employeeName}
+              time={getTimeInYearMonthDayMinutes(item.time_elapsed).toString().slice(0, -4)}
+              date={new Date(item?.time_returned).toLocaleDateString()}
+              status={item.status}
+              remarks={item.rejection_reason}
+            />
             )}
           </div>
         </div>

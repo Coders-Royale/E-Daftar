@@ -1,7 +1,7 @@
-const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
-// const baseUrl = "http://localhost:7071/api";
-const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
-// const baseUrlChat = "http://localhost:3001/api/chat";
+// const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+const baseUrl = "http://localhost:7071/api";
+// const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
+const baseUrlChat = "http://localhost:3001/api/chat";
 
 const apiEndPoints = {
   // GET REQUESTS
@@ -16,6 +16,7 @@ const apiEndPoints = {
   loadMessages: `/loadMessages`,
   getYourApprovedDocuments: `/getYourApprovedDocuments`,
   getYourRejectedDocuments: `/getYourRejectedDocuments`,
+  getYourPendingDocuments: `/getYourPendingDocuments`,
   getDocument: `/getDocument`,
 
   // POST REQUESTS
@@ -186,6 +187,25 @@ export async function getYourRejectedDocuments(params) {
     const res = await fetch(
       baseUrl +
       apiEndPoints.getYourRejectedDocuments +
+      `?employeeId=${params.employeeId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          "Content-type": "application/json",
+        },
+      }
+    ).then((res) => res.json());
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getYourPendingDocuments(params) {
+  try {
+    const res = await fetch(
+      baseUrl +
+      apiEndPoints.getYourPendingDocumentst +
       `?employeeId=${params.employeeId}`,
       {
         headers: {
