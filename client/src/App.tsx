@@ -133,17 +133,23 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   const [isEnabled, setIsEnabled] = useState(false);
+  const [speakText, setSpeakText] = useState("");
 
   window.addEventListener("mouseover", (event) => {
-    if (isEnabled)
-      if (event?.srcElement instanceof HTMLElement) {
-        if (!event?.srcElement?.innerHTML.includes("</")) {
-          window.speechSynthesis.cancel();
-          msg.text = event?.srcElement?.innerText;
-          window.speechSynthesis.speak(msg);
-        }
+    if (event?.srcElement instanceof HTMLElement) {
+      if (!event?.srcElement?.innerHTML.includes("</")) {
+        setSpeakText(event?.srcElement?.innerText);
       }
+    }
   });
+
+  useEffect(() => {
+    if (isEnabled) {
+      window.speechSynthesis.cancel();
+      msg.text = speakText;
+      window.speechSynthesis.speak(msg);
+    }
+  }, [speakText, isEnabled]);
 
   window.addEventListener("keydown", (e) => {
     if (e?.keyCode === 18) {

@@ -16,17 +16,13 @@ const Toggle = ({ color, setColor, setIsEnabled, isEnabled }) => {
 
   const refClick = useRef(null);
 
-  const onKeyPress = (e) => {
-    setIsEnabled(!isEnabled);
-  };
-
   return (
     <div className="flex items-center gap-4">
       <div className="flex gap-2 items-center">
         <p className="text-sm text-gray-600">Normal</p>
         <Switch
           checked={isEnabled}
-          onChange={onKeyPress}
+          onChange={() => setIsEnabled(!isEnabled)}
           ref={refClick}
           className={`${isEnabled ? "bg-blue-900" : "bg-blue-700"}
           relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
