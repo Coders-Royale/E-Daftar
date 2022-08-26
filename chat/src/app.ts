@@ -41,7 +41,7 @@ app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 app.use(cors(
     {
-        origin: ["http://localhost:3000", "https://sih-2022.vercel.app", "https://sih-2022-server.azurewebsites.net"],
+        origin: ["http://localhost:3000", "https://sih-2022.vercel.app", "https://sih-2022-server.azurewebsites.net", "https://bf9f-2401-4900-4dd3-691d-a846-6bdf-5dd6-3810.in.ngrok.io"],
     }
 ));
 app.use(logger("dev"));
