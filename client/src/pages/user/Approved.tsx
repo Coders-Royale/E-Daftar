@@ -94,12 +94,16 @@ const Approved = ({ selected, setSelected, color }: Props) => {
           />
         </div>
 
-        <EmailContent
-          selectedMid={selectedMid}
-          setSelectedMid={setSelectedMid}
-          type="approved"
-          emailContent={messages[selectedMid]}
-        />
+        {
+          messages.length > 0 && 
+          <EmailContent
+            selectedMid={selectedMid}
+            setSelectedMid={setSelectedMid}
+            type="approved"
+            emailContent={messages[selectedMid]}
+            documentId={messages[selectedMid].documentId}
+          />
+        }
       </div>
     </div>
   );
