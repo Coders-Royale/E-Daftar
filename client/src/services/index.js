@@ -205,8 +205,8 @@ export async function getYourPendingDocuments(params) {
   try {
     const res = await fetch(
       baseUrl +
-      apiEndPoints.getYourPendingDocumentst +
-      `?employeeId=${params.employeeId}`,
+      apiEndPoints.getYourPendingDocuments +
+      `?employeeId=${params.employeeId}` + `&role=${params.role}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

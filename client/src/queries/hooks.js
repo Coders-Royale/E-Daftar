@@ -10,6 +10,7 @@ import {
 	loadMessages,
 	getYourApprovedDocuments,
 	getYourRejectedDocuments,
+	getYourPendingDocuments,
 	getDocument,
 } from "../services";
 
@@ -97,6 +98,16 @@ export const useYourRejectedDocuments = (params) => {
 	return useQuery(
 		[QUERY_KEYS.YOUR_REJECTED_DOCUMENTS, params.employeeId],
 		() => getYourRejectedDocuments(params),
+		{
+			retry: false,
+		}
+	);
+}
+
+export const useYourPendingDocuments = (params) => {
+	return useQuery(
+		[QUERY_KEYS.YOUR_PENDING_DOCUMENTS, params.employeeId, params.role],
+		() => getYourPendingDocuments(params),
 		{
 			retry: false,
 		}
