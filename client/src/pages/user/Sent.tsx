@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLoadMessages } from "../../queries/hooks";
@@ -25,6 +25,7 @@ import Email2 from "../../images/tracking_page_email_2.png";
 import Email3 from "../../images/tracking_page_email_3.png";
 import Dp from "../../images/profile_page_dp.png";
 import Loader from "../../components/Loader";
+import { AppContext } from "../../App";
 
 enum Status {
   Pending = "Pending",
@@ -57,9 +58,11 @@ interface Props {
 }
 
 const Sent = ({ selected, setSelected, color }: Props) => {
-  useEffect(() => {
-    setSelected(1);
-  }, [setSelected]);
+  // useEffect(() => {
+  //   setSelected(1);
+  // }, [setSelected]);
+
+  const { setNotification } = useContext(AppContext);
 
   const [selectedMid, setSelectedMid] = useState<number>(0);
   const [messages, setMessages] = useState<any[]>([]);
@@ -93,7 +96,7 @@ const Sent = ({ selected, setSelected, color }: Props) => {
     return false;
   };
 
-  const receivedStatus = useTrackStatus({
+  const receivedStatus: any = useTrackStatus({
     documentId:
       messages?.length > 0
         ? messages[selectedMid]?.content.split("documentId=")[1]
@@ -104,6 +107,11 @@ const Sent = ({ selected, setSelected, color }: Props) => {
   useEffect(() => {
     if (receivedStatus.data) {
       setStatuses(receivedStatus.data?.data);
+      const temp = (receivedStatus?.data?.data as []) || [];
+
+      setNotification((prev: any) => {
+        return [...prev, ...temp];
+      });
     }
   }, [receivedStatus.isSuccess === true]);
 
@@ -112,8 +120,6 @@ const Sent = ({ selected, setSelected, color }: Props) => {
     pageNo: 1,
     filter: "sent",
   });
-
-  console.log(receivedMessages.data);
 
   useEffect(() => {
     if (receivedMessages.data) {

@@ -80,7 +80,6 @@ const Pending = ({ selected, setSelected, color }: Props) => {
     if (receivedMessages.data) {
       setMessages(receivedMessages.data.data);
     }
-    console.log(receivedMessages.data);
   }, [receivedMessages.isSuccess === true]);
 
   return (

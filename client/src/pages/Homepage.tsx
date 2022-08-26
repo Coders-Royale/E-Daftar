@@ -211,8 +211,7 @@ const Homepage: React.FC = () => {
           Paperless. Fast. Smooth.
         </h1>
         <h1 className="text-xl text-center mt-4 text-gray-550">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim nulla
-          ultrices praesent sed nisl velit est eget.
+          Companion App now available to track the status of your files on the go.
         </h1>
       </div>
 

@@ -19,10 +19,12 @@ import Pending from "./pages/user/Pending";
 import Approved from "./pages/user/Approved";
 import Rejected from "./pages/user/Rejected";
 import Toggle from "./components/ThemeToggle";
-
+import useSound from "use-sound";
 import { FilesProvider } from "./contexts/files.context";
 
 import getSocket from "./helpers/socket";
+
+const boopSfx = require("./music.mp3");
 
 const socket = getSocket(); // returns an instance of getSocket.
 
@@ -50,7 +52,7 @@ interface AppContextInterface {
   theme: "Light" | "Dark" | "SweetMorning" | "BrightVault" | "Superman";
   setTheme: any;
   notification: any[];
-  setNotification:any
+  setNotification: any;
 }
 // color === "Light" || color === "Dark"
 // ? ""
@@ -61,8 +63,8 @@ interface AppContextInterface {
 export const AppContext = createContext<AppContextInterface>({
   theme: "Light",
   setTheme: null,
-  notification:[],
-  setNotification:null
+  notification: [],
+  setNotification: null,
 });
 
 export const COLORS = {
@@ -139,6 +141,12 @@ const App: React.FC = () => {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [speakText, setSpeakText] = useState("");
+  const [play] = useSound(boopSfx);
+
+  useEffect(() => {
+    console.log("updated");
+    play();
+  }, [notification]);
 
   window.addEventListener("mouseover", (event) => {
     if (event?.srcElement instanceof HTMLElement) {
@@ -179,7 +187,14 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ theme: theme, setTheme: setTheme, notification: notification, setNotification: setNotification }}>
+    <AppContext.Provider
+      value={{
+        theme: theme,
+        setTheme: setTheme,
+        notification: notification,
+        setNotification: setNotification,
+      }}
+    >
       <div className="font-roboto">
         {window.location.pathname === "/" ? null : (
           <div className="absolute right-0 top-0 mr-8 mt-2">

@@ -43,7 +43,8 @@ interface Props {
 }
 
 const Notifications = ({ selected, setSelected, color }: Props) => {
-  const { theme, setTheme } = useContext(AppContext);
+  const { theme, setTheme, notification } = useContext(AppContext);
+
   return (
     <div
       className={`h-screen flex ${
@@ -61,8 +62,16 @@ const Notifications = ({ selected, setSelected, color }: Props) => {
         >
           NOTIFICATIONS
         </h1>
+        {/* employeeDepartment: "hr"
+employeeId: "A1"
+employeeName: "Admin One"
+rejection_reason: ""
+status: "Forwarded"
+time_elapsed: 19635
+time_received: "2022-08-26T09:25:56.354Z"
+time_returned: "2022-08-26T09:26:15.989Z" */}
 
-        {notificationContent1.map((item, index) => (
+        {notification.map((item: any, index: number) => (
           <div
             className={`${
               theme === "Dark" ? "bg-gray-825" : "bg-white"
@@ -78,18 +87,17 @@ const Notifications = ({ selected, setSelected, color }: Props) => {
                       theme === "Dark" ? "text-gray-150" : "text-gray-750"
                     }`}
                   >
+                    <span className="font-medium">{item.employeeName}</span> has{" "}
                     <span className="font-medium">
-                      {notificationContent1[0].sender}
+                      {item?.status?.toLowerCase()}
                     </span>{" "}
-                    sent a mail titled{" "}
-                    <span className="font-medium">
-                      {notificationContent1[0].title}
-                    </span>{" "}
-                    to be approved.
+                    your mail.
                   </h1>
-                  <h1 className="text-sm font-medium text-gray-550">
-                    {notificationContent1[0].comment}
-                  </h1>
+                  {item?.rejection_reason?.length > 0 && (
+                    <h1 className="text-sm font-medium text-gray-550">
+                      {item.rejection_reason}
+                    </h1>
+                  )}
                 </div>
               </div>
 
