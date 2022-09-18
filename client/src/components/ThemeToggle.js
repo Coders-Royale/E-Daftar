@@ -17,6 +17,7 @@ const Toggle = ({ color, setColor, setIsEnabled, isEnabled }) => {
   const refClick = useRef(null);
 
   return (
+  	<div className="relative z-50">
     <div className="flex items-center gap-4">
       <div className="flex gap-2 items-center">
         <p className="text-sm text-gray-600">Normal</p>
@@ -82,6 +83,7 @@ const Toggle = ({ color, setColor, setIsEnabled, isEnabled }) => {
           </Menu.Items>
         </Transition>
       </Menu>
+    </div>
     </div>
   );
 };

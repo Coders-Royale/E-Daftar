@@ -88,7 +88,7 @@ const NewPassword = () => {
     return false;
   };
 
-  const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
+  const baseUrl = "http://localhost:7071/api";
   const handleNewPassword = async () => {
     const res = await fetch(
       `${baseUrl}/forgotPassword` +
