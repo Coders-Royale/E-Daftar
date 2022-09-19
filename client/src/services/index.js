@@ -1,5 +1,6 @@
-// const baseUrl = "https://sih-2022-server.azurewebsites.net/api";
-const baseUrl = "http://localhost:7071/api";
+const baseUrl = "https://edaftar.azurewebsites.net/";
+// const baseUrl = "https://sih-2022-server.azurewebsites.net/api"; // raghhav id
+// const baseUrl = "http://localhost:7071/api";
 // const baseUrlChat = "https://sih-email.herokuapp.com/api/chat";
 const baseUrlChat = "http://localhost:3001/api/chat";
 
