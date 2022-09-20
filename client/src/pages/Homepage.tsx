@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Homepage_1 from "../images/homepage_1.svg";
 import Homepage_2 from "../images/homepage_2.svg";
@@ -23,6 +24,7 @@ import Footer from "../components/Footer";
 
 const Homepage: React.FC = () => {
   const [selected, setSelected] = useState(0);
+  const navigate = useNavigate();
 
   const title: string[] = [
     "Primary",
@@ -112,7 +114,7 @@ const Homepage: React.FC = () => {
             tracker for transparency. Do more with email templates and a fresh
             UI.
           </p>
-          <button className="mt-6 bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 px-8 rounded-lg font-medium text-lg">
+          <button onClick={() => navigate("/sign-in")} className="mt-6 bg-gradient-to-r from-blue-450 to-blue-150 text-white py-2 px-8 rounded-lg font-medium text-lg">
             Let's Go !!!
           </button>
         </div>
