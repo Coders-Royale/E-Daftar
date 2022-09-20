@@ -356,7 +356,7 @@ const Profile = ({ selected, setSelected, color }: Props) => {
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
-  const baseUrl = "http://localhost:7071/api";
+  const baseUrl = "https://edaftar.azurewebsites.net/api";
   const handleChangePassword = async () => {
     const res = await fetch(
       `${baseUrl}/changePassword` +

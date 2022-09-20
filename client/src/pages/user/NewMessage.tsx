@@ -48,7 +48,7 @@ interface Error {
   message: string;
 }
 
-const baseUrl = "http://localhost:7071/api";
+const baseUrl = "https://edaftar.azurewebsites.net/api";
 
 const Input = styled("input")({
   display: "none",

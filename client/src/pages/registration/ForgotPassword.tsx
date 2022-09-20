@@ -48,7 +48,7 @@ const ForgotPassword = () => {
     return false;
   };
 
-  const baseUrl = "http://localhost:7071/api";
+  const baseUrl = "https://edaftar.azurewebsites.net/api";
   const handleRequestChangePassword = async () => {
     const res = await fetch(
       `${baseUrl}/requestForgotPassword` + `?email=${email}`,

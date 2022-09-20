@@ -308,7 +308,7 @@ export default function EmailContent({
           <div className="flex flex-row mt-1 items-center gap-2">
             <img src={Clock} alt="clock" className="w-4 h-4" />
             <h1 className="text-xs font-medium text-gray-550">
-              1:30 PM, 11 July, 2022 (Monday)
+              8:20 PM, 20 September, 2022 (Monday)
             </h1>
           </div>
         </div>
